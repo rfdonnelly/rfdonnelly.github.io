@@ -467,11 +467,11 @@ The parser is written to the <code>tree-sitter-verilog/src/</code> directory.</p
 
 <p>A <a href="https://doc.rust-lang.org/cargo/reference/build-scripts.html">Cargo build script</a> is needed to compile and link the parser into the Rust binary.</p>
 
-<p>But first, we need the <a href="https://crates.io/crates/cc">cc crate</a> for compiling C code into our Rust binary.
+<p>We need the <a href="https://crates.io/crates/cc">cc crate</a> for compiling C code into our Rust binary.
 Add the <code>cc</code> crate to the <code>build-dependencies</code> section of <code>Cargo.toml</code>:</p>
 <div class="highlight"><pre class="chroma"><code class="language-toml" data-lang="toml"><span class="p">[</span><span class="nx">build</span><span class="err">-</span><span class="nx">dependencies</span><span class="p">]</span>
 <span class="nx">cc</span> <span class="p">=</span> <span class="s2">&#34;1.0&#34;</span></code></pre></div>
-<p>Next, create a <code>build.rs</code> build script with the contents:</p>
+<p>Create a <code>build.rs</code> build script with the contents:</p>
 <div class="highlight"><pre class="chroma"><code class="language-rust" data-lang="rust"><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
 </span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">language</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;verilog&#34;</span><span class="p">;</span><span class="w">
 </span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">package</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">format</span><span class="o">!</span><span class="p">(</span><span class="s">&#34;tree-sitter-{}&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">language</span><span class="p">);</span><span class="w">
