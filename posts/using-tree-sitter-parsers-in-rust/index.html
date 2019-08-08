@@ -3,15 +3,15 @@
 <head>
   
   <meta charset="utf-8">
-  <title>Using Tree Sitter Parsers in Rust</title>
-  <meta name="description" content="Using Tree Sitter Parsers in Rust">
-  <meta name="author" content="Rob Donnelly">
+  <title>Using Tree-sitter Parsers in Rust</title>
+  <meta name="description" content="Using Tree-sitter Parsers in Rust">
+  <meta name="author" content="">
   
   <meta name="viewport" content="width=device-width, initial-scale=1">
   
   <noscript>
     <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:400,600" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="http://rfdonnelly.github.io/css/fonts.css">
+    <link rel="stylesheet" href="https://rfdonnelly.github.io/css/fonts.css">
   </noscript>
   
   
@@ -350,7 +350,7 @@ code, kbd, pre, samp {
   
   <link rel="shortcut icon" 
    
-    href="http://rfdonnelly.github.io/img/favicon.ico"
+    href="https://rfdonnelly.github.io/img/favicon.ico"
   
   type="image/x-icon">
 
@@ -360,7 +360,8 @@ code, kbd, pre, samp {
   <meta name="generator" content="Hugo 0.56.3" />
 
   
-  
+  <link rel="stylesheet" href="https://rfdonnelly.github.io/css/syntax.css">
+
 </head>
 <body>
 
@@ -369,26 +370,22 @@ code, kbd, pre, samp {
     <div class="pure-u-11-12 pure-u-md-7-12">
         <div class="desktop pure-menu pure-menu-horizontal nav-menu">
             
-            <a href="http://rfdonnelly.github.io/" class="site-title pure-menu-heading">Rob Donnelly</a>
+            <a href="https://rfdonnelly.github.io/" class="site-title pure-menu-heading">Rob Donnelly</a>
             <ul class="pure-menu-list pull-right">
 				
-                
-				
                 <li class="pure-menu-item">
-                    <a href="http://rfdonnelly.github.io/about/" class="pure-menu-link">About</a>
+                    <a href="https://rfdonnelly.github.io/about/" class="pure-menu-link">About</a>
                 </li>
             </ul>
         </div>
         <div class="mobile pure-menu nav-menu">
-            <a href="http://rfdonnelly.github.io/" class="site-title pure-menu-heading" id="toggle-home">Rob Donnelly</a>
+            <a href="https://rfdonnelly.github.io/" class="site-title pure-menu-heading" id="toggle-home">Rob Donnelly</a>
             <a href="#" id="toggle-btn">&#9776;</a>
             <ul class="pure-menu-list" id="toggle-content" style="display:none;">
                 
 				
-                
-				
                 <li class="pure-menu-item">
-                    <a href="http://rfdonnelly.github.io/about" class="pure-menu-link">About</a>
+                    <a href="https://rfdonnelly.github.io/about" class="pure-menu-link">About</a>
                 </li>
             </ul>
         </div>
@@ -417,138 +414,114 @@ code, kbd, pre, samp {
 
         
         </p>
-        <h1>Using Tree Sitter Parsers in Rust</h1>
+        <h1>Using Tree-sitter Parsers in Rust</h1>
       </div>
 
       <div class="post-content">
         
         
 
-<p><a href="https://tree-sitter.github.io/tree-sitter">Tree Sitter</a> is a parser generator tool and parsing library.
-It generates portable parsers and provides bindings for several languages including Rust.
-Tree Sitter grammars are available for several languages.</p>
+<p><a href="https://tree-sitter.github.io/tree-sitter">Tree-sitter</a> is a parser generator tool and parsing library.
+It generates portable parsers that can be used in several languages including Rust.
+Tree-sitter grammars are available for several languages.</p>
 
 <p>This is a game changer because it lowers the barrier to entry for writing language tooling.
-You no longer need to write your own parser to implement language tooling.
-With Tree Sitter, you can now simply use an existing parser.</p>
+You no longer need to write your own parser.
+With Tree-sitter, you can now simply use an existing parser.</p>
 
-<h2 id="installing-the-tree-sitter-cli">Installing the Tree Sitter CLI</h2>
+<h2 id="toolchain">Toolchain</h2>
 
-<p>The Tree Sitter CLI is required to generate a Tree Sitter parser from a Tree Sitter grammar.</p>
+<p>Tree-sitter grammars are written in Javascript.
+The grammars are executed using Node to generate the grammar JSON.
+The Tree-sitter CLI uses the grammar JSON to generate a C-based parser.
+The parser is compiled into a Rust binary and used via the Rust Tree-sitter bindings.</p>
 
-<p>Installing the Tree Sitter CLI is as simple as:</p>
-<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">cargo install tree-sitter-cli</code></pre></div>
-<p>However, this doesn&rsquo;t work until the fix for <a href="https://github.com/tree-sitter/tree-sitter/issues/352">tree-sitter/tree-sitter#352</a> makes it into a release.
-In the meantime, you&rsquo;ll need to clone and build the Tree Sitter repository.</p>
+<h2 id="install-the-dependencies">Install the Dependencies</h2>
 
-<p>The Tree Sitter repository uses Git Submodules so the <code>--recursive</code> flag must be used.</p>
-<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">git clone https://github.com/tree-sitter/tree-sitter.git --recursive</code></pre></div>
-<p>If you don&rsquo;t use the recursive flag, you&rsquo;ll get the following error on cargo build:</p>
-<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">cargo:warning=src\././utf16.h:10:22: fatal error: utf8proc.h: No such file or directory</code></pre></div>
-<p>Install dependencies</p>
-<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">sudo apt-get install emscripten</code></pre></div>
-<p>Build WASM</p>
-<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">./script/build-wasm</code></pre></div>
-<p>This didn&rsquo;t work for me so I removed the WASM dependency with the following patch.</p>
-<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-diff" data-lang="diff"><span style="color:#000080;font-weight:bold">diff --git a/cli/src/web_ui.rs b/cli/src/web_ui.rs
-</span><span style="color:#000080;font-weight:bold">index 7ebced8..45a189a 100644
-</span><span style="color:#000080;font-weight:bold"></span><span style="color:#a00000">--- a/cli/src/web_ui.rs
-</span><span style="color:#a00000"></span><span style="color:#00a000">+++ b/cli/src/web_ui.rs
-</span><span style="color:#00a000"></span><span style="color:#800080;font-weight:bold">@@ -11,9 +11,9 @@ const HTML: &amp;&#39;static str = include_str!(&#34;./web_ui.html&#34;);
-</span><span style="color:#800080;font-weight:bold"></span> const PLAYGROUND_JS: &amp;&#39;static [u8] = include_bytes!(&#34;../../docs/assets/js/playground.js&#34;);
+<p>Node is required to generate the grammar JSON.
+Install node:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo apt-get install nodejs</code></pre></div>
+<p>NOTE: This article assumes you have Rust and a C compiler installed.</p>
 
- #[cfg(unix)]
-<span style="color:#a00000">-const LIB_JS: &amp;&#39;static [u8] = include_bytes!(&#34;../../lib/binding_web/tree-sitter.js&#34;);
-</span><span style="color:#a00000"></span><span style="color:#00a000">+const LIB_JS: &amp;&#39;static [u8] = &amp;[];
-</span><span style="color:#00a000"></span> #[cfg(unix)]
-<span style="color:#a00000">-const LIB_WASM: &amp;&#39;static [u8] = include_bytes!(&#34;../../lib/binding_web/tree-sitter.wasm&#34;);
-</span><span style="color:#a00000"></span><span style="color:#00a000">+const LIB_WASM: &amp;&#39;static [u8] = &amp;[];
-</span><span style="color:#00a000"></span>
- #[cfg(windows)]
- const LIB_JS: &amp;&#39;static [u8] = &amp;[];
-</code></pre></div>
-<p>Check the version:</p>
-<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">$ cargo run -- --version
-    Finished dev [unoptimized + debuginfo] target(s) in 0.09s
-     Running `target/debug/tree-sitter --version`
-tree-sitter 0.15.7 (8657054e4b3d3ef50b0edcdf34b7bfcfc62edbe8)</code></pre></div>
-<p>Now that we have successfully built the Tree Sitter CLI we can install it for future convenience.</p>
-<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#007020">cd</span> cli
-cargo install --path .</code></pre></div>
 <h2 id="create-a-new-rust-project">Create a New Rust Project</h2>
-<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">cargo new tree-sitter-verilog-test
-<span style="color:#007020">cd</span> tree-sitter-verilog-test
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">cargo new tree-sitter-verilog-test
+<span class="nb">cd</span> tree-sitter-verilog-test
 git init
 git add .
-git commit -m <span style="color:#4070a0">&#34;Initial commit&#34;</span></code></pre></div>
-<p>Add the following dependencies to <code>Cargo.toml</code>:</p>
-<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml">[dependencies]
-tree<span style="">-</span>sitter = <span style="color:#4070a0">&#34;0.3&#34;</span> <span style="color:#60a0b0;font-style:italic"># &lt;1&gt;</span>
+git commit -m <span class="s2">&#34;Initial commit&#34;</span></code></pre></div>
+<h2 id="obtain-the-grammar">Obtain the Grammar</h2>
 
-[build<span style="">-</span>dependencies]
-cc = <span style="color:#4070a0">&#34;1.0&#34;</span> <span style="color:#60a0b0;font-style:italic"># &lt;2&gt;</span></code></pre></div>
-<ol>
-<li>The Tree Sitter Rust bindings.</li>
-<li>Library for compiling C code into a Rust binary.</li>
-</ol>
+<p>A list of existing Tree-sitter grammars is available at <a href="https://tree-sitter.github.io/tree-sitter">https://tree-sitter.github.io/tree-sitter</a>.</p>
 
-<p>A Cargo build script is needed to build and link the parser into our Rust binary.
-Create a <code>build.rs</code> build script with the contents:</p>
-<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#007020;font-weight:bold">fn</span> <span style="color:#06287e">main</span>()<span style="color:#bbb"> </span>{<span style="color:#bbb">
-</span><span style="color:#bbb">    </span><span style="color:#007020;font-weight:bold">let</span><span style="color:#bbb"> </span>language<span style="color:#bbb"> </span><span style="color:#666">=</span><span style="color:#bbb"> </span><span style="color:#4070a0">&#34;verilog&#34;</span>;<span style="color:#bbb">
-</span><span style="color:#bbb">    </span><span style="color:#007020;font-weight:bold">let</span><span style="color:#bbb"> </span>package<span style="color:#bbb"> </span><span style="color:#666">=</span><span style="color:#bbb"> </span>format<span style="color:#666">!</span>(<span style="color:#4070a0">&#34;tree-sitter-{}&#34;</span>,<span style="color:#bbb"> </span>language);<span style="color:#bbb">
-</span><span style="color:#bbb">    </span><span style="color:#007020;font-weight:bold">let</span><span style="color:#bbb"> </span>source_directory<span style="color:#bbb"> </span><span style="color:#666">=</span><span style="color:#bbb"> </span>format<span style="color:#666">!</span>(<span style="color:#4070a0">&#34;{}/src&#34;</span>,<span style="color:#bbb"> </span>package);<span style="color:#bbb">
-</span><span style="color:#bbb">    </span><span style="color:#007020;font-weight:bold">let</span><span style="color:#bbb"> </span>source_file<span style="color:#bbb"> </span><span style="color:#666">=</span><span style="color:#bbb"> </span>format<span style="color:#666">!</span>(<span style="color:#4070a0">&#34;{}/parser.c&#34;</span>,<span style="color:#bbb"> </span>source_directory);<span style="color:#bbb">
-</span><span style="color:#bbb">
-</span><span style="color:#bbb">    </span>println<span style="color:#666">!</span>(<span style="color:#4070a0">&#34;rerun-if-changed={}&#34;</span>,<span style="color:#bbb"> </span>source_file);<span style="color:#bbb"> </span><span style="color:#60a0b0;font-style:italic">// &lt;1&gt;
-</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#bbb">
-</span><span style="color:#bbb">    </span>cc::Build::new()<span style="color:#bbb">
-</span><span style="color:#bbb">        </span>.file(source_file)<span style="color:#bbb">
-</span><span style="color:#bbb">        </span>.include(source_directory)<span style="color:#bbb">
-</span><span style="color:#bbb">        </span>.compile(<span style="color:#666">&amp;</span>package);<span style="color:#bbb"> </span><span style="color:#60a0b0;font-style:italic">// &lt;2&gt;
-</span><span style="color:#60a0b0;font-style:italic"></span>}<span style="color:#bbb">
+<p>I&rsquo;ll be using the Verilog grammar.
+Obtain the grammar:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git submodule add https://github.com/tree-sitter/tree-sitter-verilog.git
+git commit -m <span class="s2">&#34;Add tree-sitter-verilog&#34;</span></code></pre></div>
+<h2 id="generate-the-parser">Generate the Parser</h2>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span> tree-sitter-verilog
+npm install</code></pre></div>
+<p>This installs the Tree-sitter CLI and runs <code>tree-sitter generate</code> which executes the grammar Javascript to generate the grammar JSON then generates the C-based parser.
+The parser is written to the <code>tree-sitter-verilog/src/</code> directory.</p>
+
+<h2 id="compile-the-parser">Compile the Parser</h2>
+
+<p>A <a href="https://doc.rust-lang.org/cargo/reference/build-scripts.html">Cargo build script</a> is needed to compile and link the parser into the Rust binary.</p>
+
+<p>But first, we need the <a href="https://crates.io/crates/cc">cc crate</a> for compiling C code into our Rust binary.
+Add the <code>cc</code> crate to the <code>build-dependencies</code> section of <code>Cargo.toml</code>:</p>
+<div class="highlight"><pre class="chroma"><code class="language-toml" data-lang="toml"><span class="p">[</span><span class="nx">build</span><span class="err">-</span><span class="nx">dependencies</span><span class="p">]</span>
+<span class="nx">cc</span> <span class="p">=</span> <span class="s2">&#34;1.0&#34;</span></code></pre></div>
+<p>Next, create a <code>build.rs</code> build script with the contents:</p>
+<div class="highlight"><pre class="chroma"><code class="language-rust" data-lang="rust"><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">language</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;verilog&#34;</span><span class="p">;</span><span class="w">
+</span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">package</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">format</span><span class="o">!</span><span class="p">(</span><span class="s">&#34;tree-sitter-{}&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">language</span><span class="p">);</span><span class="w">
+</span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">source_directory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">format</span><span class="o">!</span><span class="p">(</span><span class="s">&#34;{}/src&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">package</span><span class="p">);</span><span class="w">
+</span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">source_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">format</span><span class="o">!</span><span class="p">(</span><span class="s">&#34;{}/parser.c&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">source_directory</span><span class="p">);</span><span class="w">
+</span><span class="w">
+</span><span class="w">    </span><span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&#34;rerun-if-changed={}&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">source_file</span><span class="p">);</span><span class="w"> </span><span class="c1">// &lt;1&gt;
+</span><span class="c1"></span><span class="w">
+</span><span class="w">    </span><span class="n">cc</span>::<span class="n">Build</span>::<span class="n">new</span><span class="p">()</span><span class="w">
+</span><span class="w">        </span><span class="p">.</span><span class="n">file</span><span class="p">(</span><span class="n">source_file</span><span class="p">)</span><span class="w">
+</span><span class="w">        </span><span class="p">.</span><span class="n">include</span><span class="p">(</span><span class="n">source_directory</span><span class="p">)</span><span class="w">
+</span><span class="w">        </span><span class="p">.</span><span class="n">compile</span><span class="p">(</span><span class="o">&amp;</span><span class="n">package</span><span class="p">);</span><span class="w"> </span><span class="c1">// &lt;2&gt;
+</span><span class="c1"></span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <ol>
 <li>Tells Cargo to only re-run the build script if the parser source has changed.</li>
 <li>Compiles the parser C code into the Rust binary.</li>
 </ol>
 
-<h2 id="obtain-the-grammar">Obtain the Grammar</h2>
+<p>NOTE: We could instead rerun on a change in the grammar Javascript and add a call to <code>npm install</code> to fully automate the building of the parser.</p>
 
-<p>A list of existing Tree Sitter grammars is available at <a href="https://tree-sitter.github.io/tree-sitter">https://tree-sitter.github.io/tree-sitter</a>.</p>
+<h2 id="use-the-parser">Use the Parser</h2>
 
-<p>I&rsquo;ll be using the Verilog grammar.
-Obtain the grammar and generate the parser as follows.</p>
-<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">git clone https://github.com/tree-sitter/tree-sitter-verilog.git
-<span style="color:#007020">cd</span> tree-sitter-verilog
-tree-sitter generate</code></pre></div>
-<p>This creates the <code>tree-sitter-verilog/src/</code> directory.</p>
-
-<h2 id="use-the-grammar">Use the Grammar</h2>
-
+<p>We&rsquo;ll be using the parser via the Rust Tree-sitter bindings provided by the <a href="https://crates.io/crates/tree-sitter">tree-sitter crate</a>.
+Add the <code>tree-sitter</code> crate to the <code>dependencies</code> section of <code>Cargo.toml</code>:</p>
+<div class="highlight"><pre class="chroma"><code class="language-toml" data-lang="toml"><span class="p">[</span><span class="nx">dependencies</span><span class="p">]</span>
+<span class="nx">tree</span><span class="err">-</span><span class="nx">sitter</span> <span class="p">=</span> <span class="s2">&#34;0.3&#34;</span></code></pre></div>
 <p>Edit the contents of <code>src/main.rs</code> to be the following:</p>
-<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#007020;font-weight:bold">use</span><span style="color:#bbb"> </span>tree_sitter::{Parser,<span style="color:#bbb"> </span>Language};<span style="color:#bbb">
-</span><span style="color:#bbb">
-</span><span style="color:#bbb"></span><span style="color:#007020;font-weight:bold">extern</span><span style="color:#bbb"> </span><span style="color:#4070a0">&#34;C&#34;</span><span style="color:#bbb"> </span>{<span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">fn</span> <span style="color:#06287e">tree_sitter_verilog</span>()<span style="color:#bbb"> </span>-&gt; <span style="color:#0e84b5;font-weight:bold">Language</span>;<span style="color:#bbb"> </span>}<span style="color:#bbb">
-</span><span style="color:#bbb">
-</span><span style="color:#bbb"></span><span style="color:#007020;font-weight:bold">fn</span> <span style="color:#06287e">main</span>()<span style="color:#bbb"> </span>{<span style="color:#bbb">
-</span><span style="color:#bbb">    </span>println<span style="color:#666">!</span>(<span style="color:#4070a0">&#34;Hello, world!&#34;</span>);<span style="color:#bbb">
-</span><span style="color:#bbb"></span>}<span style="color:#bbb">
-</span><span style="color:#bbb">
-</span><span style="color:#bbb"></span><span style="color:#007020">#[test]</span><span style="color:#bbb">
-</span><span style="color:#bbb"></span><span style="color:#007020;font-weight:bold">fn</span> <span style="color:#06287e">test_parser</span>()<span style="color:#bbb"> </span>{<span style="color:#bbb">
-</span><span style="color:#bbb">    </span><span style="color:#007020;font-weight:bold">let</span><span style="color:#bbb"> </span>language<span style="color:#bbb"> </span><span style="color:#666">=</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">unsafe</span><span style="color:#bbb"> </span>{<span style="color:#bbb"> </span>tree_sitter_verilog()<span style="color:#bbb"> </span>};<span style="color:#bbb">
-</span><span style="color:#bbb">    </span><span style="color:#007020;font-weight:bold">let</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">mut</span><span style="color:#bbb"> </span>parser<span style="color:#bbb"> </span><span style="color:#666">=</span><span style="color:#bbb"> </span>Parser::new();<span style="color:#bbb">
-</span><span style="color:#bbb">    </span>parser.set_language(language).unwrap();<span style="color:#bbb">
-</span><span style="color:#bbb">
-</span><span style="color:#bbb">    </span><span style="color:#007020;font-weight:bold">let</span><span style="color:#bbb"> </span>source_code<span style="color:#bbb"> </span><span style="color:#666">=</span><span style="color:#bbb"> </span><span style="color:#4070a0">&#34;module mymodule(); endmodule&#34;</span>;<span style="color:#bbb">
-</span><span style="color:#bbb">    </span><span style="color:#007020;font-weight:bold">let</span><span style="color:#bbb"> </span>tree<span style="color:#bbb"> </span><span style="color:#666">=</span><span style="color:#bbb"> </span>parser.parse(source_code,<span style="color:#bbb"> </span><span style="color:#007020">None</span>).unwrap();<span style="color:#bbb">
-</span><span style="color:#bbb">
-</span><span style="color:#bbb">    </span>assert_eq<span style="color:#666">!</span>(tree.root_node().to_sexp(),<span style="color:#bbb"> </span><span style="color:#4070a0">&#34;(source_file (module_declaration (module_header (module_keyword) (module_identifier (simple_identifier))) (module_nonansi_header (list_of_ports))))&#34;</span>);<span style="color:#bbb">
-</span><span style="color:#bbb"></span>}<span style="color:#bbb">
+<div class="highlight"><pre class="chroma"><code class="language-rust" data-lang="rust"><span class="k">use</span><span class="w"> </span><span class="n">tree_sitter</span>::<span class="p">{</span><span class="n">Parser</span><span class="p">,</span><span class="w"> </span><span class="n">Language</span><span class="p">};</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="k">extern</span><span class="w"> </span><span class="s">&#34;C&#34;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">fn</span> <span class="nf">tree_sitter_verilog</span><span class="p">()</span><span class="w"> </span>-&gt; <span class="nc">Language</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">    </span><span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&#34;Hello, world!&#34;</span><span class="p">);</span><span class="w">
+</span><span class="w"></span><span class="p">}</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="cp">#[test]</span><span class="w">
+</span><span class="w"></span><span class="k">fn</span> <span class="nf">test_parser</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">language</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">unsafe</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">tree_sitter_verilog</span><span class="p">()</span><span class="w"> </span><span class="p">};</span><span class="w">
+</span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">parser</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Parser</span>::<span class="n">new</span><span class="p">();</span><span class="w">
+</span><span class="w">    </span><span class="n">parser</span><span class="p">.</span><span class="n">set_language</span><span class="p">(</span><span class="n">language</span><span class="p">).</span><span class="n">unwrap</span><span class="p">();</span><span class="w">
+</span><span class="w">
+</span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">source_code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;module mymodule(); endmodule&#34;</span><span class="p">;</span><span class="w">
+</span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">tree</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parser</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="n">source_code</span><span class="p">,</span><span class="w"> </span><span class="nb">None</span><span class="p">).</span><span class="n">unwrap</span><span class="p">();</span><span class="w">
+</span><span class="w">
+</span><span class="w">    </span><span class="n">assert_eq</span><span class="o">!</span><span class="p">(</span><span class="n">tree</span><span class="p">.</span><span class="n">root_node</span><span class="p">().</span><span class="n">to_sexp</span><span class="p">(),</span><span class="w"> </span><span class="s">&#34;(source_file (module_declaration (module_header (module_keyword) (module_identifier (simple_identifier))) (module_nonansi_header (list_of_ports))))&#34;</span><span class="p">);</span><span class="w">
+</span><span class="w"></span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <p>Running <code>cargo test</code> should then give the following output:</p>
-<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">$ cargo test
+<div class="highlight"><pre class="chroma"><code class="language-text" data-lang="text">$ cargo test
    Compiling tree-sitter-verilog-test v0.1.0 (/home/rfdonnelly/repos/tree-sitter-verilog-test)
     Finished dev [unoptimized + debuginfo] target(s) in 6.27s
      Running target/debug/deps/tree_sitter_verilog_test-3a23b31b32f84a74
@@ -558,8 +531,8 @@ test test_parser ... ok
 
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out</code></pre></div>
 <p>Finally commit the necessary files:</p>
-<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">git add -f Cargo.lock Cargo.toml build.rs src/main.rs tree-sitter-verilog/src/parser.c tree-sitter-verilog/src/tree_sitter/parser.h
-git commit -m <span style="color:#4070a0">&#34;Add Tree Sitter parser&#34;</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git add -f Cargo.lock Cargo.toml build.rs src/main.rs
+git commit -m <span class="s2">&#34;Add Tree-sitter parser&#34;</span></code></pre></div>
       </div>
     </div>
   </div>
@@ -573,15 +546,9 @@ git commit -m <span style="color:#4070a0">&#34;Add Tree Sitter parser&#34;</span
       <div class="pure-menu pure-menu-horizontal">
         <ul>
           
-          <li class="pure-menu-item" id="foot-name">© Rob Donnelly</li>
-          
 
           
 
-          
-          <li class="pure-menu-item">
-            <a href="https://github.com/rfdonnelly" class="pure-menu-link">GitHub</a>
-          </li>
           
 
           
