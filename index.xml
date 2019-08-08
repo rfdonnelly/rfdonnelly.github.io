@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Rob Donnelly</title>
+    <link>http://rfdonnelly.github.io/</link>
+    <description>Recent content on Rob Donnelly</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 07 Aug 2019 22:04:50 -0700</lastBuildDate>
+    
+	<atom:link href="http://rfdonnelly.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>About</title>
+      <link>http://rfdonnelly.github.io/about/</link>
+      <pubDate>Wed, 07 Aug 2019 22:04:50 -0700</pubDate>
+      
+      <guid>http://rfdonnelly.github.io/about/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Using Tree Sitter Parsers in Rust</title>
+      <link>http://rfdonnelly.github.io/posts/using-tree-sitter-parsers-in-rust/</link>
+      <pubDate>Wed, 07 Aug 2019 11:20:33 -0700</pubDate>
+      
+      <guid>http://rfdonnelly.github.io/posts/using-tree-sitter-parsers-in-rust/</guid>
+      <description>Tree Sitter is a parser generator tool and parsing library. It generates portable parsers and provides bindings for several languages including Rust. Tree Sitter grammars are available for several languages.
+This is a game changer because it lowers the barrier to entry for writing language tooling. You no longer need to write your own parser to implement language tooling. With Tree Sitter, you can now simply use an existing parser.</description>
+    </item>
+    
+  </channel>
+</rss>
