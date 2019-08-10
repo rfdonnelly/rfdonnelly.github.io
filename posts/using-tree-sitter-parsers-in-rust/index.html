@@ -421,6 +421,8 @@ code, kbd, pre, samp {
         
         
 
+<p><em>Update: 2019-08-10: Fixed rerun directive in <code>build.rs</code></em></p>
+
 <p><a href="https://tree-sitter.github.io/tree-sitter">Tree-sitter</a> is a parser generator tool and parsing library.
 It generates portable parsers that can be used in several languages including Rust.
 Tree-sitter grammars are available for several languages.</p>
@@ -478,7 +480,7 @@ Add the <code>cc</code> crate to the <code>build-dependencies</code> section of 
 </span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">source_directory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">format</span><span class="o">!</span><span class="p">(</span><span class="s">&#34;{}/src&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">package</span><span class="p">);</span><span class="w">
 </span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">source_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">format</span><span class="o">!</span><span class="p">(</span><span class="s">&#34;{}/parser.c&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">source_directory</span><span class="p">);</span><span class="w">
 </span><span class="w">
-</span><span class="w">    </span><span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&#34;rerun-if-changed={}&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">source_file</span><span class="p">);</span><span class="w"> </span><span class="c1">// &lt;1&gt;
+</span><span class="w">    </span><span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&#34;cargo:rerun-if-changed={}&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">source_file</span><span class="p">);</span><span class="w"> </span><span class="c1">// &lt;1&gt;
 </span><span class="c1"></span><span class="w">
 </span><span class="w">    </span><span class="n">cc</span>::<span class="n">Build</span>::<span class="n">new</span><span class="p">()</span><span class="w">
 </span><span class="w">        </span><span class="p">.</span><span class="n">file</span><span class="p">(</span><span class="n">source_file</span><span class="p">)</span><span class="w">
