@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Rob Donnelly</title>
@@ -10,6 +10,16 @@
     
 	<atom:link href="https://rfdonnelly.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>A Word on Patagonia</title>
+      <link>https://rfdonnelly.github.io/posts/patagonia/</link>
+      <pubDate>Tue, 30 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfdonnelly.github.io/posts/patagonia/</guid>
+      <description>My Houdini, the blue layer pictured in these photos, is no more. After 6 years together our paternship came to a sudden end. I was in disbelief. It wasn&amp;#8217;t due to some epic alpine adventure. It was caused by a puppy; a cute, energetic, teething puppy.
+  Matthes Crest during a Tenaya-Matthes-Cathedral linkup. Photo: Tami Abdollah  At less than 4oz and $99 dollars I was initially very unsure about the purchase.</description>
+    </item>
     
     <item>
       <title>About</title>
