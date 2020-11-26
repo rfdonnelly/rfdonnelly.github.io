@@ -3,8 +3,8 @@
 <head>
   
   <meta charset="utf-8">
-  <title>Tree-sitter</title>
-  <meta name="description" content="Tree-sitter">
+  <title>WSL2</title>
+  <meta name="description" content="WSL2">
   <meta name="author" content="Rob Donnelly">
   
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -356,8 +356,6 @@ code, kbd, pre, samp {
 
   
   
-  <link href="https://rfdonnelly.github.io/tags/tree-sitter/index.xml" rel="alternate" type="application/rss+xml" title="Rob Donnelly Feed" />
-  
 
   <meta name="generator" content="Hugo 0.78.2" />
 
@@ -396,32 +394,360 @@ code, kbd, pre, samp {
 </div>
 
 
-
 <div class="pure-g">
   <div class="pure-u-1-24 pure-u-md-5-24"></div>
   <div class="pure-u-11-12 pure-u-md-7-12">
-    <div class="post-content">
-      <p class="posts-name">Tree-sitter:</p>
+    <div class="post">
 
-      <ul class="posts">
+      <div class="post-title">
+        <p class="footnote">
+          <time datetime="2020-02-03 22:44:58 &#43;0000 UTC">
+            
+              2020-02-03
+            
+          </time>
         
         
         
-        <li>
-          
-          <a class="post-list" href="https://rfdonnelly.github.io/posts/using-tree-sitter-parsers-in-rust/">Using Tree-sitter Parsers in Rust</a>
 
-          <p class="footnote">
-            <time datetime="2019-08-07 11:20:33 -0700 -0700">
-              
-                2019-08-07
-              
-            </time>
-          </p>
-        </li>
         
+
         
-      </ul>
+        </p>
+        <h1>WSL2</h1>
+      </div>
+
+      <div class="post-content">
+        
+        <div class="admonitionblock note">
+<table class='pure-table pure-table-striped'>
+<tbody><tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Updated on 2020-11-25.
+Added <a href="#ssh-into-wsl2">SSH into WSL2</a>.
+</td>
+</tr>
+</tbody></table>
+</div>
+<div class="paragraph">
+<p>This article documents the setup of WSL2 for local and remote development.
+Local development is supported by Docker.
+For remote development, WSL2 effectively acts as a bridge.
+Remote development is done via SSH with support for X11 forwarding and port forwarding.
+This allows X11 applications to be run on the remote host and display on the Windows desktop and it allows a webserver to be run on the remote host and accessed via a local Windows port.</p>
+</div>
+<div class="sect1">
+<h2 id="install-wsl2">Install WSL2</h2>
+<div class="sectionbody">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Install <a href="https://docs.microsoft.com/en-us/windows/wsl/wsl2-install">WSL2</a></p>
+</li>
+<li>
+<p>Install Ubuntu from the Microsoft Store</p>
+</li>
+<li>
+<p>Convert to WSL2</p>
+<div class="literalblock">
+<div class="content">
+<pre>wsl --set-version Ubuntu 2</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Verify WSL version</p>
+<div class="literalblock">
+<div class="content">
+<pre>wsl --list --verbose</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="install-docker">Install Docker</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The following will make Docker available from WSL2.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Download the <a href="https://docs.docker.com/docker-for-windows/edge-release-notes">latest edge release</a></p>
+</li>
+<li>
+<p>Follow the <a href="https://docs.docker.com/docker-for-windows/wsl-tech-preview">Docker WSL2 instructions</a></p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="install-windows-terminal">Install Windows Terminal</h2>
+<div class="sectionbody">
+<div class="admonitionblock note">
+<table class='pure-table pure-table-striped'>
+<tbody><tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+This covers v0.8.
+</td>
+</tr>
+</tbody></table>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Install Windows Terminal from the Microsoft Store</p>
+</li>
+<li>
+<p>Open Windows Terminal</p>
+</li>
+<li>
+<p>Edit Settings</p>
+<div class="listingblock">
+<div class="title">profile.json</div>
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">// To view the default settings, hold &#34;alt&#34; while clicking on the &#34;Settings&#34; button.
+// For documentation on these settings, see: https://aka.ms/terminal-documentation
+
+{
+    &#34;$schema&#34;: &#34;https://aka.ms/terminal-profiles-schema&#34;,
+
+    &#34;defaultProfile&#34;: &#34;{2c4de342-38b7-51cf-b940-2309a097f518}&#34;,
+
+    // Simplify copying
+    &#34;copyOnSelect&#34;: true,
+
+    // Removed the following characters from the default list to allow double clicking
+    // of paths and URLs to select and copy them: &#39;/&#39;, &#39;\&#39;, &#39;.&#39;, &#39;:&#39;
+    &#34;wordDelimiters&#34;: &#34; ()\&#34;&#39;,;&lt;&gt;~!@#$%^&amp;*|+=[]{}~?\u2502&#34;,
+
+    &#34;profiles&#34;: {
+	&#34;defaults&#34;: {
+            // Make the cursor easier to find
+            &#34;cursorShape&#34;: &#34;emptyBox&#34;
+        },
+        &#34;list&#34;: [
+            {
+                // Make changes here to the powershell.exe profile
+                &#34;guid&#34;: &#34;{61c54bbd-c2c6-5271-96e7-009a87ff44bf}&#34;,
+                &#34;name&#34;: &#34;Windows PowerShell&#34;,
+                &#34;commandline&#34;: &#34;powershell.exe&#34;,
+                &#34;hidden&#34;: false
+            },
+            {
+                // Make changes here to the cmd.exe profile
+                &#34;guid&#34;: &#34;{0caa0dad-35be-5f56-a8ff-afceeeaa6101}&#34;,
+                &#34;name&#34;: &#34;cmd&#34;,
+                &#34;commandline&#34;: &#34;cmd.exe&#34;,
+                &#34;hidden&#34;: false
+            },
+            {
+                &#34;guid&#34;: &#34;{2c4de342-38b7-51cf-b940-2309a097f518}&#34;,
+                &#34;hidden&#34;: false,
+                &#34;name&#34;: &#34;Ubuntu&#34;,
+                &#34;source&#34;: &#34;Windows.Terminal.Wsl&#34;,
+
+                // Fix the starting directory
+                &#34;startingDirectory&#34;: &#34;//wsl$/Ubuntu/home/&lt;windows-username&gt;&#34;
+            },
+            {
+                &#34;guid&#34;: &#34;{b453ae62-4e3d-5e58-b989-0a998ec441b8}&#34;,
+                &#34;hidden&#34;: false,
+                &#34;name&#34;: &#34;Azure Cloud Shell&#34;,
+                &#34;source&#34;: &#34;Windows.Terminal.Azure&#34;
+            }
+        ]
+    },
+
+    // Add custom color schemes to this array
+    &#34;schemes&#34;: [],
+
+    // Add any keybinding overrides to this array.
+    // To unbind a default keybinding, set the command to &#34;unbound&#34;
+    &#34;keybindings&#34;: [
+        // Make paste work like Linux
+        { &#34;command&#34;: &#34;paste&#34;, &#34;keys&#34;: [ &#34;shift+insert&#34; ] }
+    ]
+}</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="setup-ssh-x11-forwarding">Setup SSH X11 Forwarding</h2>
+<div class="sectionbody">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Install <a href="https://sourceforge.net/projects/vcxsrv">VcXsrc</a></p>
+</li>
+<li>
+<p>Run XLaunch</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Set display number to <code>0</code></p>
+</li>
+<li>
+<p>Disable access control</p>
+</li>
+<li>
+<p>Save configuration</p>
+</li>
+<li>
+<p>Open saved configuration to run VcXsrc</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>Open WSL terminal</p>
+</li>
+<li>
+<p>Configure <code>$DISPLAY</code> by adding the following to your <code>~/.bashrc</code></p>
+<div class="literalblock">
+<div class="content">
+<pre>export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk &#39;{print $2}&#39;):0.0</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This sets the DISPLAY to the IP address of the Windows host.</p>
+</div>
+</li>
+<li>
+<p>Configure SSH</p>
+<div class="listingblock">
+<div class="title">~/.ssh/config</div>
+<div class="content">
+<pre class="highlight"><code>Host *
+    User &lt;remote-username&gt;
+    ForwardX11 yes
+    ForwardX11Trusted yes
+    ForwardAgent yes</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Test</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>SSH</p>
+<div class="literalblock">
+<div class="content">
+<pre> ssh remote-host
+.. Run an X11 application</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>xlogo</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It should display on your Windows desktop.</p>
+</div>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="setup-pageant">Setup Pageant</h2>
+<div class="sectionbody">
+<div class="admonitionblock note">
+<table class='pure-table pure-table-striped'>
+<tbody><tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+This assumes you manage SSH keys using PuTTY pageant or compatible application.
+</td>
+</tr>
+</tbody></table>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Download <a href="https://github.com/BlackReloaded/wsl2-ssh-pageant">wsl2-ssh-pageant</a></p>
+<div class="literalblock">
+<div class="content">
+<pre>cd ~/.ssh/
+curl -LO https://github.com/BlackReloaded/wsl2-ssh-pageant/releases/download/v1.0.0/wsl2-ssh-pageant.exe
+chmod +x wsl2-ssh-pageant.exe</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Install socat</p>
+<div class="literalblock">
+<div class="content">
+<pre>sudo apt-get install socat</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Add wsl2-ssh-pageant to your <code>~/.bashrc</code></p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-sh" data-lang="sh">export SSH_AUTH_SOCK=$HOME/.ssh/agent.sock
+ss -a | grep -q $SSH_AUTH_SOCK
+if [ $? -ne 0 ]; then
+        rm -f $SSH_AUTH_SOCK
+        setsid nohup socat UNIX-LISTEN:$SSH_AUTH_SOCK,fork EXEC:$HOME/.ssh/wsl2-ssh-pageant.exe &gt;/dev/null 2&gt;&amp;1 &amp;
+fi</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="ssh-into-wsl2">SSH into WSL2</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Scott Hanselman has a great article on accessing WSL2 via Windows OpenSSH server titled <a href="https://www.hanselman.com/blog/the-easy-way-how-to-ssh-into-bash-and-wsl2-on-windows-10-from-an-external-machine">THE EASY WAY how to SSH into Bash and WSL2 on Windows 10 from an external machine</a>.
+However, it only supports Bash.
+It doesn’t support alternative shells like Zsh.</p>
+</div>
+<div class="paragraph">
+<p>The trick is to change the Windows OpenSSH server default shell to <code>C:\Windows\System32\wsl.exe</code> instead of <code>C:\Windows\System32\bash.exe</code>.
+This will use whatever shell WSL2 has been configured to use.</p>
+</div>
+<div class="listingblock">
+<div class="title">So instead of</div>
+<div class="content">
+<pre class="highlight"><code>New-ItemProperty -Path &#34;HKLM:\SOFTWARE\OpenSSH&#34; -Name DefaultShell -Value &#34;C:\WINDOWS\System32\bash.exe&#34; -PropertyType String -Force</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Use</div>
+<div class="content">
+<pre class="highlight"><code>New-ItemProperty -Path &#34;HKLM:\SOFTWARE\OpenSSH&#34; -Name DefaultShell -Value &#34;C:\WINDOWS\System32\wsl.exe&#34; -PropertyType String -Force</code></pre>
+</div>
+</div>
+</div>
+</div>
+
+      </div>
     </div>
   </div>
   <div class="pure-u-1-24 pure-u-md-5-24"></div>
@@ -451,8 +777,6 @@ code, kbd, pre, samp {
 
         </ul>
         <a href="#" class="pure-menu-link pull-right" id="gototop-btn">↑↑</a>
-        
-        <a href="https://rfdonnelly.github.io/tags/tree-sitter/index.xml" class="pure-menu-link pull-right">RSS</a>
         
       </div>
       

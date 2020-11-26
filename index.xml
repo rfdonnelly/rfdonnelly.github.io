@@ -6,19 +6,24 @@
     <description>Recent content on Rob Donnelly</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 08 Aug 2019 11:58:40 -0700</lastBuildDate>
-    
-	<atom:link href="https://rfdonnelly.github.io/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Tue, 30 Jun 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://rfdonnelly.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>A Word on Patagonia</title>
       <link>https://rfdonnelly.github.io/posts/patagonia/</link>
       <pubDate>Tue, 30 Jun 2020 00:00:00 +0000</pubDate>
       
       <guid>https://rfdonnelly.github.io/posts/patagonia/</guid>
-      <description>My Houdini, the blue layer pictured in these photos, is no more. After 6 years together our paternship came to a sudden end. I was in disbelief. It wasn&amp;#8217;t due to some epic alpine adventure. It was caused by a puppy; a cute, energetic, teething puppy.
+      <description>My Houdini, the blue layer pictured in these photos, is no more. After 6 years together our paternship came to a sudden end. I was in disbelief. It wasn’t due to some epic alpine adventure. It was caused by a puppy; a cute, energetic, teething puppy.
   Matthes Crest during a Tenaya-Matthes-Cathedral linkup. Photo: Tami Abdollah 2015-09-05  At less than 4oz and $99 dollars I was initially very unsure about the purchase.</description>
+    </item>
+    
+    <item>
+      <title>WSL2</title>
+      <link>https://rfdonnelly.github.io/posts/wsl2/</link>
+      <pubDate>Mon, 03 Feb 2020 22:44:58 +0000</pubDate>
+      
+      <guid>https://rfdonnelly.github.io/posts/wsl2/</guid>
+      <description>Note  Updated on 2020-11-25. Added SSH into WSL2.     This article documents the setup of WSL2 for local and remote development. Local development is supported by Docker. For remote development, WSL2 effectively acts as a bridge. Remote development is done via SSH with support for X11 forwarding and port forwarding. This allows X11 applications to be run on the remote host and display on the Windows desktop and it allows a webserver to be run on the remote host and accessed via a local Windows port.</description>
     </item>
     
     <item>
