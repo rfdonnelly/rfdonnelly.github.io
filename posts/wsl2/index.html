@@ -514,48 +514,36 @@ This allows X11 applications to be run on the remote host and display on the Win
     // Simplify copying
     &#34;copyOnSelect&#34;: true,
 
-    // Disable multi-line paste warning
-    &#34;multiLinePasteWarning&#34;: false,
-
     // Removed the following characters from the default list to allow double clicking
     // of paths and URLs to select and copy them: &#39;/&#39;, &#39;\&#39;, &#39;.&#39;, &#39;:&#39;
     &#34;wordDelimiters&#34;: &#34; ()\&#34;&#39;,;&lt;&gt;~!@#$%^&amp;*|+=[]{}~?\u2502&#34;,
 
+    &#34;multiLinePasteWarning&#34;: false,
+
     &#34;profiles&#34;: {
         &#34;defaults&#34;: {
             // Make the cursor easier to find
-            &#34;cursorShape&#34;: &#34;emptyBox&#34;
+            &#34;cursorShape&#34;: &#34;emptyBox&#34;,
+
+            // Hide everything by default
+            &#34;hidden&#34;: true,
         },
         &#34;list&#34;: [
             {
-                // Make changes here to the powershell.exe profile
-                &#34;guid&#34;: &#34;{61c54bbd-c2c6-5271-96e7-009a87ff44bf}&#34;,
-                &#34;name&#34;: &#34;Windows PowerShell&#34;,
-                &#34;commandline&#34;: &#34;powershell.exe&#34;,
-                &#34;hidden&#34;: true
-            },
-            {
-                // Make changes here to the cmd.exe profile
-                &#34;guid&#34;: &#34;{0caa0dad-35be-5f56-a8ff-afceeeaa6101}&#34;,
-                &#34;name&#34;: &#34;cmd&#34;,
-                &#34;commandline&#34;: &#34;cmd.exe&#34;,
-                &#34;hidden&#34;: true
-            },
-            {
                 &#34;guid&#34;: &#34;{2c4de342-38b7-51cf-b940-2309a097f518}&#34;,
                 &#34;hidden&#34;: false,
-                &#34;name&#34;: &#34;Ubuntu&#34;,
-                &#34;source&#34;: &#34;Windows.Terminal.Wsl&#34;,
+                &#34;name&#34;: &#34;WSL2&#34;,
 
-                // Fix the starting directory
-                &#34;startingDirectory&#34;: &#34;//wsl$/Ubuntu/home/rfdonnelly&#34;
+                // Start WSL like any other profile (i.e. don&#39;t use &#34;source&#34;)
+                // Start in Linux home directory instead of Windows home directory
+                &#34;commandline&#34;: &#34;wsl.exe ~&#34;,
+
+                // WORKAROUND: The right padding is more than it should be.
+                // Making it 0 seems to be equivalent to 8 on the left.
+                // Also hide the scrollbar so that it doesn&#39;t contribute to the padding.
+                &#34;padding&#34;: &#34;8, 8, 0, 0&#34;,
+                &#34;scrollbarState&#34;: &#34;hidden&#34;,
             },
-            {
-                &#34;guid&#34;: &#34;{b453ae62-4e3d-5e58-b989-0a998ec441b8}&#34;,
-                &#34;hidden&#34;: true,
-                &#34;name&#34;: &#34;Azure Cloud Shell&#34;,
-                &#34;source&#34;: &#34;Windows.Terminal.Azure&#34;
-            }
         ]
     },
 
