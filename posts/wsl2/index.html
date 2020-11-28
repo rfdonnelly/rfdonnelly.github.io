@@ -426,8 +426,8 @@ code, kbd, pre, samp {
 <div class="title">Note</div>
 </td>
 <td class="content">
-Updated on 2020-11-25.
-Added <a href="#ssh-into-wsl2">SSH into WSL2</a>.
+2020-11-25 — Added <a href="#ssh-into-wsl2">SSH into WSL2</a>.
+NOTE: 2020-11-27 — Changed Docker from edge to stable.
 </td>
 </tr>
 </tbody></table>
@@ -436,8 +436,8 @@ Added <a href="#ssh-into-wsl2">SSH into WSL2</a>.
 <p>This article documents the setup of WSL2 for local and remote development.
 Local development is supported by Docker.
 For remote development, WSL2 effectively acts as a bridge.
-Remote development is done via SSH with support for X11 forwarding and port forwarding.
-This allows X11 applications to be run on the remote host and display on the Windows desktop and it allows a webserver to be run on the remote host and accessed via a local Windows port.</p>
+Remote development is done via SSH with support for X11 forwarding.
+This allows X11 applications to be run on the remote host and display on the Windows desktop.</p>
 </div>
 <div class="sect1">
 <h2 id="install-wsl2">Install WSL2</h2>
@@ -479,10 +479,10 @@ This allows X11 applications to be run on the remote host and display on the Win
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Download the <a href="https://docs.docker.com/docker-for-windows/edge-release-notes">latest edge release</a></p>
+<p>Download the <a href="https://docs.docker.com/docker-for-windows/release-notes/">latest stable release</a></p>
 </li>
 <li>
-<p>Follow the <a href="https://docs.docker.com/docker-for-windows/wsl-tech-preview">Docker WSL2 instructions</a></p>
+<p>Follow the <a href="https://docs.docker.com/docker-for-windows/wsl/">Docker WSL2 instructions</a></p>
 </li>
 </ol>
 </div>
@@ -491,18 +491,6 @@ This allows X11 applications to be run on the remote host and display on the Win
 <div class="sect1">
 <h2 id="install-windows-terminal">Install Windows Terminal</h2>
 <div class="sectionbody">
-<div class="admonitionblock note">
-<table class='pure-table pure-table-striped'>
-<tbody><tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-This covers v0.8.
-</td>
-</tr>
-</tbody></table>
-</div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -518,7 +506,6 @@ This covers v0.8.
 <div class="content">
 <pre class="highlight"><code class="language-json" data-lang="json">// To view the default settings, hold &#34;alt&#34; while clicking on the &#34;Settings&#34; button.
 // For documentation on these settings, see: https://aka.ms/terminal-documentation
-
 {
     &#34;$schema&#34;: &#34;https://aka.ms/terminal-profiles-schema&#34;,
 
@@ -527,12 +514,15 @@ This covers v0.8.
     // Simplify copying
     &#34;copyOnSelect&#34;: true,
 
+    // Disable multi-line paste warning
+    &#34;multiLinePasteWarning&#34;: false,
+
     // Removed the following characters from the default list to allow double clicking
     // of paths and URLs to select and copy them: &#39;/&#39;, &#39;\&#39;, &#39;.&#39;, &#39;:&#39;
     &#34;wordDelimiters&#34;: &#34; ()\&#34;&#39;,;&lt;&gt;~!@#$%^&amp;*|+=[]{}~?\u2502&#34;,
 
     &#34;profiles&#34;: {
-	&#34;defaults&#34;: {
+        &#34;defaults&#34;: {
             // Make the cursor easier to find
             &#34;cursorShape&#34;: &#34;emptyBox&#34;
         },
@@ -542,14 +532,14 @@ This covers v0.8.
                 &#34;guid&#34;: &#34;{61c54bbd-c2c6-5271-96e7-009a87ff44bf}&#34;,
                 &#34;name&#34;: &#34;Windows PowerShell&#34;,
                 &#34;commandline&#34;: &#34;powershell.exe&#34;,
-                &#34;hidden&#34;: false
+                &#34;hidden&#34;: true
             },
             {
                 // Make changes here to the cmd.exe profile
                 &#34;guid&#34;: &#34;{0caa0dad-35be-5f56-a8ff-afceeeaa6101}&#34;,
                 &#34;name&#34;: &#34;cmd&#34;,
                 &#34;commandline&#34;: &#34;cmd.exe&#34;,
-                &#34;hidden&#34;: false
+                &#34;hidden&#34;: true
             },
             {
                 &#34;guid&#34;: &#34;{2c4de342-38b7-51cf-b940-2309a097f518}&#34;,
@@ -558,19 +548,16 @@ This covers v0.8.
                 &#34;source&#34;: &#34;Windows.Terminal.Wsl&#34;,
 
                 // Fix the starting directory
-                &#34;startingDirectory&#34;: &#34;//wsl$/Ubuntu/home/&lt;windows-username&gt;&#34;
+                &#34;startingDirectory&#34;: &#34;//wsl$/Ubuntu/home/rfdonnelly&#34;
             },
             {
                 &#34;guid&#34;: &#34;{b453ae62-4e3d-5e58-b989-0a998ec441b8}&#34;,
-                &#34;hidden&#34;: false,
+                &#34;hidden&#34;: true,
                 &#34;name&#34;: &#34;Azure Cloud Shell&#34;,
                 &#34;source&#34;: &#34;Windows.Terminal.Azure&#34;
             }
         ]
     },
-
-    // Add custom color schemes to this array
-    &#34;schemes&#34;: [],
 
     // Add any keybinding overrides to this array.
     // To unbind a default keybinding, set the command to &#34;unbound&#34;
