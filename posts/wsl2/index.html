@@ -443,6 +443,18 @@ code, kbd, pre, samp {
 </tr>
 </tbody></table>
 </div>
+<div class="admonitionblock note">
+<table class='pure-table pure-table-striped'>
+<tbody><tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+2020-11-29 — Added workaround for older Docker images.
+</td>
+</tr>
+</tbody></table>
+</div>
 <div class="paragraph">
 <p>This article documents the setup of WSL2 for local and remote development.
 Local development is supported by Docker.
@@ -496,6 +508,26 @@ This allows X11 applications to be run on the remote host and display on the Win
 <p>Follow the <a href="https://docs.docker.com/docker-for-windows/wsl/">Docker WSL2 instructions</a></p>
 </li>
 </ol>
+</div>
+<div class="admonitionblock note">
+<table class='pure-table pure-table-striped'>
+<tbody><tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>To run older Docker base images <a href="https://github.com/microsoft/WSL/issues/4694">a workaround may be needed</a>.</p>
+</div>
+<div class="listingblock">
+<div class="title">Create <code>%userprofile%\.wslconfig</code> with the following content</div>
+<div class="content">
+<pre class="highlight"><code>kernelCommandLine = vsyscall=emulate</code></pre>
+</div>
+</div>
+</td>
+</tr>
+</tbody></table>
 </div>
 </div>
 </div>
