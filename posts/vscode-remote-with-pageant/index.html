@@ -3,8 +3,8 @@
 <head>
   
   <meta charset="utf-8">
-  <title>Rob Donnelly</title>
-  <meta name="description" content="Rob Donnelly">
+  <title>Using Pageant with VS Code Remote Development</title>
+  <meta name="description" content="Using Pageant with VS Code Remote Development">
   <meta name="author" content="Rob Donnelly">
   
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -356,8 +356,6 @@ code, kbd, pre, samp {
 
   
   
-  <link href="https://rfdonnelly.github.io/index.xml" rel="alternate" type="application/rss+xml" title="Rob Donnelly Feed" />
-  
 
   <meta name="generator" content="Hugo 0.78.2" />
 
@@ -398,30 +396,20 @@ code, kbd, pre, samp {
 
 <div class="pure-g">
   <div class="pure-u-1-24 pure-u-md-5-24"></div>
-	<div class="pure-u-11-12 pure-u-md-7-12">
-	<div class="post-content">
-	
-	  <p class="posts-name">Recent posts:</p>
+  <div class="pure-u-11-12 pure-u-md-7-12">
+    <div class="post">
 
-	  <ul class="posts">
-		
-		
-		
-		<li>
-		  
-		  <a class="post-list" href="https://rfdonnelly.github.io/posts/vscode-remote-with-pageant/">Using Pageant with VS Code Remote Development</a>
-
-      <p class="footnote">
-        <time datetime="2020-12-01 22:31:27 &#43;0000 UTC">
-          
-            2020-12-01
-          
-        </time>
-
+      <div class="post-title">
+        <p class="footnote">
+          <time datetime="2020-12-01 22:31:27 &#43;0000 UTC">
+            
+              2020-12-01
+            
+          </time>
+        
         
         |
         
-
         
         tags: [ <a href="https://rfdonnelly.github.io/tags/software">Software</a> <a href="https://rfdonnelly.github.io/tags/vs-code">VS Code</a> <a href="https://rfdonnelly.github.io/tags/ssh">SSH</a> ]
         
@@ -429,95 +417,117 @@ code, kbd, pre, samp {
         
 
         
+        </p>
+        <h1>Using Pageant with VS Code Remote Development</h1>
+      </div>
 
-      </p>
-    </li>
-    
-    
-		
-		<li>
-		  
-		  <a class="post-list" href="https://rfdonnelly.github.io/posts/patagonia/">A Word on Patagonia</a>
-
-      <p class="footnote">
-        <time datetime="2020-06-30 00:00:00 &#43;0000 UTC">
-          
-            2020-06-30
-          
-        </time>
-
+      <div class="post-content">
         
+        <div class="paragraph">
+<p>This article documents using Pageant to manage SSH keys for VS Code Remote.</p>
+</div>
+<div class="sect1">
+<h2 id="_assumptions">Assumptions</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://code.visualstudio.com/">VS Code</a> and the <a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack">VS Code Remote Development extension</a> is installed</p>
+</li>
+<li>
+<p><a href="https://the.earth.li/~sgtatham/putty/0.74/htmldoc/Chapter9.html#pageant">PuTTY Pageant</a> is being used to manage SSH keys</p>
+</li>
+<li>
+<p>The remote host has a corresponding public key</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_introduction">Introduction</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>VS Code Remote Development doesn’t support Pageant out of the box.⁠<sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup>
+More specifically, VS Code Remote Development uses the Windows 10 native OpenSSH client and the OpenSSH client doesn’t support Pageant.
+A bridge is needed to make Pageant available to the OpenSSH client.</p>
+</div>
+<div class="paragraph">
+<p>This is where <code>wsl-ssh-pageant</code> comes in.
+<code>wsl-ssh-pageant</code> can make Pageant available to WSL or the Windows OpenSSH client.
+We are going to use it to make Pageant available to the Windows OpenSSH client.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_install_wsl_ssh_pageant">Install <code>wsl-ssh-pageant</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Download <code>wsl-ssh-pageant-amd64-gui.exe</code> from the <a href="https://github.com/benpye/wsl-ssh-pageant/releases">latest release</a> of <code>wsl-ssh-pageant</code>⁠<sup class="footnote">[<a id="_footnoteref_2" class="footnote" href="#_footnotedef_2" title="View footnote.">2</a>]</sup></p>
+</div>
+<div class="admonitionblock note">
+<table class='pure-table pure-table-striped'>
+<tbody><tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+The <code>-gui</code> version doesn’t actually provide a GUI but rather it doesn’t open a terminal while the non-gui version does.
+</td>
+</tr>
+</tbody></table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_setup_wsl_ssh_pageant">Setup <code>wsl-ssh-pageant</code></h2>
+<div class="sectionbody">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Open the startup directory by pressing <span class="keyseq"><kbd>⊞Win</kbd>+<kbd>R</kbd></span> and typing <code>shell:startup↵</code></p>
+</li>
+<li>
+<p>Create a <code>.bat</code> file with the following content⁠<sup class="footnote">[<a id="_footnoteref_3" class="footnote" href="#_footnotedef_3" title="View footnote.">3</a>]</sup></p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bat" data-lang="bat">@ECHO OFF
+SETX SSH_AUTH_SOCK \\.\pipe\ssh-pageant
+START /B &#34;&#34; &#34;C:\SSH\wsl-ssh-pageant-amd64-gui.exe&#34; --systray --winssh ssh-pageant</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Run the <code>.bat</code> file</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_use_vs_code_remote_development">Use VS Code Remote Development</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Open VS Code and connect to a remote host.
+You should no longer be prompted for a password.</p>
+</div>
+</div>
+</div>
+<div id="footnotes">
+<hr/>
+<div class="footnote" id="_footnotedef_1">
+<a href="#_footnoteref_1">1</a>. As of VS Code v1.51.
+</div>
+<div class="footnote" id="_footnotedef_2">
+<a href="#_footnoteref_2">2</a>. <code>wsl-ssh-pageant</code> v20201121.2 as of this writing.
+</div>
+<div class="footnote" id="_footnotedef_3">
+<a href="#_footnoteref_3">3</a>. Sourced from <a href="https://github.com/microsoft/vscode-remote-release/issues/61#issuecomment-508651407">microsoft/vscode-remote-release#61</a>.
+</div>
+</div>
 
-        
-
-        
-
-        
-
-      </p>
-    </li>
-    
-    
-		
-		<li>
-		  
-		  <a class="post-list" href="https://rfdonnelly.github.io/posts/wsl2/">Using WSL2</a>
-
-      <p class="footnote">
-        <time datetime="2020-02-03 22:44:58 &#43;0000 UTC">
-          
-            2020-02-03
-          
-        </time>
-
-        
-        |
-        
-
-        
-        tags: [ <a href="https://rfdonnelly.github.io/tags/software">Software</a> <a href="https://rfdonnelly.github.io/tags/docker">Docker</a> <a href="https://rfdonnelly.github.io/tags/wsl2">WSL2</a> <a href="https://rfdonnelly.github.io/tags/windows-terminal">Windows Terminal</a> <a href="https://rfdonnelly.github.io/tags/ssh">SSH</a> ]
-        
-
-        
-
-        
-
-      </p>
-    </li>
-    
-    
-		
-    
-		
-		<li>
-		  
-		  <a class="post-list" href="https://rfdonnelly.github.io/posts/using-tree-sitter-parsers-in-rust/">Using Tree-sitter Parsers in Rust</a>
-
-      <p class="footnote">
-        <time datetime="2019-08-07 11:20:33 -0700 -0700">
-          
-            2019-08-07
-          
-        </time>
-
-        
-        |
-        
-
-        
-        tags: [ <a href="https://rfdonnelly.github.io/tags/software">Software</a> <a href="https://rfdonnelly.github.io/tags/rust">Rust</a> <a href="https://rfdonnelly.github.io/tags/tree-sitter">Tree-sitter</a> ]
-        
-
-        
-
-        
-
-      </p>
-    </li>
-    
-    
-    </ul>
-  </div>
+      </div>
+    </div>
   </div>
   <div class="pure-u-1-24 pure-u-md-5-24"></div>
 </div>
@@ -546,8 +556,6 @@ code, kbd, pre, samp {
 
         </ul>
         <a href="#" class="pure-menu-link pull-right" id="gototop-btn">↑↑</a>
-        
-        <a href="https://rfdonnelly.github.io/index.xml" class="pure-menu-link pull-right">RSS</a>
         
       </div>
       

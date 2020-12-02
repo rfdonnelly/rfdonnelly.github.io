@@ -3,8 +3,8 @@
 <head>
   
   <meta charset="utf-8">
-  <title>WSL2</title>
-  <meta name="description" content="WSL2">
+  <title>Using WSL2</title>
+  <meta name="description" content="Using WSL2">
   <meta name="author" content="Rob Donnelly">
   
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -408,13 +408,17 @@ code, kbd, pre, samp {
           </time>
         
         
+        |
+        
+        
+        tags: [ <a href="https://rfdonnelly.github.io/tags/software">Software</a> <a href="https://rfdonnelly.github.io/tags/docker">Docker</a> <a href="https://rfdonnelly.github.io/tags/wsl2">WSL2</a> <a href="https://rfdonnelly.github.io/tags/windows-terminal">Windows Terminal</a> <a href="https://rfdonnelly.github.io/tags/ssh">SSH</a> ]
         
 
         
 
         
         </p>
-        <h1>WSL2</h1>
+        <h1>Using WSL2</h1>
       </div>
 
       <div class="post-content">
@@ -537,7 +541,7 @@ This allows X11 applications to be run on the remote host and display on the Win
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Install Windows Terminal from the Microsoft Store</p>
+<p>Install Windows Terminal from the Microsoft Store⁠<sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup></p>
 </li>
 <li>
 <p>Open Windows Terminal</p>
@@ -633,7 +637,7 @@ This allows X11 applications to be run on the remote host and display on the Win
 </div>
 </li>
 <li>
-<p>Open WSL terminal</p>
+<p>Open a WSL terminal</p>
 </li>
 <li>
 <p>Configure <code>$DISPLAY</code> by adding the following to your <code>~/.bashrc</code></p>
@@ -717,7 +721,7 @@ chmod +x wsl2-ssh-pageant.exe</pre>
 </div>
 </li>
 <li>
-<p>Install socat</p>
+<p>Install <code>socat</code></p>
 <div class="literalblock">
 <div class="content">
 <pre>sudo apt-get install socat</pre>
@@ -725,7 +729,7 @@ chmod +x wsl2-ssh-pageant.exe</pre>
 </div>
 </li>
 <li>
-<p>Add wsl2-ssh-pageant to your <code>~/.bashrc</code></p>
+<p>Add <code>wsl2-ssh-pageant</code> to your <code>~/.bashrc</code></p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-sh" data-lang="sh">export SSH_AUTH_SOCK=$HOME/.ssh/agent.sock
@@ -765,6 +769,12 @@ This will use whatever shell WSL2 has been configured to use.</p>
 <pre class="highlight"><code>New-ItemProperty -Path &#34;HKLM:\SOFTWARE\OpenSSH&#34; -Name DefaultShell -Value &#34;C:\WINDOWS\System32\wsl.exe&#34; -PropertyType String -Force</code></pre>
 </div>
 </div>
+</div>
+</div>
+<div id="footnotes">
+<hr/>
+<div class="footnote" id="_footnotedef_1">
+<a href="#_footnoteref_1">1</a>. Windows Terminal v1.4 as of this writing.
 </div>
 </div>
 

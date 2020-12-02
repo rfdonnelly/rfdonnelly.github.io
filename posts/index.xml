@@ -6,7 +6,20 @@
     <description>Recent content in Posts on Rob Donnelly</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 30 Jun 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://rfdonnelly.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 01 Dec 2020 22:31:27 +0000</lastBuildDate><atom:link href="https://rfdonnelly.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Using Pageant with VS Code Remote Development</title>
+      <link>https://rfdonnelly.github.io/posts/vscode-remote-with-pageant/</link>
+      <pubDate>Tue, 01 Dec 2020 22:31:27 +0000</pubDate>
+      
+      <guid>https://rfdonnelly.github.io/posts/vscode-remote-with-pageant/</guid>
+      <description>This article documents using Pageant to manage SSH keys for VS Code Remote.
+ Assumptions   VS Code and the VS Code Remote Development extension is installed
+  PuTTY Pageant is being used to manage SSH keys
+  The remote host has a corresponding public key
+     Introduction VS Code Remote Development doesn’t support Pageant out of the box.⁠[1] More specifically, VS Code Remote Development uses the Windows 10 native OpenSSH client and the OpenSSH client doesn’t support Pageant.</description>
+    </item>
+    
     <item>
       <title>A Word on Patagonia</title>
       <link>https://rfdonnelly.github.io/posts/patagonia/</link>
@@ -18,7 +31,7 @@
     </item>
     
     <item>
-      <title>WSL2</title>
+      <title>Using WSL2</title>
       <link>https://rfdonnelly.github.io/posts/wsl2/</link>
       <pubDate>Mon, 03 Feb 2020 22:44:58 +0000</pubDate>
       
