@@ -8,16 +8,22 @@
     <loc>https://rfdonnelly.github.io/</loc>
     <lastmod>2022-08-17T00:43:11+00:00</lastmod>
   </url><url>
-    <loc>https://rfdonnelly.github.io/posts/tauri-async-rust-process/</loc>
+    <loc>https://rfdonnelly.github.io/tags/rust/</loc>
     <lastmod>2022-08-17T00:43:11+00:00</lastmod>
   </url><url>
     <loc>https://rfdonnelly.github.io/tags/software/</loc>
-    <lastmod>2020-12-01T22:31:27+00:00</lastmod>
-  </url><url>
-    <loc>https://rfdonnelly.github.io/tags/ssh/</loc>
-    <lastmod>2020-12-01T22:31:27+00:00</lastmod>
+    <lastmod>2022-08-17T00:43:11+00:00</lastmod>
   </url><url>
     <loc>https://rfdonnelly.github.io/tags/</loc>
+    <lastmod>2022-08-17T00:43:11+00:00</lastmod>
+  </url><url>
+    <loc>https://rfdonnelly.github.io/tags/tauri/</loc>
+    <lastmod>2022-08-17T00:43:11+00:00</lastmod>
+  </url><url>
+    <loc>https://rfdonnelly.github.io/posts/tauri-async-rust-process/</loc>
+    <lastmod>2022-08-17T00:43:11+00:00</lastmod>
+  </url><url>
+    <loc>https://rfdonnelly.github.io/tags/ssh/</loc>
     <lastmod>2020-12-01T22:31:27+00:00</lastmod>
   </url><url>
     <loc>https://rfdonnelly.github.io/posts/vscode-remote-with-pageant/</loc>
@@ -46,9 +52,6 @@
   </url><url>
     <loc>https://rfdonnelly.github.io/about/</loc>
     <lastmod>2019-08-08T11:58:40-07:00</lastmod>
-  </url><url>
-    <loc>https://rfdonnelly.github.io/tags/rust/</loc>
-    <lastmod>2019-08-07T11:20:33-07:00</lastmod>
   </url><url>
     <loc>https://rfdonnelly.github.io/tags/tree-sitter/</loc>
     <lastmod>2019-08-07T11:20:33-07:00</lastmod>

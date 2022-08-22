@@ -457,6 +457,10 @@ kbd, pre, code, samp {
           
         
         
+        |
+        
+        
+        tags: [ <a href="https://rfdonnelly.github.io/tags/software">Software</a> <a href="https://rfdonnelly.github.io/tags/tauri">Tauri</a> <a href="https://rfdonnelly.github.io/tags/rust">Rust</a> ]
         
 
         
@@ -468,8 +472,8 @@ kbd, pre, code, samp {
 
       <div class="post-content">
         
-        <nav id="toc" class="toc" role="doc-toc"><h2 id="toc-title">Table of Contents</h2><ol class="toc-list level-1"><li><a href="#_goal">1. Goal</a></li><li><a href="#_create_a_tauri_app">2. Create a Tauri App</a></li><li><a href="#_the_async_process">3. The Async Process</a></li><li><a href="#_bidirectional_communication_between_rust_and_javascript">4. Bidirectional Communication between Rust and JavaScript</a><ol class="toc-list level-2"><li><a href="#_comands_vs_events">4.1. Comands vs Events</a></li><li><a href="#_possible_simplification">4.2. Possible Simplification</a></li><li><a href="#_the_javascript_side">4.3. The JavaScript Side</a></li><li><a href="#_the_rust_side">4.4. The Rust Side</a></li></ol></li><li><a href="#_bidirectional_communication_between_the_main_thread_and_the_async_process">5. Bidirectional Communication between the Main Thread and the Async Process</a><ol class="toc-list level-2"><li><a href="#_an_aside_who_owns_the_async_runtime">5.1. An Aside: Who Owns the Async Runtime?</a></li><li><a href="#_creating_the_channels">5.2. Creating the Channels</a></li><li><a href="#_running_the_async_process">5.3. Running the Async Process</a></li><li><a href="#_main_thread_to_async_process">5.4. Main Thread to Async Process</a></li><li><a href="#_async_process_to_main_thread">5.5. Async Process to Main Thread</a></li></ol></li><li><a href="#_result_2">6. Result</a></li></ol></nav><p>The complete source code for this post is available at <a class="bare" href="https://github.com/rfdonnelly/tauri-async-example">https://github.com/rfdonnelly/tauri-async-example</a>.</p>
-<section class="doc-section level-1"><h2 id="_goal">1. Goal</h2><p>Integrate an async Rust process into a Tauri application.
+        <nav id="toc" class="toc" role="doc-toc"><h2 id="toc-title">Table of Contents</h2><ol class="toc-list level-1"><li><a href="#goal">1. Goal</a></li><li><a href="#create-a-tauri-app">2. Create a Tauri App</a></li><li><a href="#the-async-process">3. The Async Process</a></li><li><a href="#bidirectional-communication-between-rust-and-javascript">4. Bidirectional Communication between Rust and JavaScript</a><ol class="toc-list level-2"><li><a href="#comands-vs-events">4.1. Comands vs Events</a></li><li><a href="#possible-simplification">4.2. Possible Simplification</a></li><li><a href="#the-javascript-side">4.3. The JavaScript Side</a></li><li><a href="#the-rust-side">4.4. The Rust Side</a></li></ol></li><li><a href="#bidirectional-communication-between-the-main-thread-and-the-async-process">5. Bidirectional Communication between the Main Thread and the Async Process</a><ol class="toc-list level-2"><li><a href="#an-aside-who-owns-the-async-runtime">5.1. An Aside: Who Owns the Async Runtime?</a></li><li><a href="#creating-the-channels">5.2. Creating the Channels</a></li><li><a href="#running-the-async-process">5.3. Running the Async Process</a></li><li><a href="#main-thread-to-async-process">5.4. Main Thread to Async Process</a></li><li><a href="#async-process-to-main-thread">5.5. Async Process to Main Thread</a></li></ol></li><li><a href="#result-2">6. Result</a></li></ol></nav><p>The complete source code for this post is available at <a class="bare" href="https://github.com/rfdonnelly/tauri-async-example">https://github.com/rfdonnelly/tauri-async-example</a>.</p>
+<section class="doc-section level-1"><h2 id="goal">1. Goal</h2><p>Integrate an async Rust process into a Tauri application.
 More specifically, perform bidirectional communication between the Tauri webview and an async Rust process where either side can initiate.</p>
 <p>The Tauri main thread manages both the webview and the async process.
 The main thread sits between the two.</p>
@@ -477,7 +481,7 @@ The main thread sits between the two.</p>
 <figcaption>Figure 1. A diagram of our desired Tauri application</figcaption></figure>
 <p>We can break this up into two smaller problems: bidirectional communication between,</p>
 <div class="ulist"><ul><li>the webview (JavaScript) and the main thread (Rust)</li><li>the main thread (Rust) and the async process (Rust)</li></ul></div></section>
-<section class="doc-section level-1"><h2 id="_create_a_tauri_app">2. Create a Tauri App</h2><p>First, we need to create a Tauri application.</p>
+<section class="doc-section level-1"><h2 id="create-a-tauri-app">2. Create a Tauri App</h2><p>First, we need to create a Tauri application.</p>
 <p>Follow the <a href="https://tauri.app/v1/guides/getting-started/prerequisites/">Tauri Getting Started</a> instructions for installing the necessary prerequisites.</p>
 <p>Run the <code>create-tauri-app</code> utility</p>
 <div class="listing-block"><pre class="pygments highlight" style="background: #f0f0f0;"><code data-lang="sh"><span></span>npm create tauri-app</code></pre></div>
@@ -493,7 +497,7 @@ npm install
 npm run tauri dev</code></pre></div>
 <figure class="image-block"><img src="create-tauri-app-vite-vue.png" alt="The default application window for the Tauri Vite + Vue template"/>
 <figcaption>Figure 2. The Tauri application with the Vite + Vue template</figcaption></figure></section>
-<section class="doc-section level-1"><h2 id="_the_async_process">3. The Async Process</h2><p>Next, we need to know what our async process looks like.
+<section class="doc-section level-1"><h2 id="the-async-process">3. The Async Process</h2><p>Next, we need to know what our async process looks like.
 We’ll keep it abstract to make this applicable to more applications.</p>
 <div class="image-block kroki"><img src="https://kroki.io/graphviz/svg/eNp1j8FqwzAMhu95CpPTBt0juNBTYWww2kIPyyiKozZimu3KdkIZffc5aQnbILoYyd8nfjV0EvCtWqvvQuUSsJ8Nid68FGMfUn0DDKcQUQ4RktAdHoqhRtblbhhXduU9k4FIzpbFxPSder9ze6w7wr6yD8_QwdYI-fhYLlRowaMO5wSCH5P4FSfxFciqXSsITZY3Ocy8Bn7SVuFiTWXfxBkMYcbMXbww6iMxY7NQw2scO9FMpzbWnPLy39c8LcdoxtkQJQeL-ggc_gbPzJBjnsm_455_Ut_dBtfi-gN7TX80" alt="Diagram"/></div>
 <p>The async process will take input via a <a href="https://docs.rs/tokio/latest/tokio/sync/mpsc/index.html"><code>tokio::mpsc</code></a> (Multi-Producer, Single-Consumer) channel and give output via another <code>tokio::mpsc</code> channel.</p>
@@ -521,19 +525,19 @@ We’ll also add Tracing and Tracing Subscriber while were at it.</p>
 <div class="listing-block"><pre class="pygments highlight" style="background: #f0f0f0;"><code data-lang="sh"><span></span><span style="color: #007020">cd</span> tauri-src
 cargo add tokio --features full
 cargo add tracing tracing-subscriber</code></pre></div></section>
-<section class="doc-section level-1"><h2 id="_bidirectional_communication_between_rust_and_javascript">4. Bidirectional Communication between Rust and JavaScript</h2><div class="image-block kroki"><img src="https://kroki.io/graphviz/svg/eNqlkMFqwzAMhu95CpPTBt0juFDGGIwVRlvYYSlDsdXGTLE92U4po-8-J-0yUthpugiZ___8S9rsGXwjHsVXIXIx2A9tWK6ei2EOqT4LFKUQkd8jJDYXcV8ENZIsN_1zZRfek1EQjbNlMWoOnXi76F6x7gweKnvzBB2sFRsfb8uZCA14lOEzAWOe4pFQ7gwR6pnou3LkWJLZN7GmhNuR3caRvQRjxaZhBJ35q5z3X2TwI3kRjlZV9oWdwhD-gG8nC9_Nh2jK2RA5B4tyBxRygjPy3rUtWB0mi2RP_-m1ZxJp4F6Zfu_70KGNP9BTcfoGSVuXsg==" alt="Diagram"/></div>
+<section class="doc-section level-1"><h2 id="bidirectional-communication-between-rust-and-javascript">4. Bidirectional Communication between Rust and JavaScript</h2><div class="image-block kroki"><img src="https://kroki.io/graphviz/svg/eNqlkMFqwzAMhu95CpPTBt0juFDGGIwVRlvYYSlDsdXGTLE92U4po-8-J-0yUthpugiZ___8S9rsGXwjHsVXIXIx2A9tWK6ei2EOqT4LFKUQkd8jJDYXcV8ENZIsN_1zZRfek1EQjbNlMWoOnXi76F6x7gweKnvzBB2sFRsfb8uZCA14lOEzAWOe4pFQ7gwR6pnou3LkWJLZN7GmhNuR3caRvQRjxaZhBJ35q5z3X2TwI3kRjlZV9oWdwhD-gG8nC9_Nh2jK2RA5B4tyBxRygjPy3rUtWB0mi2RP_-m1ZxJp4F6Zfu_70KGNP9BTcfoGSVuXsg==" alt="Diagram"/></div>
 <p>Tauri provides two mechanism for communicating between Rust and JavaScript: Events and Commands.
 The <a href="https://tauri.app/v1/guides/features/command">Tauri docs for Commands</a> and <a href="https://tauri.app/v1/guides/features/events">Events</a> do a good job of covering these.</p>
-<section class="doc-section level-2"><h3 id="_comands_vs_events">4.1. Comands vs Events</h3><p>Events be sent in either direction while Commands can only go from JavaScript to Rust.</p>
+<section class="doc-section level-2"><h3 id="comands-vs-events">4.1. Comands vs Events</h3><p>Events be sent in either direction while Commands can only go from JavaScript to Rust.</p>
 <p>For sending messages from JavaScript to Rust, I prefer Commands.
 Commands automate a lot of the boiler plate like message deserialization and state management.
 So while we could use Events for everything, Commands are more ergonomic.</p></section>
-<section class="doc-section level-2"><h3 id="_possible_simplification">4.2. Possible Simplification</h3><p>You can get by with only async Tauri Commands (i.e. without Tauri Events) if:</p>
+<section class="doc-section level-2"><h3 id="possible-simplification">4.2. Possible Simplification</h3><p>You can get by with only async Tauri Commands (i.e. without Tauri Events) if:</p>
 <div class="ulist"><ul><li>JavaScript initiates all communication</li><li>Requests/responses are one-to-one or one-to-none</li></ul></div>
 <p>Otherwise, you also need Tauri Events.
 In this post, the goal is to allow either side to initiate communication.
 This requires the use of Events.</p></section>
-<section class="doc-section level-2"><h3 id="_the_javascript_side">4.3. The JavaScript Side</h3><p>On the JavaScript side we use the <a href="https://tauri.app/v1/api/js/modules/tauri#invoke"><code>invoke</code></a> and <a href="https://tauri.app/v1/api/js/modules/event#listen"><code>listen</code></a> Tauri APIs to send Commands and receive Events respectively.</p>
+<section class="doc-section level-2"><h3 id="the-javascript-side">4.3. The JavaScript Side</h3><p>On the JavaScript side we use the <a href="https://tauri.app/v1/api/js/modules/tauri#invoke"><code>invoke</code></a> and <a href="https://tauri.app/v1/api/js/modules/event#listen"><code>listen</code></a> Tauri APIs to send Commands and receive Events respectively.</p>
 <p>I rewrote the <code>HelloWorld</code> Vue component that is created by the <code>create-tauri-app</code> utility to provide an interface for sending messages to Rust and reporting messages in both directions.</p>
 <p>Replace the content of <code>src/components/HelloWorld.vue</code> with the listing below.
 The interesting parts are the <code>sendOutput()</code> function and the call to <code>listen()</code>.</p>
@@ -586,17 +590,17 @@ The interesting parts are the <code>sendOutput()</code> function and the call to
   &lt;/<span style="color: #062873; font-weight: bold">div</span>&gt;
 &lt;/<span style="color: #062873; font-weight: bold">template</span>&gt;</code></pre><ol class="callout-list arabic"><li>Clicking the button calls <code>sendOutput()</code></li><li>Add the &#39;js2rs&#39; message to the outputs array to show the user what was sent</li><li>Send the &#39;js2rs&#39; message to Rust via the Tauri <code>invoke</code> API</li><li>Setup a listener for the &#39;rs2js&#39; event via the Tauri <code>listen</code> API</li><li>Add the &#39;rs2js&#39; message to the <code>inputs</code> array to show the user what was received</li></ol></div>
 
-<section class="doc-section level-3"><h4 id="_an_aside_suspense">4.3.1. An Aside: <code>&lt;Suspense&gt;</code></h4><p>The <code>HelloWorld</code> component is now awaiting an async function in the <code>&lt;script setup&gt;</code>.
+<section class="doc-section level-3"><h4 id="an-aside-suspense">4.3.1. An Aside: <code>&lt;Suspense&gt;</code></h4><p>The <code>HelloWorld</code> component is now awaiting an async function in the <code>&lt;script setup&gt;</code>.
 When a Vue component includes a top-level <code>await</code> statement in <code>&lt;script setup&gt;</code>, the Vue component must now be placed in a <a href="https://vuejs.org/guide/built-ins/suspense.html"><code>&lt;Suspense&gt;</code></a> component.
 Modify <code>src/App.vue</code> as follows</p>
 <div class="listing-block"><pre class="pygments highlight" style="background: #f0f0f0;"><code data-lang="diff"><span></span><span style="color: #A00000">-  &lt;HelloWorld/&gt;</span>
 <span style="color: #00A000">+  &lt;Suspense&gt;</span>
 <span style="color: #00A000">+    &lt;HelloWorld/&gt;</span>
 <span style="color: #00A000">+  &lt;/Suspense&gt;</span></code></pre></div></section>
-<section class="doc-section level-3"><h4 id="_result">4.3.2. Result</h4><p>Now when we run the app it looks like</p>
+<section class="doc-section level-3"><h4 id="result">4.3.2. Result</h4><p>Now when we run the app it looks like</p>
 <figure class="image-block"><img src="vue-mods.png" alt="The Tauri application after the modifications to HelloWorld.vue"/>
 <figcaption>Figure 3. The Tauri application after the modifications to the <code>HelloWorld</code> component</figcaption></figure></section></section>
-<section class="doc-section level-2"><h3 id="_the_rust_side">4.4. The Rust Side</h3><p>Here is the Rust side of the bidirectional communication between the main thread and the webview.
+<section class="doc-section level-2"><h3 id="the-rust-side">4.4. The Rust Side</h3><p>Here is the Rust side of the bidirectional communication between the main thread and the webview.
 Most of the bidirectional communication between the main thread and the async process has been commented out.</p>
 <div class="listing-block"><pre class="pygments highlight" style="background: #f0f0f0;"><code data-lang="rust"><span></span><span style="color: #007020; font-weight: bold">use</span><span style="color: #bbbbbb"> </span>tauri::Manager;<span style="color: #bbbbbb"></span>
 <span style="color: #007020; font-weight: bold">use</span><span style="color: #bbbbbb"> </span>tokio::sync::mpsc;<span style="color: #bbbbbb"></span>
@@ -651,11 +655,11 @@ Most of the bidirectional communication between the main thread and the async pr
 <span style="color: #bbbbbb">    </span><span style="color: #60a0b0; font-style: italic">// ...</span>
 }<span style="color: #bbbbbb"></span></code></pre><ol class="callout-list arabic"><li>Stateful async Tauri Commands must return a <code>Result</code> (see <a href="https://github.com/tauri-apps/tauri/issues/2533">tauri-apps/tauri#2533</a>).</li></ol></div>
 </section></section>
-<section class="doc-section level-1"><h2 id="_bidirectional_communication_between_the_main_thread_and_the_async_process">5. Bidirectional Communication between the Main Thread and the Async Process</h2><div class="image-block kroki"><img src="https://kroki.io/graphviz/svg/eNqlkMFqwzAMhu95CpPTBtkjeNDTYGwwusIOyxiKozZmqu1JdkIZffc5TQht2W26GMnf__NLrd0xhE49qJ9C5WJwX61lvX4qTr2kZgIMJYnInxES2xkei6BB0uVmHNduFQJZA9F6VxYLM_TqfebesOktDrW7eYQeXg3bEG_LSkkHAbV8J2D8WIT7uAifwTq16RihzeJ1DnMty108EOqtJcK2UuNrPHnWZHddbCidOUNYnFdycKZ2L-wNivzH_Hzhu_tTeuOdRM7Zo94CyeVumRlzXDPVfNR9EHORePb863dyG_ppcCyOv7jhlXE=" alt="Diagram"/></div>
+<section class="doc-section level-1"><h2 id="bidirectional-communication-between-the-main-thread-and-the-async-process">5. Bidirectional Communication between the Main Thread and the Async Process</h2><div class="image-block kroki"><img src="https://kroki.io/graphviz/svg/eNqlkMFqwzAMhu95CpPTBtkjeNDTYGwwusIOyxiKozZmqu1JdkIZffc5TQht2W26GMnf__NLrd0xhE49qJ9C5WJwX61lvX4qTr2kZgIMJYnInxES2xkei6BB0uVmHNduFQJZA9F6VxYLM_TqfebesOktDrW7eYQeXg3bEG_LSkkHAbV8J2D8WIT7uAifwTq16RihzeJ1DnMty108EOqtJcK2UuNrPHnWZHddbCidOUNYnFdycKZ2L-wNivzH_Hzhu_tTeuOdRM7Zo94CyeVumRlzXDPVfNR9EHORePb863dyG_ppcCyOv7jhlXE=" alt="Diagram"/></div>
 <p>Passing messages between Rust and JavaScript may be straightforward but doing so between the Tauri main thread and an async process is a little more involved.</p>
 <p>The inputs and outputs of the async process are implemented as <a href="https://docs.rs/tokio/latest/tokio/sync/mpsc/index.html"><code>tokio::mpsc</code></a> (Multi-Producer, Single-Consumer) channels.
 We only have a single producer but there isn’t a more specific channel primitive for single-producer, single-consumer.</p>
-<section class="doc-section level-2"><h3 id="_an_aside_who_owns_the_async_runtime">5.1. An Aside: Who Owns the Async Runtime?</h3><p>By default, Tauri owns and initializes the Tokio runtime.
+<section class="doc-section level-2"><h3 id="an-aside-who-owns-the-async-runtime">5.1. An Aside: Who Owns the Async Runtime?</h3><p>By default, Tauri owns and initializes the Tokio runtime.
 Because of this, you don’t need an async <code>main</code> and a <code>#[tokio::main]</code> annotation.</p>
 <p>For additional flexibility, Tauri allows us to own and initialize the Tokio runtime ourselves.
 We can do this by adding the <code>#[tokio::main]</code> annotation, adding <code>async</code> to <code>main</code>, and then telling Tauri to use our Tokio runtime.</p>
@@ -665,7 +669,7 @@ We can do this by adding the <code>#[tokio::main]</code> annotation, adding <cod
 
 <span style="color: #bbbbbb">    </span><span style="color: #60a0b0; font-style: italic">// ...</span>
 }<span style="color: #bbbbbb"></span></code></pre></div>
-<section class="doc-section level-3"><h4 id="_inside_tauri">5.1.1. Inside Tauri</h4><p>If we make all of our async calls inside of Tauri, then Tauri can own and manage the Tokio runtime.</p>
+<section class="doc-section level-3"><h4 id="inside-tauri">5.1.1. Inside Tauri</h4><p>If we make all of our async calls inside of Tauri, then Tauri can own and manage the Tokio runtime.</p>
 <div class="listing-block"><pre class="pygments highlight" style="background: #f0f0f0;"><code data-lang="rust"><span></span><span style="color: #007020; font-weight: bold">fn</span> <span style="color: #06287e">main</span>()<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
 <span style="color: #bbbbbb">    </span><span style="color: #60a0b0; font-style: italic">// ...</span>
 
@@ -683,7 +687,7 @@ We can do this by adding the <code>#[tokio::main]</code> annotation, adding <cod
 <span style="color: #bbbbbb">        </span><span style="color: #60a0b0; font-style: italic">// ...</span>
 }<span style="color: #bbbbbb"></span></code></pre></div>
 <p>This is the method we’re going to use because it is slightly simpler.</p></section>
-<section class="doc-section level-3"><h4 id="_outside_tauri">5.1.2. Outside Tauri</h4><p>If we make any async calls outside of Tauri, then we need to own and manage the Tokio runtime.</p>
+<section class="doc-section level-3"><h4 id="outside-tauri">5.1.2. Outside Tauri</h4><p>If we make any async calls outside of Tauri, then we need to own and manage the Tokio runtime.</p>
 <div class="listing-block"><pre class="pygments highlight" style="background: #f0f0f0;"><code data-lang="rust"><span></span><span style="color: #007020">#[tokio::main]</span><span style="color: #bbbbbb"></span>
 <span style="color: #007020; font-weight: bold">async</span><span style="color: #bbbbbb"> </span><span style="color: #007020; font-weight: bold">fn</span> <span style="color: #06287e">main</span>()<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
 <span style="color: #bbbbbb">    </span>tauri::async_runtime::set(tokio::runtime::Handle::current());<span style="color: #bbbbbb"></span>
@@ -700,7 +704,7 @@ We can do this by adding the <code>#[tokio::main]</code> annotation, adding <cod
 <span style="color: #bbbbbb">    </span>tauri::Builder::default()<span style="color: #bbbbbb"></span>
 <span style="color: #bbbbbb">        </span><span style="color: #60a0b0; font-style: italic">// ...</span>
 }<span style="color: #bbbbbb"></span></code></pre></div></section></section>
-<section class="doc-section level-2"><h3 id="_creating_the_channels">5.2. Creating the Channels</h3><p>The <code>tokio::mpsc</code> channels need to be created for both directions: inputs in to the async process and outputs out of the async process.</p>
+<section class="doc-section level-2"><h3 id="creating-the-channels">5.2. Creating the Channels</h3><p>The <code>tokio::mpsc</code> channels need to be created for both directions: inputs in to the async process and outputs out of the async process.</p>
 <div class="listing-block"><pre class="pygments highlight" style="background: #f0f0f0;"><code data-lang="rust"><span></span><span style="color: #007020; font-weight: bold">fn</span> <span style="color: #06287e">main</span>()<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
 <span style="color: #bbbbbb">    </span><span style="color: #60a0b0; font-style: italic">// ...</span>
 
@@ -709,7 +713,7 @@ We can do this by adding the <code>#[tokio::main]</code> annotation, adding <cod
 
 <span style="color: #bbbbbb">    </span><span style="color: #60a0b0; font-style: italic">// ...</span>
 }<span style="color: #bbbbbb"></span></code></pre></div></section>
-<section class="doc-section level-2"><h3 id="_running_the_async_process">5.3. Running the Async Process</h3><p>We’ll have Tauri own and manage the Tokio runtime so we’ll need to run the async process inside <code>tauri::Builder::setup()</code>.</p>
+<section class="doc-section level-2"><h3 id="running-the-async-process">5.3. Running the Async Process</h3><p>We’ll have Tauri own and manage the Tokio runtime so we’ll need to run the async process inside <code>tauri::Builder::setup()</code>.</p>
 <div class="listing-block"><pre class="pygments highlight" style="background: #f0f0f0;"><code data-lang="rust"><span></span><span style="color: #007020; font-weight: bold">fn</span> <span style="color: #06287e">main</span>()<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
 <span style="color: #bbbbbb">    </span><span style="color: #60a0b0; font-style: italic">// ...</span>
 
@@ -730,7 +734,7 @@ We can do this by adding the <code>#[tokio::main]</code> annotation, adding <cod
 <span style="color: #bbbbbb">        </span>}<span style="color: #bbbbbb"></span>
 <span style="color: #bbbbbb">        </span><span style="color: #60a0b0; font-style: italic">// ...</span>
 }<span style="color: #bbbbbb"></span></code></pre></div></section>
-<section class="doc-section level-2"><h3 id="_main_thread_to_async_process">5.4. Main Thread to Async Process</h3><div class="image-block kroki"><img src="https://kroki.io/graphviz/svg/eNqlUM1qwzAMvucpjE8bZC9Q8KCnwdigdIUeljEUR21MVceV7YQy-u5zmpC1uU4XWeL7kyuzZ3C1eBE_mUjFYA-VYbV-y66zj-UA0BR9QP4OENmM4L4ISiQlN_26sEvnyGgIprEymzBdKz5H3BbL1mBX2IdXaOFDs3HhUebC1-BQ-VMExq-JeAwT8R2MFZuaEapEXqcwc1qawplQ7QwRVrnou26oYUVmX4eS4o0yuEl56c9WF3bFjUbv_yN-e_DT8zW9bqwPnLIHtQPy97clTJ9jjsnHTz06r3MxuEjGalES6MMiveTdIaPVH2lu0rXD4pJdfgEFB51E" alt="Diagram"/></div>
+<section class="doc-section level-2"><h3 id="main-thread-to-async-process">5.4. Main Thread to Async Process</h3><div class="image-block kroki"><img src="https://kroki.io/graphviz/svg/eNqlUM1qwzAMvucpjE8bZC9Q8KCnwdigdIUeljEUR21MVceV7YQy-u5zmpC1uU4XWeL7kyuzZ3C1eBE_mUjFYA-VYbV-y66zj-UA0BR9QP4OENmM4L4ISiQlN_26sEvnyGgIprEymzBdKz5H3BbL1mBX2IdXaOFDs3HhUebC1-BQ-VMExq-JeAwT8R2MFZuaEapEXqcwc1qawplQ7QwRVrnou26oYUVmX4eS4o0yuEl56c9WF3bFjUbv_yN-e_DT8zW9bqwPnLIHtQPy97clTJ9jjsnHTz06r3MxuEjGalES6MMiveTdIaPVH2lu0rXD4pJdfgEFB51E" alt="Diagram"/></div>
 <p>Sending messages between the main thread to the async process requires more sophistication.
 This additional sophistication is dictated by the need for our command to have mutable access to the async process input channel.</p>
 <p>To review, the main thread receives a message from JavaScript via a Tauri Command.
@@ -772,7 +776,7 @@ Instead of having to write <code>Mutex&lt;mpsc::Sender&lt;String&gt;&gt;</code> 
 <span style="color: #bbbbbb">        </span>.<span style="color: #007020; font-weight: bold">await</span><span style="color: #bbbbbb"></span>
 <span style="color: #bbbbbb">        </span>.map_err(<span style="color: #666666">|</span>e<span style="color: #666666">|</span><span style="color: #bbbbbb"> </span>e.to_string())<span style="color: #bbbbbb"></span>
 }<span style="color: #bbbbbb"></span></code></pre></div></section>
-<section class="doc-section level-2"><h3 id="_async_process_to_main_thread">5.5. Async Process to Main Thread</h3><div class="image-block kroki"><img src="https://kroki.io/graphviz/svg/eNqlkEFqwzAQRfc-hdCqBfcCARWyKpQWQhrIoi5lLE9ikYmsjCSbUHL3yrFxE2-rjTSj97_-qDJ7BleLF_GTibQY7KEyrNZv2bX2sRwATdEH5O8Akc0I94ugRFJy07cLu3SOjIZgGiuziela8TlyWyxbg11hH16hhQ_NxoVHmQtfg0PlTxEYvybhMUzCdzBWbGpGqJJ4ncLMZakKZ0K1M0RY5aLfdUMNKzL7OpQUb5zBTc5Lf7a6sCtuNHr_H_PbgZ-er-l1Y33glD2oHZC_ny0xfY45k4-fenRe3yUePf9uczFkkIzVoiTQh0U6yfkjXTs0LtnlF9Z3nUQ=" alt="Diagram"/></div>
+<section class="doc-section level-2"><h3 id="async-process-to-main-thread">5.5. Async Process to Main Thread</h3><div class="image-block kroki"><img src="https://kroki.io/graphviz/svg/eNqlkEFqwzAQRfc-hdCqBfcCARWyKpQWQhrIoi5lLE9ikYmsjCSbUHL3yrFxE2-rjTSj97_-qDJ7BleLF_GTibQY7KEyrNZv2bX2sRwATdEH5O8Akc0I94ugRFJy07cLu3SOjIZgGiuziela8TlyWyxbg11hH16hhQ_NxoVHmQtfg0PlTxEYvybhMUzCdzBWbGpGqJJ4ncLMZakKZ0K1M0RY5aLfdUMNKzL7OpQUb5zBTc5Lf7a6sCtuNHr_H_PbgZ-er-l1Y33glD2oHZC_ny0xfY45k4-fenRe3yUePf9uczFkkIzVoiTQh0U6yfkjXTs0LtnlF9Z3nUQ=" alt="Diagram"/></div>
 <p>In comparison, sending messages from the async process to the main thread is trivial.</p>
 <p>We spawn an async process that pulls messages out of the output channel and forwards them to our <code>rs2js</code> function.</p>
 <div class="listing-block"><pre class="pygments highlight" style="background: #f0f0f0;"><code data-lang="rust"><span></span><span style="color: #007020; font-weight: bold">fn</span> <span style="color: #06287e">main</span>()<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
@@ -796,7 +800,7 @@ Instead of having to write <code>Mutex&lt;mpsc::Sender&lt;String&gt;&gt;</code> 
 <span style="color: #bbbbbb">        </span>})<span style="color: #bbbbbb"></span>
 <span style="color: #bbbbbb">        </span><span style="color: #60a0b0; font-style: italic">// ...</span>
 }<span style="color: #bbbbbb"></span></code></pre></div></section></section>
-<section class="doc-section level-1"><h2 id="_result_2">6. Result</h2><p>The following demo shows three messages &#34;a&#34;, &#34;b&#34;, and &#34;c&#34; send from the webview to the async Rust process and back.</p>
+<section class="doc-section level-1"><h2 id="result-2">6. Result</h2><p>The following demo shows three messages &#34;a&#34;, &#34;b&#34;, and &#34;c&#34; send from the webview to the async Rust process and back.</p>
 <p>Before a message is sent, it is reported in the &#34;js2rs events&#34; portion of the page.
 The message is then sent to the main thread in Rust.
 When the message is received by the main thread, it is reported in the terminal.
