@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  <meta charset="utf-8">
+  <title>Tauri &#43; Async Rust Process</title>
+  <meta name="description" content="Tauri &#43; Async Rust Process">
+  <meta name="author" content="Rob Donnelly">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <noscript>
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:400,600" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://rfdonnelly.github.io/css/fonts.css">
+  </noscript>
+  
+  
+  <style type="text/css" media="screen">
+    /*!
+Pure v1.0.0
+Copyright 2013 Yahoo!
+Licensed under the BSD License.
+https://github.com/yahoo/pure/blob/master/LICENSE.md
+*/
+/*!
+normalize.css v^3.0 | MIT License | git.io/normalize
+Copyright (c) Nicolas Gallagher and Jonathan Neal
+*/
+/*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */img,legend{border:0}legend,td,th{padding:0}html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}article,aside,details,figcaption,figure,footer,header,hgroup,main,menu,nav,section,summary{display:block}audio,canvas,progress,video{display:inline-block;vertical-align:baseline}audio:not([controls]){display:none;height:0}[hidden],template{display:none}a{background-color:transparent}a:active,a:hover{outline:0}abbr[title]{border-bottom:1px dotted}b,optgroup,strong{font-weight:700}dfn{font-style:italic}h1{font-size:2em;margin:.67em 0}mark{background:#ff0;color:#000}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sup{top:-.5em}sub{bottom:-.25em}svg:not(:root){overflow:hidden}figure{margin:1em 40px}hr{box-sizing:content-box;height:0}pre,textarea{overflow:auto}code,kbd,pre,samp{font-family:monospace,monospace;font-size:1em}button,input,optgroup,select,textarea{color:inherit;font:inherit;margin:0}button{overflow:visible}button,select{text-transform:none}button,html input[type=button],input[type=reset],input[type=submit]{-webkit-appearance:button;cursor:pointer}button[disabled],html input[disabled]{cursor:default}button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}input{line-height:normal}input[type=checkbox],input[type=radio]{box-sizing:border-box;padding:0}input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{height:auto}input[type=search]{-webkit-appearance:textfield;box-sizing:content-box}input[type=search]::-webkit-search-cancel-button,input[type=search]::-webkit-search-decoration{-webkit-appearance:none}fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}table{border-collapse:collapse;border-spacing:0}.hidden,[hidden]{display:none!important}.pure-img{max-width:100%;height:auto;display:block}
+  </style>
+  <style type="text/css" media="screen">
+    /*!
+Pure v1.0.0
+Copyright 2013 Yahoo!
+Licensed under the BSD License.
+https://github.com/yahoo/pure/blob/master/LICENSE.md
+*/
+.pure-menu{box-sizing:border-box}.pure-menu-fixed{position:fixed;left:0;top:0;z-index:3}.pure-menu-item,.pure-menu-list{position:relative}.pure-menu-list{list-style:none;margin:0;padding:0}.pure-menu-item{padding:0;margin:0;height:100%}.pure-menu-heading,.pure-menu-link{display:block;text-decoration:none;white-space:nowrap}.pure-menu-horizontal{width:100%;white-space:normal}.pure-menu-horizontal .pure-menu-list{display:inline-block}.pure-menu-horizontal .pure-menu-heading,.pure-menu-horizontal .pure-menu-item,.pure-menu-horizontal .pure-menu-separator{display:inline-block;zoom:1;vertical-align:middle}.pure-menu-item .pure-menu-item{display:block}.pure-menu-children{display:none;position:absolute;left:100%;top:0;margin:0;padding:0;z-index:3}.pure-menu-horizontal .pure-menu-children{left:0;top:auto;width:inherit}.pure-menu-active>.pure-menu-children,.pure-menu-allow-hover:hover>.pure-menu-children{display:block;position:absolute}.pure-menu-has-children>.pure-menu-link:after{padding-left:.5em;content:"\25B8";font-size:small}.pure-menu-horizontal .pure-menu-has-children>.pure-menu-link:after{content:"\25BE"}.pure-menu-scrollable{overflow-y:scroll;overflow-x:hidden}.pure-menu-scrollable .pure-menu-list{display:block}.pure-menu-horizontal.pure-menu-scrollable .pure-menu-list{display:inline-block}.pure-menu-horizontal.pure-menu-scrollable{white-space:nowrap;overflow-y:hidden;overflow-x:auto;-ms-overflow-style:none;-webkit-overflow-scrolling:touch;padding:.5em 0}.pure-menu-horizontal.pure-menu-scrollable::-webkit-scrollbar{display:none}.pure-menu-horizontal .pure-menu-children .pure-menu-separator,.pure-menu-separator{background-color:#ccc;height:1px;margin:.3em 0}.pure-menu-horizontal .pure-menu-separator{width:1px;height:1.3em;margin:0 .3em}.pure-menu-horizontal .pure-menu-children .pure-menu-separator{display:block;width:auto}.pure-menu-heading{text-transform:uppercase;color:#565d64}.pure-menu-link{color:#777}.pure-menu-children{background-color:#fff}.pure-menu-disabled,.pure-menu-heading,.pure-menu-link{padding:.5em 1em}.pure-menu-disabled{opacity:.5}.pure-menu-disabled .pure-menu-link:hover{background-color:transparent}.pure-menu-active>.pure-menu-link,.pure-menu-link:focus,.pure-menu-link:hover{background-color:#eee}.pure-menu-selected .pure-menu-link,.pure-menu-selected .pure-menu-link:visited{color:#000}
+
+  </style>
+  <style type="text/css" media="screen">
+    /*!
+Pure v1.0.0
+Copyright 2013 Yahoo!
+Licensed under the BSD License.
+https://github.com/yahoo/pure/blob/master/LICENSE.md
+*/
+.pure-g{letter-spacing:-.31em;text-rendering:optimizespeed;font-family:FreeSans,Arimo,"Droid Sans",Helvetica,Arial,sans-serif;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-flow:row wrap;-ms-flex-flow:row wrap;flex-flow:row wrap;-webkit-align-content:flex-start;-ms-flex-line-pack:start;align-content:flex-start}@media all and (-ms-high-contrast:none),(-ms-high-contrast:active){table .pure-g{display:block}}.opera-only :-o-prefocus,.pure-g{word-spacing:-.43em}.pure-u,.pure-u-1,.pure-u-1-1,.pure-u-1-12,.pure-u-1-2,.pure-u-1-24,.pure-u-1-3,.pure-u-1-4,.pure-u-1-5,.pure-u-1-6,.pure-u-1-8,.pure-u-10-24,.pure-u-11-12,.pure-u-11-24,.pure-u-12-24,.pure-u-13-24,.pure-u-14-24,.pure-u-15-24,.pure-u-16-24,.pure-u-17-24,.pure-u-18-24,.pure-u-19-24,.pure-u-2-24,.pure-u-2-3,.pure-u-2-5,.pure-u-20-24,.pure-u-21-24,.pure-u-22-24,.pure-u-23-24,.pure-u-24-24,.pure-u-3-24,.pure-u-3-4,.pure-u-3-5,.pure-u-3-8,.pure-u-4-24,.pure-u-4-5,.pure-u-5-12,.pure-u-5-24,.pure-u-5-5,.pure-u-5-6,.pure-u-5-8,.pure-u-6-24,.pure-u-7-12,.pure-u-7-24,.pure-u-7-8,.pure-u-8-24,.pure-u-9-24{display:inline-block;zoom:1;letter-spacing:normal;word-spacing:normal;vertical-align:top;text-rendering:auto}.pure-g [class*=pure-u]{font-family:sans-serif}.pure-u-1-24{width:4.1667%}.pure-u-1-12,.pure-u-2-24{width:8.3333%}.pure-u-1-8,.pure-u-3-24{width:12.5%}.pure-u-1-6,.pure-u-4-24{width:16.6667%}.pure-u-1-5{width:20%}.pure-u-5-24{width:20.8333%}.pure-u-1-4,.pure-u-6-24{width:25%}.pure-u-7-24{width:29.1667%}.pure-u-1-3,.pure-u-8-24{width:33.3333%}.pure-u-3-8,.pure-u-9-24{width:37.5%}.pure-u-2-5{width:40%}.pure-u-10-24,.pure-u-5-12{width:41.6667%}.pure-u-11-24{width:45.8333%}.pure-u-1-2,.pure-u-12-24{width:50%}.pure-u-13-24{width:54.1667%}.pure-u-14-24,.pure-u-7-12{width:58.3333%}.pure-u-3-5{width:60%}.pure-u-15-24,.pure-u-5-8{width:62.5%}.pure-u-16-24,.pure-u-2-3{width:66.6667%}.pure-u-17-24{width:70.8333%}.pure-u-18-24,.pure-u-3-4{width:75%}.pure-u-19-24{width:79.1667%}.pure-u-4-5{width:80%}.pure-u-20-24,.pure-u-5-6{width:83.3333%}.pure-u-21-24,.pure-u-7-8{width:87.5%}.pure-u-11-12,.pure-u-22-24{width:91.6667%}.pure-u-23-24{width:95.8333%}.pure-u-1,.pure-u-1-1,.pure-u-24-24,.pure-u-5-5{width:100%}
+  </style>
+  <style type="text/css" media="screen">
+    /*!
+Pure v1.0.0
+Copyright 2013 Yahoo!
+Licensed under the BSD License.
+https://github.com/yahoo/pure/blob/master/LICENSE.md
+*/
+.pure-table{border-collapse:collapse;border-spacing:0;empty-cells:show;border:1px solid #cbcbcb}.pure-table caption{color:#000;font:italic 85%/1 arial,sans-serif;padding:1em 0;text-align:center}.pure-table td,.pure-table th{border-left:1px solid #cbcbcb;border-width:0 0 0 1px;font-size:inherit;margin:0;overflow:visible;padding:.5em 1em}.pure-table td:first-child,.pure-table th:first-child{border-left-width:0}.pure-table thead{background-color:#e0e0e0;color:#000;text-align:left;vertical-align:bottom}.pure-table td{background-color:transparent}.pure-table-odd td,.pure-table-striped tr:nth-child(2n-1) td{background-color:#f2f2f2}.pure-table-bordered td{border-bottom:1px solid #cbcbcb}.pure-table-bordered tbody>tr:last-child>td{border-bottom-width:0}.pure-table-horizontal td,.pure-table-horizontal th{border-width:0 0 1px;border-bottom:1px solid #cbcbcb}.pure-table-horizontal tbody>tr:last-child>td{border-bottom-width:0}
+  </style>
+  
+  
+  <style type="text/css" media="screen">
+    /*!
+Pure v1.0.0
+Copyright 2013 Yahoo!
+Licensed under the BSD License.
+https://github.com/yahoo/pure/blob/master/LICENSE.md
+*/
+@media screen and (min-width:35.5em){.pure-u-sm-1,.pure-u-sm-1-1,.pure-u-sm-1-12,.pure-u-sm-1-2,.pure-u-sm-1-24,.pure-u-sm-1-3,.pure-u-sm-1-4,.pure-u-sm-1-5,.pure-u-sm-1-6,.pure-u-sm-1-8,.pure-u-sm-10-24,.pure-u-sm-11-12,.pure-u-sm-11-24,.pure-u-sm-12-24,.pure-u-sm-13-24,.pure-u-sm-14-24,.pure-u-sm-15-24,.pure-u-sm-16-24,.pure-u-sm-17-24,.pure-u-sm-18-24,.pure-u-sm-19-24,.pure-u-sm-2-24,.pure-u-sm-2-3,.pure-u-sm-2-5,.pure-u-sm-20-24,.pure-u-sm-21-24,.pure-u-sm-22-24,.pure-u-sm-23-24,.pure-u-sm-24-24,.pure-u-sm-3-24,.pure-u-sm-3-4,.pure-u-sm-3-5,.pure-u-sm-3-8,.pure-u-sm-4-24,.pure-u-sm-4-5,.pure-u-sm-5-12,.pure-u-sm-5-24,.pure-u-sm-5-5,.pure-u-sm-5-6,.pure-u-sm-5-8,.pure-u-sm-6-24,.pure-u-sm-7-12,.pure-u-sm-7-24,.pure-u-sm-7-8,.pure-u-sm-8-24,.pure-u-sm-9-24{display:inline-block;zoom:1;letter-spacing:normal;word-spacing:normal;vertical-align:top;text-rendering:auto}.pure-u-sm-1-24{width:4.1667%}.pure-u-sm-1-12,.pure-u-sm-2-24{width:8.3333%}.pure-u-sm-1-8,.pure-u-sm-3-24{width:12.5%}.pure-u-sm-1-6,.pure-u-sm-4-24{width:16.6667%}.pure-u-sm-1-5{width:20%}.pure-u-sm-5-24{width:20.8333%}.pure-u-sm-1-4,.pure-u-sm-6-24{width:25%}.pure-u-sm-7-24{width:29.1667%}.pure-u-sm-1-3,.pure-u-sm-8-24{width:33.3333%}.pure-u-sm-3-8,.pure-u-sm-9-24{width:37.5%}.pure-u-sm-2-5{width:40%}.pure-u-sm-10-24,.pure-u-sm-5-12{width:41.6667%}.pure-u-sm-11-24{width:45.8333%}.pure-u-sm-1-2,.pure-u-sm-12-24{width:50%}.pure-u-sm-13-24{width:54.1667%}.pure-u-sm-14-24,.pure-u-sm-7-12{width:58.3333%}.pure-u-sm-3-5{width:60%}.pure-u-sm-15-24,.pure-u-sm-5-8{width:62.5%}.pure-u-sm-16-24,.pure-u-sm-2-3{width:66.6667%}.pure-u-sm-17-24{width:70.8333%}.pure-u-sm-18-24,.pure-u-sm-3-4{width:75%}.pure-u-sm-19-24{width:79.1667%}.pure-u-sm-4-5{width:80%}.pure-u-sm-20-24,.pure-u-sm-5-6{width:83.3333%}.pure-u-sm-21-24,.pure-u-sm-7-8{width:87.5%}.pure-u-sm-11-12,.pure-u-sm-22-24{width:91.6667%}.pure-u-sm-23-24{width:95.8333%}.pure-u-sm-1,.pure-u-sm-1-1,.pure-u-sm-24-24,.pure-u-sm-5-5{width:100%}}@media screen and (min-width:48em){.pure-u-md-1,.pure-u-md-1-1,.pure-u-md-1-12,.pure-u-md-1-2,.pure-u-md-1-24,.pure-u-md-1-3,.pure-u-md-1-4,.pure-u-md-1-5,.pure-u-md-1-6,.pure-u-md-1-8,.pure-u-md-10-24,.pure-u-md-11-12,.pure-u-md-11-24,.pure-u-md-12-24,.pure-u-md-13-24,.pure-u-md-14-24,.pure-u-md-15-24,.pure-u-md-16-24,.pure-u-md-17-24,.pure-u-md-18-24,.pure-u-md-19-24,.pure-u-md-2-24,.pure-u-md-2-3,.pure-u-md-2-5,.pure-u-md-20-24,.pure-u-md-21-24,.pure-u-md-22-24,.pure-u-md-23-24,.pure-u-md-24-24,.pure-u-md-3-24,.pure-u-md-3-4,.pure-u-md-3-5,.pure-u-md-3-8,.pure-u-md-4-24,.pure-u-md-4-5,.pure-u-md-5-12,.pure-u-md-5-24,.pure-u-md-5-5,.pure-u-md-5-6,.pure-u-md-5-8,.pure-u-md-6-24,.pure-u-md-7-12,.pure-u-md-7-24,.pure-u-md-7-8,.pure-u-md-8-24,.pure-u-md-9-24{display:inline-block;zoom:1;letter-spacing:normal;word-spacing:normal;vertical-align:top;text-rendering:auto}.pure-u-md-1-24{width:4.1667%}.pure-u-md-1-12,.pure-u-md-2-24{width:8.3333%}.pure-u-md-1-8,.pure-u-md-3-24{width:12.5%}.pure-u-md-1-6,.pure-u-md-4-24{width:16.6667%}.pure-u-md-1-5{width:20%}.pure-u-md-5-24{width:20.8333%}.pure-u-md-1-4,.pure-u-md-6-24{width:25%}.pure-u-md-7-24{width:29.1667%}.pure-u-md-1-3,.pure-u-md-8-24{width:33.3333%}.pure-u-md-3-8,.pure-u-md-9-24{width:37.5%}.pure-u-md-2-5{width:40%}.pure-u-md-10-24,.pure-u-md-5-12{width:41.6667%}.pure-u-md-11-24{width:45.8333%}.pure-u-md-1-2,.pure-u-md-12-24{width:50%}.pure-u-md-13-24{width:54.1667%}.pure-u-md-14-24,.pure-u-md-7-12{width:58.3333%}.pure-u-md-3-5{width:60%}.pure-u-md-15-24,.pure-u-md-5-8{width:62.5%}.pure-u-md-16-24,.pure-u-md-2-3{width:66.6667%}.pure-u-md-17-24{width:70.8333%}.pure-u-md-18-24,.pure-u-md-3-4{width:75%}.pure-u-md-19-24{width:79.1667%}.pure-u-md-4-5{width:80%}.pure-u-md-20-24,.pure-u-md-5-6{width:83.3333%}.pure-u-md-21-24,.pure-u-md-7-8{width:87.5%}.pure-u-md-11-12,.pure-u-md-22-24{width:91.6667%}.pure-u-md-23-24{width:95.8333%}.pure-u-md-1,.pure-u-md-1-1,.pure-u-md-24-24,.pure-u-md-5-5{width:100%}}@media screen and (min-width:64em){.pure-u-lg-1,.pure-u-lg-1-1,.pure-u-lg-1-12,.pure-u-lg-1-2,.pure-u-lg-1-24,.pure-u-lg-1-3,.pure-u-lg-1-4,.pure-u-lg-1-5,.pure-u-lg-1-6,.pure-u-lg-1-8,.pure-u-lg-10-24,.pure-u-lg-11-12,.pure-u-lg-11-24,.pure-u-lg-12-24,.pure-u-lg-13-24,.pure-u-lg-14-24,.pure-u-lg-15-24,.pure-u-lg-16-24,.pure-u-lg-17-24,.pure-u-lg-18-24,.pure-u-lg-19-24,.pure-u-lg-2-24,.pure-u-lg-2-3,.pure-u-lg-2-5,.pure-u-lg-20-24,.pure-u-lg-21-24,.pure-u-lg-22-24,.pure-u-lg-23-24,.pure-u-lg-24-24,.pure-u-lg-3-24,.pure-u-lg-3-4,.pure-u-lg-3-5,.pure-u-lg-3-8,.pure-u-lg-4-24,.pure-u-lg-4-5,.pure-u-lg-5-12,.pure-u-lg-5-24,.pure-u-lg-5-5,.pure-u-lg-5-6,.pure-u-lg-5-8,.pure-u-lg-6-24,.pure-u-lg-7-12,.pure-u-lg-7-24,.pure-u-lg-7-8,.pure-u-lg-8-24,.pure-u-lg-9-24{display:inline-block;zoom:1;letter-spacing:normal;word-spacing:normal;vertical-align:top;text-rendering:auto}.pure-u-lg-1-24{width:4.1667%}.pure-u-lg-1-12,.pure-u-lg-2-24{width:8.3333%}.pure-u-lg-1-8,.pure-u-lg-3-24{width:12.5%}.pure-u-lg-1-6,.pure-u-lg-4-24{width:16.6667%}.pure-u-lg-1-5{width:20%}.pure-u-lg-5-24{width:20.8333%}.pure-u-lg-1-4,.pure-u-lg-6-24{width:25%}.pure-u-lg-7-24{width:29.1667%}.pure-u-lg-1-3,.pure-u-lg-8-24{width:33.3333%}.pure-u-lg-3-8,.pure-u-lg-9-24{width:37.5%}.pure-u-lg-2-5{width:40%}.pure-u-lg-10-24,.pure-u-lg-5-12{width:41.6667%}.pure-u-lg-11-24{width:45.8333%}.pure-u-lg-1-2,.pure-u-lg-12-24{width:50%}.pure-u-lg-13-24{width:54.1667%}.pure-u-lg-14-24,.pure-u-lg-7-12{width:58.3333%}.pure-u-lg-3-5{width:60%}.pure-u-lg-15-24,.pure-u-lg-5-8{width:62.5%}.pure-u-lg-16-24,.pure-u-lg-2-3{width:66.6667%}.pure-u-lg-17-24{width:70.8333%}.pure-u-lg-18-24,.pure-u-lg-3-4{width:75%}.pure-u-lg-19-24{width:79.1667%}.pure-u-lg-4-5{width:80%}.pure-u-lg-20-24,.pure-u-lg-5-6{width:83.3333%}.pure-u-lg-21-24,.pure-u-lg-7-8{width:87.5%}.pure-u-lg-11-12,.pure-u-lg-22-24{width:91.6667%}.pure-u-lg-23-24{width:95.8333%}.pure-u-lg-1,.pure-u-lg-1-1,.pure-u-lg-24-24,.pure-u-lg-5-5{width:100%}}@media screen and (min-width:80em){.pure-u-xl-1,.pure-u-xl-1-1,.pure-u-xl-1-12,.pure-u-xl-1-2,.pure-u-xl-1-24,.pure-u-xl-1-3,.pure-u-xl-1-4,.pure-u-xl-1-5,.pure-u-xl-1-6,.pure-u-xl-1-8,.pure-u-xl-10-24,.pure-u-xl-11-12,.pure-u-xl-11-24,.pure-u-xl-12-24,.pure-u-xl-13-24,.pure-u-xl-14-24,.pure-u-xl-15-24,.pure-u-xl-16-24,.pure-u-xl-17-24,.pure-u-xl-18-24,.pure-u-xl-19-24,.pure-u-xl-2-24,.pure-u-xl-2-3,.pure-u-xl-2-5,.pure-u-xl-20-24,.pure-u-xl-21-24,.pure-u-xl-22-24,.pure-u-xl-23-24,.pure-u-xl-24-24,.pure-u-xl-3-24,.pure-u-xl-3-4,.pure-u-xl-3-5,.pure-u-xl-3-8,.pure-u-xl-4-24,.pure-u-xl-4-5,.pure-u-xl-5-12,.pure-u-xl-5-24,.pure-u-xl-5-5,.pure-u-xl-5-6,.pure-u-xl-5-8,.pure-u-xl-6-24,.pure-u-xl-7-12,.pure-u-xl-7-24,.pure-u-xl-7-8,.pure-u-xl-8-24,.pure-u-xl-9-24{display:inline-block;zoom:1;letter-spacing:normal;word-spacing:normal;vertical-align:top;text-rendering:auto}.pure-u-xl-1-24{width:4.1667%}.pure-u-xl-1-12,.pure-u-xl-2-24{width:8.3333%}.pure-u-xl-1-8,.pure-u-xl-3-24{width:12.5%}.pure-u-xl-1-6,.pure-u-xl-4-24{width:16.6667%}.pure-u-xl-1-5{width:20%}.pure-u-xl-5-24{width:20.8333%}.pure-u-xl-1-4,.pure-u-xl-6-24{width:25%}.pure-u-xl-7-24{width:29.1667%}.pure-u-xl-1-3,.pure-u-xl-8-24{width:33.3333%}.pure-u-xl-3-8,.pure-u-xl-9-24{width:37.5%}.pure-u-xl-2-5{width:40%}.pure-u-xl-10-24,.pure-u-xl-5-12{width:41.6667%}.pure-u-xl-11-24{width:45.8333%}.pure-u-xl-1-2,.pure-u-xl-12-24{width:50%}.pure-u-xl-13-24{width:54.1667%}.pure-u-xl-14-24,.pure-u-xl-7-12{width:58.3333%}.pure-u-xl-3-5{width:60%}.pure-u-xl-15-24,.pure-u-xl-5-8{width:62.5%}.pure-u-xl-16-24,.pure-u-xl-2-3{width:66.6667%}.pure-u-xl-17-24{width:70.8333%}.pure-u-xl-18-24,.pure-u-xl-3-4{width:75%}.pure-u-xl-19-24{width:79.1667%}.pure-u-xl-4-5{width:80%}.pure-u-xl-20-24,.pure-u-xl-5-6{width:83.3333%}.pure-u-xl-21-24,.pure-u-xl-7-8{width:87.5%}.pure-u-xl-11-12,.pure-u-xl-22-24{width:91.6667%}.pure-u-xl-23-24{width:95.8333%}.pure-u-xl-1,.pure-u-xl-1-1,.pure-u-xl-24-24,.pure-u-xl-5-5{width:100%}}
+  </style>
+  
+
+  
+  <style type="text/css" media="screen">
+    
+      /* Light mode -- this is the default! */
+:root {
+  --color: #484848;
+  --color-footnote: #575757;
+  --color-footer-content: #bbb;
+  --background-color: rgb(252, 252, 252);
+  --background-color-code: rgb(240, 240, 240);
+  --background-color-toggle-content: rgb(249, 249, 249);
+  --link-color: #c05b4d;
+  --link-color-hover: #a5473a;
+  --list-link-color: #336699;
+  --border-navbar-and-footer: #e3e3e3;
+}
+
+    
+  </style>
+
+  <style type="text/css" media="screen">
+    html {
+  min-height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+body {
+  background-color: rgb(252, 252, 252);
+  background-color: var(--background-color);
+  color: #484848;
+  color: var(--color);
+}
+
+a {
+  text-decoration: none;
+}
+
+kbd, pre, code, samp {
+  background-color: rgb(240, 240, 240);
+  background-color: var(--background-color-code);
+}
+
+.nav-menu {
+  margin-top: 5px;
+  padding-bottom: 5px;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: #e3e3e3;
+  border-bottom-color: var(--border-navbar-and-footer);
+}
+
+.pure-menu-heading {
+  text-transform: none;
+  font-size: large;
+}
+
+.pure-menu-link:hover {
+  background-color: unset;
+}
+
+.header {
+  text-align: left;
+  color: #484848;
+  color: var(--color);
+  margin-bottom: .5em;
+}
+
+.header ul li {
+  height: auto;
+}
+
+.header ul li a {
+  font-weight: bold;
+  color: #484848;
+  color: var(--color);
+  font-family: "Source Sans Pro", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.header {
+  font-weight: bold;
+  color: #484848;
+  color: var(--color);
+  font-family: "Source Sans Pro", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.site-title {
+  color: #484848;
+  color: var(--color);
+  text-transform: none;
+  font-weight: normal;
+  font-family: "Source Sans Pro", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.pull-right {
+  float: right;
+}
+
+.posts-name {
+  text-transform: capitalize;
+  font-weight: bold;
+  padding-left: 1em;
+  margin-top: 1em;
+  font-family: "Source Sans Pro", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.posts {
+  font-family: verdana, arial, helvetica, sans-serif;
+  list-style-type: none;
+  padding-left: 1em;
+}
+
+.posts li p {
+  margin-top: 0;
+}
+
+.posts li {
+  margin-bottom: 1em;
+}
+
+.posts li > a {
+  color: #369;
+  color: var(--list-link-color);
+  text-decoration: none;
+}
+
+.post-list {
+  font-size: large;
+}
+
+.footnote {
+  font-family: verdana, arial, helvetica, sans-serif;
+  color: #575757;
+  color: var(--color-footnote);
+  font-size: 0.75em;
+  margin-bottom: 0;
+}
+
+.footnote a {
+  color: #575757;
+  color: var(--color-footnote);
+}
+
+.footnote a:hover {
+  text-decoration: underline;
+  color: #369;
+  color: var(--list-link-color);
+}
+
+.footer {
+  position: absolute;
+  z-index: 2;
+  height: auto;
+  width: 100%;
+  bottom: 0;
+}
+
+.footer-content {
+  border-top-width: 1px;
+  border-top-style: solid;
+  border-top-color: #e3e3e3;
+  border-top: 1px solid var(--border-navbar-and-footer);
+  font-size: 80%;
+  color: #bbb;
+  color: var(--color-footer-content);
+}
+
+.footer-content a {
+  color: #575757;
+  color: var(--color-footnote);
+}
+
+.footer-content ul {
+  height: auto;
+  margin-top: 0;
+  margin-bottom: 0;
+  display: inline-block;
+  padding-left: 0;
+}
+
+/* https://github.com/gohugoio/hugo/issues/1778#issuecomment-451552602 */
+#TableOfContents > ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#gototop-btn {
+  display: inline-block;
+}
+
+#foot-name {
+  color: #484848;
+  color: var(--color);
+  text-transform: none;
+}
+
+#foot-copyright {
+  padding-left: 1em;
+  padding-bottom: 0.5em;
+  margin: 0;
+}
+
+.post {
+  font-family: proxima-nova, "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
+  color: #484848;
+  color: var(--color);
+  letter-spacing: normal;
+  padding-left: .5em;
+}
+
+.post h1, h2, h3, h4, h5, h6 {
+  font-weight: bold;
+  letter-spacing: normal;
+}
+
+.post-content {
+  z-index: 9;
+  overflow: auto;
+  padding: 0;
+  padding-bottom: 3em;
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+.post-content img {
+  max-width: 100%;
+  height: auto;
+}
+
+.post-content pre {
+  padding: 0.5em;
+}
+
+.post a {
+  color: #c05b4d;
+  color: var(--link-color);
+  text-decoration: none;
+}
+
+.post a:hover {
+  color: #a5473a;
+  color: var(--link-color-hover);
+  text-decoration: underline;
+}
+
+.post h1 {
+  font-size: 28px;
+}
+
+.post h2 {
+  font-size: 25px;
+}
+
+.post h3 {
+  font-size: 23px;
+}
+
+.post h4 {
+  font-size: 21px;
+}
+
+.post h5 {
+  font-size: 19px;
+}
+
+.post h6 {
+  font-size: 18px;
+}
+
+.post-title {
+  margin-top: 0;
+  margin-bottom: 1em;
+}
+
+.post-title h1 {
+  font-weight: bold;
+  font-size: 39px;
+  line-height: 40px;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+@media screen and (max-width: 768px) {
+  .desktop {
+    display: none;
+  }
+
+  .mobile {
+    display: block;
+  }
+
+  #toggle-btn {
+    display: inline-block;
+    float: right;
+    padding: .5em 1em;
+    text-decoration: none;
+    color: #484848;
+    color: var(--color);
+    font-weight: bold;
+  }
+
+  #toggle-content li {
+    clear: both;
+    height: auto;
+    background-color: rgb(249, 249, 249);
+    background-color: var(--background-color-toggle-content);
+  }
+
+  #toggle-home {
+    display: inline-block;
+  }
+}
+
+@media screen and (min-width: 769px) {
+  .mobile {
+    display: none;
+  }
+
+  .desktop {
+    display: block;
+  }
+}
+
+  </style>
+
+  
+  <link rel="shortcut icon" 
+   
+    href="https://rfdonnelly.github.io/img/favicon.ico"
+  
+  type="image/x-icon">
+
+  
+  
+
+  
+  <link rel="stylesheet" href="https://rfdonnelly.github.io/css/syntax.css">
+<link rel="stylesheet" href="https://rfdonnelly.github.io/css/overrides.css">
+
+</head>
+<body>
+
+<div class="header pure-g">
+    <div class="pure-u-1-24 pure-u-md-5-24"></div>
+    <div class="pure-u-11-12 pure-u-md-7-12">
+        <div class="desktop pure-menu pure-menu-horizontal nav-menu">
+            
+            <a href="https://rfdonnelly.github.io/" class="site-title pure-menu-heading">Rob Donnelly</a>
+            <ul class="pure-menu-list pull-right">
+				
+                <li class="pure-menu-item">
+                    <a href="https://rfdonnelly.github.io/about/" class="pure-menu-link">About</a>
+                </li>
+            </ul>
+        </div>
+        <div class="mobile pure-menu nav-menu">
+            <a href="https://rfdonnelly.github.io/" class="site-title pure-menu-heading" id="toggle-home">Rob Donnelly</a>
+            <a href="#" id="toggle-btn">&#9776;</a>
+            <ul class="pure-menu-list" id="toggle-content" style="display:none;">
+                
+				
+                <li class="pure-menu-item">
+                    <a href="https://rfdonnelly.github.io/about" class="pure-menu-link">About</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="pure-u-1-24 pure-u-md-5-24"></div>
+</div>
+
+
+<div class="pure-g">
+  <div class="pure-u-1-24 pure-u-md-5-24"></div>
+  <div class="pure-u-11-12 pure-u-md-7-12">
+    <div class="post">
+
+      <div class="post-title">
+        <p class="footnote">
+          
+            <time datetime="2022-08-17 00:43:11 &#43;0000 UTC">
+              
+                2022-08-17
+              
+            </time>
+          
+        
+        
+        
+
+        
+
+        
+        </p>
+        <h1>Tauri &#43; Async Rust Process</h1>
+      </div>
+
+      <div class="post-content">
+        
+        <nav id="toc" class="toc" role="doc-toc"><h2 id="toc-title">Table of Contents</h2><ol class="toc-list level-1"><li><a href="#_goal">1. Goal</a></li><li><a href="#_create_a_tauri_app">2. Create a Tauri App</a></li><li><a href="#_the_async_process">3. The Async Process</a></li><li><a href="#_bidirectional_communication_between_rust_and_javascript">4. Bidirectional Communication between Rust and JavaScript</a><ol class="toc-list level-2"><li><a href="#_comands_vs_events">4.1. Comands vs Events</a></li><li><a href="#_possible_simplification">4.2. Possible Simplification</a></li><li><a href="#_the_javascript_side">4.3. The JavaScript Side</a></li><li><a href="#_the_rust_side">4.4. The Rust Side</a></li></ol></li><li><a href="#_bidirectional_communication_between_the_main_thread_and_the_async_process">5. Bidirectional Communication between the Main Thread and the Async Process</a><ol class="toc-list level-2"><li><a href="#_an_aside_who_owns_the_async_runtime">5.1. An Aside: Who Owns the Async Runtime?</a></li><li><a href="#_creating_the_channels">5.2. Creating the Channels</a></li><li><a href="#_running_the_async_process">5.3. Running the Async Process</a></li><li><a href="#_main_thread_to_async_process">5.4. Main Thread to Async Process</a></li><li><a href="#_async_process_to_main_thread">5.5. Async Process to Main Thread</a></li></ol></li><li><a href="#_result_2">6. Result</a></li></ol></nav><p>The complete source code for this post is available at <a class="bare" href="https://github.com/rfdonnelly/tauri-async-example">https://github.com/rfdonnelly/tauri-async-example</a>.</p>
+<section class="doc-section level-1"><h2 id="_goal">1. Goal</h2><p>Integrate an async Rust process into a Tauri application.
+More specifically, perform bidirectional communication between the Tauri webview and an async Rust process where either side can initiate.</p>
+<p>The Tauri main thread manages both the webview and the async process.
+The main thread sits between the two.</p>
+<figure class="image-block kroki"><img src="https://kroki.io/graphviz/svg/eNp1jsEKwjAMhu97irKTgj7ChJ0EUZA58OBEsq66Yu1q0m2I7N3t3Ch6WA6BhO_Ln0LeEEzJ1uwdMFcI-l5IjJJt8J2pzgeAq5qswIuFGuUI96UgFyoK036d6dgYJTlYWekw8EzbsNPIHUXeSNFmeraBBg4cpbHzcMGoBCMietaA4uzFh_XiDqRmaYkCCicn7plpDYzXYnppnuk9VlwQTZq_ry5Xfa7r_RleabLosm10BUX_IZ5sm2HdBd0HaOlmwA==" alt="Diagram"/>
+<figcaption>Figure 1. A diagram of our desired Tauri application</figcaption></figure>
+<p>We can break this up into two smaller problems: bidirectional communication between,</p>
+<div class="ulist"><ul><li>the webview (JavaScript) and the main thread (Rust)</li><li>the main thread (Rust) and the async process (Rust)</li></ul></div></section>
+<section class="doc-section level-1"><h2 id="_create_a_tauri_app">2. Create a Tauri App</h2><p>First, we need to create a Tauri application.</p>
+<p>Follow the <a href="https://tauri.app/v1/guides/getting-started/prerequisites/">Tauri Getting Started</a> instructions for installing the necessary prerequisites.</p>
+<p>Run the <code>create-tauri-app</code> utility</p>
+<div class="listing-block"><pre class="pygments highlight" style="background: #f0f0f0;"><code data-lang="sh"><span></span>npm create tauri-app</code></pre></div>
+<p>And make the following entries/selections</p>
+<div class="listing-block"><pre>? What is your app name? <strong>tauri-async</strong>
+? What should the window title be? <strong>Tauri App</strong>
+? What UI recipe would you like to add? <strong>create-vite</strong>
+? Add &#34;@tauri-apps/api&#34; npm package? <strong>Yes</strong>
+? Which vite template would you like to use? <strong>vue</strong></pre></div>
+<p>Then run build and run the application</p>
+<div class="listing-block"><pre class="pygments highlight" style="background: #f0f0f0;"><code data-lang="sh"><span></span><span style="color: #007020">cd</span> tauri-async
+npm install
+npm run tauri dev</code></pre></div>
+<figure class="image-block"><img src="create-tauri-app-vite-vue.png" alt="The default application window for the Tauri Vite + Vue template"/>
+<figcaption>Figure 2. The Tauri application with the Vite + Vue template</figcaption></figure></section>
+<section class="doc-section level-1"><h2 id="_the_async_process">3. The Async Process</h2><p>Next, we need to know what our async process looks like.
+We’ll keep it abstract to make this applicable to more applications.</p>
+<div class="image-block kroki"><img src="https://kroki.io/graphviz/svg/eNp1j8FqwzAMhu95CpPTBt0juNBTYWww2kIPyyiKozZimu3KdkIZffc5aQnbILoYyd8nfjV0EvCtWqvvQuUSsJ8Nid68FGMfUn0DDKcQUQ4RktAdHoqhRtblbhhXduU9k4FIzpbFxPSder9ze6w7wr6yD8_QwdYI-fhYLlRowaMO5wSCH5P4FSfxFciqXSsITZY3Ocy8Bn7SVuFiTWXfxBkMYcbMXbww6iMxY7NQw2scO9FMpzbWnPLy39c8LcdoxtkQJQeL-ggc_gbPzJBjnsm_455_Ut_dBtfi-gN7TX80" alt="Diagram"/></div>
+<p>The async process will take input via a <a href="https://docs.rs/tokio/latest/tokio/sync/mpsc/index.html"><code>tokio::mpsc</code></a> (Multi-Producer, Single-Consumer) channel and give output via another <code>tokio::mpsc</code> channel.</p>
+<p>We’ll create an async process model that acts as a sit-in for any specifc use case.
+The model is an async function with a loop that takes strings from the input channel and returns them on the output channel.</p>
+<p>Our async process model in <code>src-tauri/src/main.rs</code></p>
+<div class="listing-block"><pre class="pygments highlight" style="background: #f0f0f0;"><code data-lang="rust"><span></span><span style="color: #007020; font-weight: bold">use</span><span style="color: #bbbbbb"> </span>tokio::sync::mpsc;<span style="color: #bbbbbb"></span>
+
+<span style="color: #60a0b0; font-style: italic">// ...</span>
+
+<span style="color: #007020; font-weight: bold">async</span><span style="color: #bbbbbb"> </span><span style="color: #007020; font-weight: bold">fn</span> <span style="color: #06287e">async_process_model</span>(<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span><span style="color: #007020; font-weight: bold">mut</span><span style="color: #bbbbbb"> </span>input_rx: <span style="color: #0e84b5; font-weight: bold">mpsc</span>::Receiver<span style="color: #666666">&lt;</span><span style="color: #007020">String</span><span style="color: #666666">&gt;</span>,<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span>output_tx: <span style="color: #0e84b5; font-weight: bold">mpsc</span>::Sender<span style="color: #666666">&lt;</span><span style="color: #007020">String</span><span style="color: #666666">&gt;</span>,<span style="color: #bbbbbb"></span>
+)<span style="color: #bbbbbb"> </span>-&gt; <span style="color: #007020">Result</span><span style="color: #666666">&lt;</span>(),<span style="color: #bbbbbb"> </span><span style="color: #007020">Box</span><span style="color: #666666">&lt;</span><span style="color: #007020; font-weight: bold">dyn</span><span style="color: #bbbbbb"> </span>std::error::Error<span style="color: #bbbbbb"> </span><span style="color: #666666">+</span><span style="color: #bbbbbb"> </span><span style="color: #007020">Send</span><span style="color: #bbbbbb"> </span><span style="color: #666666">+</span><span style="color: #bbbbbb"> </span><span style="color: #007020">Sync</span><span style="color: #666666">&gt;&gt;</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span><span style="color: #007020; font-weight: bold">loop</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span><span style="color: #007020; font-weight: bold">while</span><span style="color: #bbbbbb"> </span><span style="color: #007020; font-weight: bold">let</span><span style="color: #bbbbbb"> </span><span style="color: #007020">Some</span>(input)<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>input_rx.recv().<span style="color: #007020; font-weight: bold">await</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">            </span><span style="color: #007020; font-weight: bold">let</span><span style="color: #bbbbbb"> </span>output<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>input;<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">            </span>output_tx.send(output).<span style="color: #007020; font-weight: bold">await</span><span style="color: #666666">?</span>;<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span>}<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span>}<span style="color: #bbbbbb"></span>
+}<span style="color: #bbbbbb"></span></code></pre></div>
+<p>Even though Tauri uses and re-exports some of the Tokio types (via the <a href="https://docs.rs/tauri/1.0.5/tauri/async_runtime/index.html"><code>tauri::async_runtime</code></a> module), it doesn’t re-export everything we need.
+So we’ll need to add Tokio.
+We’ll also add Tracing and Tracing Subscriber while were at it.</p>
+<div class="listing-block"><pre class="pygments highlight" style="background: #f0f0f0;"><code data-lang="sh"><span></span><span style="color: #007020">cd</span> tauri-src
+cargo add tokio --features full
+cargo add tracing tracing-subscriber</code></pre></div></section>
+<section class="doc-section level-1"><h2 id="_bidirectional_communication_between_rust_and_javascript">4. Bidirectional Communication between Rust and JavaScript</h2><div class="image-block kroki"><img src="https://kroki.io/graphviz/svg/eNqlkMFqwzAMhu95CpPTBt0juFDGGIwVRlvYYSlDsdXGTLE92U4po-8-J-0yUthpugiZ___8S9rsGXwjHsVXIXIx2A9tWK6ei2EOqT4LFKUQkd8jJDYXcV8ENZIsN_1zZRfek1EQjbNlMWoOnXi76F6x7gweKnvzBB2sFRsfb8uZCA14lOEzAWOe4pFQ7gwR6pnou3LkWJLZN7GmhNuR3caRvQRjxaZhBJ35q5z3X2TwI3kRjlZV9oWdwhD-gG8nC9_Nh2jK2RA5B4tyBxRygjPy3rUtWB0mi2RP_-m1ZxJp4F6Zfu_70KGNP9BTcfoGSVuXsg==" alt="Diagram"/></div>
+<p>Tauri provides two mechanism for communicating between Rust and JavaScript: Events and Commands.
+The <a href="https://tauri.app/v1/guides/features/command">Tauri docs for Commands</a> and <a href="https://tauri.app/v1/guides/features/events">Events</a> do a good job of covering these.</p>
+<section class="doc-section level-2"><h3 id="_comands_vs_events">4.1. Comands vs Events</h3><p>Events be sent in either direction while Commands can only go from JavaScript to Rust.</p>
+<p>For sending messages from JavaScript to Rust, I prefer Commands.
+Commands automate a lot of the boiler plate like message deserialization and state management.
+So while we could use Events for everything, Commands are more ergonomic.</p></section>
+<section class="doc-section level-2"><h3 id="_possible_simplification">4.2. Possible Simplification</h3><p>You can get by with only async Tauri Commands (i.e. without Tauri Events) if:</p>
+<div class="ulist"><ul><li>JavaScript initiates all communication</li><li>Requests/responses are one-to-one or one-to-none</li></ul></div>
+<p>Otherwise, you also need Tauri Events.
+In this post, the goal is to allow either side to initiate communication.
+This requires the use of Events.</p></section>
+<section class="doc-section level-2"><h3 id="_the_javascript_side">4.3. The JavaScript Side</h3><p>On the JavaScript side we use the <a href="https://tauri.app/v1/api/js/modules/tauri#invoke"><code>invoke</code></a> and <a href="https://tauri.app/v1/api/js/modules/event#listen"><code>listen</code></a> Tauri APIs to send Commands and receive Events respectively.</p>
+<p>I rewrote the <code>HelloWorld</code> Vue component that is created by the <code>create-tauri-app</code> utility to provide an interface for sending messages to Rust and reporting messages in both directions.</p>
+<p>Replace the content of <code>src/components/HelloWorld.vue</code> with the listing below.
+The interesting parts are the <code>sendOutput()</code> function and the call to <code>listen()</code>.</p>
+<div class="listing-block"><pre class="pygments highlight" style="background: #f0f0f0;"><code data-lang="vue"><span></span>&lt;<span style="color: #062873; font-weight: bold">script</span> <span style="color: #4070a0">setup</span>&gt;
+<span style="color: #007020; font-weight: bold">import</span> { ref } <span style="color: #007020; font-weight: bold">from</span> <span style="color: #4070a0">&#39;vue&#39;</span>
+<span style="color: #007020; font-weight: bold">import</span> { listen } <span style="color: #007020; font-weight: bold">from</span> <span style="color: #4070a0">&#39;@tauri-apps/api/event&#39;</span>
+<span style="color: #007020; font-weight: bold">import</span> { invoke } <span style="color: #007020; font-weight: bold">from</span> <span style="color: #4070a0">&#39;@tauri-apps/api/tauri&#39;</span>
+
+<span style="color: #007020; font-weight: bold">const</span> output <span style="color: #666666">=</span> ref(<span style="color: #4070a0">&#34;&#34;</span>);
+<span style="color: #007020; font-weight: bold">const</span> outputs <span style="color: #666666">=</span> ref([]);
+<span style="color: #007020; font-weight: bold">const</span> inputs <span style="color: #666666">=</span> ref([]);
+
+<span style="color: #007020; font-weight: bold">function</span> sendOutput() {
+  console.log(<span style="color: #4070a0">&#34;js: js2rs: &#34;</span> <span style="color: #666666">+</span> output.value)
+  outputs.value.push({ timestamp<span style="color: #666666">:</span> <span style="color: #007020">Date</span>.now(), message<span style="color: #666666">:</span> output.value }) <b class="conum">2</b>
+  invoke(<span style="color: #4070a0">&#39;js2rs&#39;</span>, { message<span style="color: #666666">:</span> output.value }) <b class="conum">3</b>
+}
+
+<span style="color: #007020; font-weight: bold">await</span> listen(<span style="color: #4070a0">&#39;rs2js&#39;</span>, (event) =&gt; { <b class="conum">4</b>
+  console.log(<span style="color: #4070a0">&#34;js: rs2js: &#34;</span> <span style="color: #666666">+</span> event)
+  <span style="color: #007020; font-weight: bold">let</span> input <span style="color: #666666">=</span> event.payload
+  inputs.value.push({ timestamp<span style="color: #666666">:</span> <span style="color: #007020">Date</span>.now(), message<span style="color: #666666">:</span> input }) <b class="conum">5</b>
+})
+&lt;/<span style="color: #062873; font-weight: bold">script</span>&gt;
+
+&lt;<span style="color: #062873; font-weight: bold">template</span>&gt;
+  &lt;<span style="color: #062873; font-weight: bold">div</span> <span style="color: #4070a0">style</span><span style="color: #666666">=</span><span style="color: #4070a0">&#34;display: grid; grid-template-columns: auto auto;&#34;</span>&gt;
+    &lt;<span style="color: #062873; font-weight: bold">div</span> <span style="color: #4070a0">style</span><span style="color: #666666">=</span><span style="color: #4070a0">&#34;grid-column: span 2; grid-row: 1;&#34;</span>&gt;
+      &lt;<span style="color: #062873; font-weight: bold">label</span> <span style="color: #4070a0">for</span><span style="color: #666666">=</span><span style="color: #4070a0">&#34;input&#34;</span> <span style="color: #4070a0">style</span><span style="color: #666666">=</span><span style="color: #4070a0">&#34;display: block;&#34;</span>&gt;Message&lt;/<span style="color: #062873; font-weight: bold">label</span>&gt;
+      &lt;<span style="color: #062873; font-weight: bold">input</span> <span style="color: #4070a0">id</span><span style="color: #666666">=</span><span style="color: #4070a0">&#34;input&#34;</span> <span style="color: #062873; font-weight: bold">v-model</span><span style="color: #4070a0">=&#34;output&#34;</span>&gt;
+      &lt;<span style="color: #062873; font-weight: bold">br</span>&gt;
+      &lt;<span style="color: #062873; font-weight: bold">button</span> <span style="color: #062873; font-weight: bold">@click</span><span style="color: #4070a0">=&#34;sendOutput()&#34;</span>&gt;<span style="color: #4070a0">Send</span> <span style="color: #4070a0">to</span> <span style="color: #4070a0">Rust</span>&lt;/<span style="color: #062873; font-weight: bold">button</span>&gt; <b class="conum">1</b>
+    &lt;/<span style="color: #062873; font-weight: bold">div</span>&gt;
+    &lt;<span style="color: #062873; font-weight: bold">div</span> <span style="color: #4070a0">style</span><span style="color: #666666">=</span><span style="color: #4070a0">&#34;grid-column: 1; grid-row: 2;&#34;</span>&gt;
+      &lt;<span style="color: #062873; font-weight: bold">h3</span>&gt;js2rs events&lt;/<span style="color: #062873; font-weight: bold">h3</span>&gt;
+      &lt;<span style="color: #062873; font-weight: bold">ol</span>&gt;
+        &lt;<span style="color: #062873; font-weight: bold">li</span> <span style="color: #062873; font-weight: bold">v-for</span><span style="color: #4070a0">=&#34;output in outputs&#34;&gt;</span>
+<span style="color: #4070a0">          {{output}}</span>
+<span style="color: #4070a0">        &lt;/li&gt;</span>
+<span style="color: #4070a0">      &lt;/ol&gt;</span>
+<span style="color: #4070a0">    &lt;/div&gt;</span>
+<span style="color: #4070a0">    &lt;div style=&#34;grid-column: 2; grid-row: 2;&#34;&gt;</span>
+<span style="color: #4070a0">      &lt;h3&gt;rs2js events&lt;/h3&gt;</span>
+<span style="color: #4070a0">      &lt;ol&gt;</span>
+<span style="color: #4070a0">        &lt;li v-for=&#34;input in inputs&#34;</span>&gt;
+          {{<span style="color: #4070a0">input</span>}}
+        &lt;/<span style="color: #062873; font-weight: bold">li</span>&gt;
+      &lt;/<span style="color: #062873; font-weight: bold">ol</span>&gt;
+    &lt;/<span style="color: #062873; font-weight: bold">div</span>&gt;
+  &lt;/<span style="color: #062873; font-weight: bold">div</span>&gt;
+&lt;/<span style="color: #062873; font-weight: bold">template</span>&gt;</code></pre><ol class="callout-list arabic"><li>Clicking the button calls <code>sendOutput()</code></li><li>Add the &#39;js2rs&#39; message to the outputs array to show the user what was sent</li><li>Send the &#39;js2rs&#39; message to Rust via the Tauri <code>invoke</code> API</li><li>Setup a listener for the &#39;rs2js&#39; event via the Tauri <code>listen</code> API</li><li>Add the &#39;rs2js&#39; message to the <code>inputs</code> array to show the user what was received</li></ol></div>
+
+<section class="doc-section level-3"><h4 id="_an_aside_suspense">4.3.1. An Aside: <code>&lt;Suspense&gt;</code></h4><p>The <code>HelloWorld</code> component is now awaiting an async function in the <code>&lt;script setup&gt;</code>.
+When a Vue component includes a top-level <code>await</code> statement in <code>&lt;script setup&gt;</code>, the Vue component must now be placed in a <a href="https://vuejs.org/guide/built-ins/suspense.html"><code>&lt;Suspense&gt;</code></a> component.
+Modify <code>src/App.vue</code> as follows</p>
+<div class="listing-block"><pre class="pygments highlight" style="background: #f0f0f0;"><code data-lang="diff"><span></span><span style="color: #A00000">-  &lt;HelloWorld/&gt;</span>
+<span style="color: #00A000">+  &lt;Suspense&gt;</span>
+<span style="color: #00A000">+    &lt;HelloWorld/&gt;</span>
+<span style="color: #00A000">+  &lt;/Suspense&gt;</span></code></pre></div></section>
+<section class="doc-section level-3"><h4 id="_result">4.3.2. Result</h4><p>Now when we run the app it looks like</p>
+<figure class="image-block"><img src="vue-mods.png" alt="The Tauri application after the modifications to HelloWorld.vue"/>
+<figcaption>Figure 3. The Tauri application after the modifications to the <code>HelloWorld</code> component</figcaption></figure></section></section>
+<section class="doc-section level-2"><h3 id="_the_rust_side">4.4. The Rust Side</h3><p>Here is the Rust side of the bidirectional communication between the main thread and the webview.
+Most of the bidirectional communication between the main thread and the async process has been commented out.</p>
+<div class="listing-block"><pre class="pygments highlight" style="background: #f0f0f0;"><code data-lang="rust"><span></span><span style="color: #007020; font-weight: bold">use</span><span style="color: #bbbbbb"> </span>tauri::Manager;<span style="color: #bbbbbb"></span>
+<span style="color: #007020; font-weight: bold">use</span><span style="color: #bbbbbb"> </span>tokio::sync::mpsc;<span style="color: #bbbbbb"></span>
+
+<span style="color: #60a0b0; font-style: italic">// ...</span>
+
+<span style="color: #007020; font-weight: bold">fn</span> <span style="color: #06287e">main</span>()<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span><span style="color: #60a0b0; font-style: italic">// ...</span>
+
+<span style="color: #bbbbbb">    </span><span style="color: #007020; font-weight: bold">let</span><span style="color: #bbbbbb"> </span>(async_proc_input_tx,<span style="color: #bbbbbb"> </span>async_proc_input_rx)<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>mpsc::channel(<span style="color: #40a070">1</span>);<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span><span style="color: #007020; font-weight: bold">let</span><span style="color: #bbbbbb"> </span>(async_proc_output_tx,<span style="color: #bbbbbb"> </span><span style="color: #007020; font-weight: bold">mut</span><span style="color: #bbbbbb"> </span>async_proc_output_rx)<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>mpsc::channel(<span style="color: #40a070">1</span>);<span style="color: #bbbbbb"></span>
+
+<span style="color: #bbbbbb">    </span>tauri::Builder::default()<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span><span style="color: #60a0b0; font-style: italic">// ...</span>
+<span style="color: #bbbbbb">        </span>.invoke_handler(tauri::generate_handler<span style="color: #666666">!</span>[js2rs])<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span>.setup(<span style="color: #666666">|</span>app<span style="color: #666666">|</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">            </span><span style="color: #60a0b0; font-style: italic">// ...</span>
+
+<span style="color: #bbbbbb">            </span><span style="color: #007020; font-weight: bold">let</span><span style="color: #bbbbbb"> </span>app_handle<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>app.handle();<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">            </span>tauri::async_runtime::spawn(<span style="color: #007020; font-weight: bold">async</span><span style="color: #bbbbbb"> </span><span style="color: #007020; font-weight: bold">move</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">                </span><span style="color: #60a0b0; font-style: italic">// An infinite loop that takes output from the async process</span>
+<span style="color: #bbbbbb">                </span><span style="color: #60a0b0; font-style: italic">// and sends it to the webview via a Tauri Event</span>
+<span style="color: #bbbbbb">                </span><span style="color: #007020; font-weight: bold">loop</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">                    </span><span style="color: #007020; font-weight: bold">if</span><span style="color: #bbbbbb"> </span><span style="color: #007020; font-weight: bold">let</span><span style="color: #bbbbbb"> </span><span style="color: #007020">Some</span>(output)<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>async_proc_output_rx.recv().<span style="color: #007020; font-weight: bold">await</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">                        </span>rs2js(output,<span style="color: #bbbbbb"> </span><span style="color: #666666">&amp;</span>app_handle);<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">                    </span>}<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">                </span>}<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">            </span>});<span style="color: #bbbbbb"></span>
+
+<span style="color: #bbbbbb">            </span><span style="color: #007020">Ok</span>(())<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span>})<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span>.run(tauri::generate_context<span style="color: #666666">!</span>())<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span>.expect(<span style="color: #4070a0">&#34;error while running tauri application&#34;</span>);<span style="color: #bbbbbb"></span>
+}<span style="color: #bbbbbb"></span>
+
+<span style="color: #60a0b0; font-style: italic">// A function that sends a message from Rust to JavaScript via a Tauri Event</span>
+<span style="color: #007020; font-weight: bold">fn</span> <span style="color: #06287e">rs2js</span><span style="color: #666666">&lt;</span>R: <span style="color: #0e84b5; font-weight: bold">tauri</span>::Runtime<span style="color: #666666">&gt;</span>(message: <span style="color: #007020">String</span>,<span style="color: #bbbbbb"> </span>manager: <span style="color: #007020">&amp;</span><span style="color: #0e84b5; font-weight: bold">impl</span><span style="color: #bbbbbb"> </span>Manager<span style="color: #666666">&lt;</span>R<span style="color: #666666">&gt;</span>)<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span>info<span style="color: #666666">!</span>(<span style="color: #666666">?</span>message,<span style="color: #bbbbbb"> </span><span style="color: #4070a0">&#34;rs2js&#34;</span>);<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span>manager<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span>.emit_all(<span style="color: #4070a0">&#34;rs2js&#34;</span>,<span style="color: #bbbbbb"> </span>message)<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span>.unwrap();<span style="color: #bbbbbb"></span>
+}<span style="color: #bbbbbb"></span>
+
+<span style="color: #60a0b0; font-style: italic">// The Tauri command that gets called when Tauri JavaScript API `invoke`</span>
+<span style="color: #60a0b0; font-style: italic">// command is called</span>
+<span style="color: #007020">#[tauri::command]</span><span style="color: #bbbbbb"></span>
+<span style="color: #007020; font-weight: bold">async</span><span style="color: #bbbbbb"> </span><span style="color: #007020; font-weight: bold">fn</span> <span style="color: #06287e">js2rs</span>(<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span>message: <span style="color: #007020">String</span>,<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span>state: <span style="color: #0e84b5; font-weight: bold">tauri</span>::State<span style="color: #666666">&lt;&#39;</span><span style="color: #007020">_</span>,<span style="color: #bbbbbb"> </span>AsyncProcInputTx<span style="color: #666666">&gt;</span>,<span style="color: #bbbbbb"></span>
+)<span style="color: #bbbbbb"> </span>-&gt; <span style="color: #007020">Result</span><span style="color: #666666">&lt;</span>(),<span style="color: #bbbbbb"> </span><span style="color: #007020">String</span><span style="color: #666666">&gt;</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><b class="conum">1</b>
+<span style="color: #bbbbbb">    </span>info<span style="color: #666666">!</span>(<span style="color: #666666">?</span>message,<span style="color: #bbbbbb"> </span><span style="color: #4070a0">&#34;js2rs&#34;</span>);<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span><span style="color: #60a0b0; font-style: italic">// ...</span>
+}<span style="color: #bbbbbb"></span></code></pre><ol class="callout-list arabic"><li>Stateful async Tauri Commands must return a <code>Result</code> (see <a href="https://github.com/tauri-apps/tauri/issues/2533">tauri-apps/tauri#2533</a>).</li></ol></div>
+</section></section>
+<section class="doc-section level-1"><h2 id="_bidirectional_communication_between_the_main_thread_and_the_async_process">5. Bidirectional Communication between the Main Thread and the Async Process</h2><div class="image-block kroki"><img src="https://kroki.io/graphviz/svg/eNqlkMFqwzAMhu95CpPTBtkjeNDTYGwwusIOyxiKozZmqu1JdkIZffc5TQht2W26GMnf__NLrd0xhE49qJ9C5WJwX61lvX4qTr2kZgIMJYnInxES2xkei6BB0uVmHNduFQJZA9F6VxYLM_TqfebesOktDrW7eYQeXg3bEG_LSkkHAbV8J2D8WIT7uAifwTq16RihzeJ1DnMty108EOqtJcK2UuNrPHnWZHddbCidOUNYnFdycKZ2L-wNivzH_Hzhu_tTeuOdRM7Zo94CyeVumRlzXDPVfNR9EHORePb863dyG_ppcCyOv7jhlXE=" alt="Diagram"/></div>
+<p>Passing messages between Rust and JavaScript may be straightforward but doing so between the Tauri main thread and an async process is a little more involved.</p>
+<p>The inputs and outputs of the async process are implemented as <a href="https://docs.rs/tokio/latest/tokio/sync/mpsc/index.html"><code>tokio::mpsc</code></a> (Multi-Producer, Single-Consumer) channels.
+We only have a single producer but there isn’t a more specific channel primitive for single-producer, single-consumer.</p>
+<section class="doc-section level-2"><h3 id="_an_aside_who_owns_the_async_runtime">5.1. An Aside: Who Owns the Async Runtime?</h3><p>By default, Tauri owns and initializes the Tokio runtime.
+Because of this, you don’t need an async <code>main</code> and a <code>#[tokio::main]</code> annotation.</p>
+<p>For additional flexibility, Tauri allows us to own and initialize the Tokio runtime ourselves.
+We can do this by adding the <code>#[tokio::main]</code> annotation, adding <code>async</code> to <code>main</code>, and then telling Tauri to use our Tokio runtime.</p>
+<div class="listing-block"><pre class="pygments highlight" style="background: #f0f0f0;"><code data-lang="rust"><span></span><span style="color: #007020">#[tokio::main]</span><span style="color: #bbbbbb"></span>
+<span style="color: #007020; font-weight: bold">async</span><span style="color: #bbbbbb"> </span><span style="color: #007020; font-weight: bold">fn</span> <span style="color: #06287e">main</span>()<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span>tauri::async_runtime::set(tokio::runtime::Handle::current());<span style="color: #bbbbbb"></span>
+
+<span style="color: #bbbbbb">    </span><span style="color: #60a0b0; font-style: italic">// ...</span>
+}<span style="color: #bbbbbb"></span></code></pre></div>
+<section class="doc-section level-3"><h4 id="_inside_tauri">5.1.1. Inside Tauri</h4><p>If we make all of our async calls inside of Tauri, then Tauri can own and manage the Tokio runtime.</p>
+<div class="listing-block"><pre class="pygments highlight" style="background: #f0f0f0;"><code data-lang="rust"><span></span><span style="color: #007020; font-weight: bold">fn</span> <span style="color: #06287e">main</span>()<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span><span style="color: #60a0b0; font-style: italic">// ...</span>
+
+<span style="color: #bbbbbb">    </span>tauri::Builder::default()<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span>.setup(<span style="color: #666666">|</span>app<span style="color: #666666">|</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">            </span>tokio::spawn(<span style="color: #007020; font-weight: bold">async</span><span style="color: #bbbbbb"> </span><span style="color: #007020; font-weight: bold">move</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">                </span>async_process(<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">                    </span>async_process_input_rx,<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">                    </span>async_process_output_tx,<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">                </span>).<span style="color: #007020; font-weight: bold">await</span><span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">            </span>});<span style="color: #bbbbbb"></span>
+
+<span style="color: #bbbbbb">            </span><span style="color: #007020">Ok</span>(())<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span>}<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span><span style="color: #60a0b0; font-style: italic">// ...</span>
+}<span style="color: #bbbbbb"></span></code></pre></div>
+<p>This is the method we’re going to use because it is slightly simpler.</p></section>
+<section class="doc-section level-3"><h4 id="_outside_tauri">5.1.2. Outside Tauri</h4><p>If we make any async calls outside of Tauri, then we need to own and manage the Tokio runtime.</p>
+<div class="listing-block"><pre class="pygments highlight" style="background: #f0f0f0;"><code data-lang="rust"><span></span><span style="color: #007020">#[tokio::main]</span><span style="color: #bbbbbb"></span>
+<span style="color: #007020; font-weight: bold">async</span><span style="color: #bbbbbb"> </span><span style="color: #007020; font-weight: bold">fn</span> <span style="color: #06287e">main</span>()<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span>tauri::async_runtime::set(tokio::runtime::Handle::current());<span style="color: #bbbbbb"></span>
+
+<span style="color: #bbbbbb">    </span><span style="color: #60a0b0; font-style: italic">// ...</span>
+
+<span style="color: #bbbbbb">    </span>tokio::spawn(<span style="color: #007020; font-weight: bold">async</span><span style="color: #bbbbbb"> </span><span style="color: #007020; font-weight: bold">move</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span>async_process(<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">            </span>async_process_input_rx,<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">            </span>async_process_output_tx,<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span>).<span style="color: #007020; font-weight: bold">await</span><span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span>});<span style="color: #bbbbbb"></span>
+
+<span style="color: #bbbbbb">    </span>tauri::Builder::default()<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span><span style="color: #60a0b0; font-style: italic">// ...</span>
+}<span style="color: #bbbbbb"></span></code></pre></div></section></section>
+<section class="doc-section level-2"><h3 id="_creating_the_channels">5.2. Creating the Channels</h3><p>The <code>tokio::mpsc</code> channels need to be created for both directions: inputs in to the async process and outputs out of the async process.</p>
+<div class="listing-block"><pre class="pygments highlight" style="background: #f0f0f0;"><code data-lang="rust"><span></span><span style="color: #007020; font-weight: bold">fn</span> <span style="color: #06287e">main</span>()<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span><span style="color: #60a0b0; font-style: italic">// ...</span>
+
+<span style="color: #bbbbbb">    </span><span style="color: #007020; font-weight: bold">let</span><span style="color: #bbbbbb"> </span>(async_process_input_tx,<span style="color: #bbbbbb"> </span>async_process_input_rx)<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>mpsc::channel(<span style="color: #40a070">1</span>);<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span><span style="color: #007020; font-weight: bold">let</span><span style="color: #bbbbbb"> </span>(async_process_output_tx,<span style="color: #bbbbbb"> </span>async_process_output_rx)<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>mpsc::channel(<span style="color: #40a070">1</span>);<span style="color: #bbbbbb"></span>
+
+<span style="color: #bbbbbb">    </span><span style="color: #60a0b0; font-style: italic">// ...</span>
+}<span style="color: #bbbbbb"></span></code></pre></div></section>
+<section class="doc-section level-2"><h3 id="_running_the_async_process">5.3. Running the Async Process</h3><p>We’ll have Tauri own and manage the Tokio runtime so we’ll need to run the async process inside <code>tauri::Builder::setup()</code>.</p>
+<div class="listing-block"><pre class="pygments highlight" style="background: #f0f0f0;"><code data-lang="rust"><span></span><span style="color: #007020; font-weight: bold">fn</span> <span style="color: #06287e">main</span>()<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span><span style="color: #60a0b0; font-style: italic">// ...</span>
+
+<span style="color: #bbbbbb">    </span><span style="color: #007020; font-weight: bold">let</span><span style="color: #bbbbbb"> </span>(async_process_input_tx,<span style="color: #bbbbbb"> </span>async_process_input_rx)<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>mpsc::channel(<span style="color: #40a070">1</span>);<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span><span style="color: #007020; font-weight: bold">let</span><span style="color: #bbbbbb"> </span>(async_process_output_tx,<span style="color: #bbbbbb"> </span>async_process_output_rx)<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>mpsc::channel(<span style="color: #40a070">1</span>);<span style="color: #bbbbbb"></span>
+
+<span style="color: #bbbbbb">    </span>tauri::Builder::default()<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span><span style="color: #60a0b0; font-style: italic">// ...</span>
+<span style="color: #bbbbbb">        </span>.setup(<span style="color: #666666">|</span>app<span style="color: #666666">|</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">            </span>tokio::spawn(<span style="color: #007020; font-weight: bold">async</span><span style="color: #bbbbbb"> </span><span style="color: #007020; font-weight: bold">move</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">                </span>async_process(<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">                    </span>async_process_input_rx,<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">                    </span>async_process_output_tx,<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">                </span>).<span style="color: #007020; font-weight: bold">await</span><span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">            </span>});<span style="color: #bbbbbb"></span>
+
+<span style="color: #bbbbbb">            </span><span style="color: #007020">Ok</span>(())<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span>}<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span><span style="color: #60a0b0; font-style: italic">// ...</span>
+}<span style="color: #bbbbbb"></span></code></pre></div></section>
+<section class="doc-section level-2"><h3 id="_main_thread_to_async_process">5.4. Main Thread to Async Process</h3><div class="image-block kroki"><img src="https://kroki.io/graphviz/svg/eNqlUM1qwzAMvucpjE8bZC9Q8KCnwdigdIUeljEUR21MVceV7YQy-u5zmpC1uU4XWeL7kyuzZ3C1eBE_mUjFYA-VYbV-y66zj-UA0BR9QP4OENmM4L4ISiQlN_26sEvnyGgIprEymzBdKz5H3BbL1mBX2IdXaOFDs3HhUebC1-BQ-VMExq-JeAwT8R2MFZuaEapEXqcwc1qawplQ7QwRVrnou26oYUVmX4eS4o0yuEl56c9WF3bFjUbv_yN-e_DT8zW9bqwPnLIHtQPy97clTJ9jjsnHTz06r3MxuEjGalES6MMiveTdIaPVH2lu0rXD4pJdfgEFB51E" alt="Diagram"/></div>
+<p>Sending messages between the main thread to the async process requires more sophistication.
+This additional sophistication is dictated by the need for our command to have mutable access to the async process input channel.</p>
+<p>To review, the main thread receives a message from JavaScript via a Tauri Command.
+The Command then needs to forward the message to the async process via input channel for the async process.
+The Command needs access to the channel.
+So how do we get give the Command access to the input channel?</p>
+<p>The answer is <code>tauri::State&lt;T&gt;</code>.
+We can use Tauri’s state management system to pass the input channel to the Command.
+The Tauri Command guide covers <a href="https://tauri.app/v1/guides/features/command#accessing-managed-state">state management</a> but it is <a href="https://github.com/tauri-apps/tauri/issues/4993">missing a key piece</a>.
+Mutability.</p>
+<p>We need mutable access to the input channel but Tauri managed state is not directly mutable and what good is state if you can mutate it?
+How do we get mutable access to the input channel via immutable state?</p>
+<p>The answer is <a href="https://doc.rust-lang.org/reference/interior-mutability.html">interior mutability</a> and &#34;the most basic type for interior mutability that supports concurrency is <code>Mutex&lt;T&gt;</code>&#34;<a class="footnote-ref" id="_footnoteref_1" href="#_footnote_1" title="View footnote 1" role="doc-noteref">[1]</a>.</p>
+<p>We can’t use <a href="https://doc.rust-lang.org/std/sync/struct.Mutex.html"><code>std::sync::Mutex&lt;T&gt;</code></a> because we need to <code>.await</code> a <code>send()</code> on the input channel and the guard for <code>std::sync::Mutex&lt;T&gt;</code> cannot be held across an <code>.await</code>.
+However, the guard for <a href="https://docs.rs/tokio/latest/tokio/sync/struct.Mutex.html"><code>tokio::sync::Mutex&lt;T&gt;</code></a> can!</p>
+<p>First, we create a struct that wraps a mutex on the input channel.</p>
+<div class="listing-block"><pre class="pygments highlight" style="background: #f0f0f0;"><code data-lang="rust"><span></span><span style="color: #007020; font-weight: bold">struct</span> <span style="color: #0e84b5; font-weight: bold">AsyncProcInputTx</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span>inner: <span style="color: #0e84b5; font-weight: bold">Mutex</span><span style="color: #666666">&lt;</span>mpsc::Sender<span style="color: #666666">&lt;</span><span style="color: #007020">String</span><span style="color: #666666">&gt;&gt;</span>,<span style="color: #bbbbbb"></span>
+}<span style="color: #bbbbbb"></span></code></pre></div>
+<p>This wrapper struct simplifies the type signature.
+Instead of having to write <code>Mutex&lt;mpsc::Sender&lt;String&gt;&gt;</code> everywhere, we only have to write <code>AsyncProcInputTx</code>.</p>
+<p>Then, we put our input channel into a mutex, put the mutex into our wrapper struct, and hand it off to Tauri to manage via <code>tauri::Builder::manage</code>.</p>
+<div class="listing-block"><pre class="pygments highlight" style="background: #f0f0f0;"><code data-lang="rust"><span></span><span style="color: #007020; font-weight: bold">fn</span> <span style="color: #06287e">main</span>()<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span><span style="color: #60a0b0; font-style: italic">// ...</span>
+
+<span style="color: #bbbbbb">    </span>tauri::Builder::default()<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span>.manage(AsyncProcInputTx<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">            </span>inner: <span style="color: #0e84b5; font-weight: bold">Mutex</span>::new(async_proc_input_tx),<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span>})<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span><span style="color: #60a0b0; font-style: italic">// ...</span>
+}<span style="color: #bbbbbb"></span></code></pre></div>
+<p>Finally, we can access this immutable state in our command, take a lock on the Mutex to get mutable access to the input channel, put the message in the channel, and implicitly unlock the Mutex when the guard goes out of scope at the end of the function.</p>
+<div class="listing-block"><pre class="pygments highlight" style="background: #f0f0f0;"><code data-lang="rust"><span></span><span style="color: #007020">#[tauri::command]</span><span style="color: #bbbbbb"></span>
+<span style="color: #007020; font-weight: bold">async</span><span style="color: #bbbbbb"> </span><span style="color: #007020; font-weight: bold">fn</span> <span style="color: #06287e">js2rs</span>(message: <span style="color: #007020">String</span>,<span style="color: #bbbbbb"> </span>state: <span style="color: #0e84b5; font-weight: bold">tauri</span>::State<span style="color: #666666">&lt;&#39;</span><span style="color: #007020">_</span>,<span style="color: #bbbbbb"> </span>AsyncProcInputTx<span style="color: #666666">&gt;</span>)<span style="color: #bbbbbb"> </span>-&gt; <span style="color: #007020">Result</span><span style="color: #666666">&lt;</span>(),<span style="color: #bbbbbb"> </span><span style="color: #007020">String</span><span style="color: #666666">&gt;</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span>info<span style="color: #666666">!</span>(<span style="color: #666666">?</span>message,<span style="color: #bbbbbb"> </span><span style="color: #4070a0">&#34;js2rs&#34;</span>);<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span><span style="color: #007020; font-weight: bold">let</span><span style="color: #bbbbbb"> </span>async_proc_input_tx<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>state.inner.lock().<span style="color: #007020; font-weight: bold">await</span>;<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span>async_proc_input_tx<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span>.send(message)<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span>.<span style="color: #007020; font-weight: bold">await</span><span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span>.map_err(<span style="color: #666666">|</span>e<span style="color: #666666">|</span><span style="color: #bbbbbb"> </span>e.to_string())<span style="color: #bbbbbb"></span>
+}<span style="color: #bbbbbb"></span></code></pre></div></section>
+<section class="doc-section level-2"><h3 id="_async_process_to_main_thread">5.5. Async Process to Main Thread</h3><div class="image-block kroki"><img src="https://kroki.io/graphviz/svg/eNqlkEFqwzAQRfc-hdCqBfcCARWyKpQWQhrIoi5lLE9ikYmsjCSbUHL3yrFxE2-rjTSj97_-qDJ7BleLF_GTibQY7KEyrNZv2bX2sRwATdEH5O8Akc0I94ugRFJy07cLu3SOjIZgGiuziela8TlyWyxbg11hH16hhQ_NxoVHmQtfg0PlTxEYvybhMUzCdzBWbGpGqJJ4ncLMZakKZ0K1M0RY5aLfdUMNKzL7OpQUb5zBTc5Lf7a6sCtuNHr_H_PbgZ-er-l1Y33glD2oHZC_ny0xfY45k4-fenRe3yUePf9uczFkkIzVoiTQh0U6yfkjXTs0LtnlF9Z3nUQ=" alt="Diagram"/></div>
+<p>In comparison, sending messages from the async process to the main thread is trivial.</p>
+<p>We spawn an async process that pulls messages out of the output channel and forwards them to our <code>rs2js</code> function.</p>
+<div class="listing-block"><pre class="pygments highlight" style="background: #f0f0f0;"><code data-lang="rust"><span></span><span style="color: #007020; font-weight: bold">fn</span> <span style="color: #06287e">main</span>()<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span><span style="color: #60a0b0; font-style: italic">// ...</span>
+
+<span style="color: #bbbbbb">    </span>tauri::Builder::default()<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span><span style="color: #60a0b0; font-style: italic">// ...</span>
+<span style="color: #bbbbbb">        </span>.setup(<span style="color: #666666">|</span>app<span style="color: #666666">|</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">            </span><span style="color: #60a0b0; font-style: italic">// ...</span>
+
+<span style="color: #bbbbbb">            </span><span style="color: #007020; font-weight: bold">let</span><span style="color: #bbbbbb"> </span>app_handle<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>app.handle();<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">            </span>tauri::async_runtime::spawn(<span style="color: #007020; font-weight: bold">async</span><span style="color: #bbbbbb"> </span><span style="color: #007020; font-weight: bold">move</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">                </span><span style="color: #007020; font-weight: bold">loop</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">                    </span><span style="color: #007020; font-weight: bold">if</span><span style="color: #bbbbbb"> </span><span style="color: #007020; font-weight: bold">let</span><span style="color: #bbbbbb"> </span><span style="color: #007020">Some</span>(output)<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>async_proc_output_rx.recv().<span style="color: #007020; font-weight: bold">await</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">                        </span>rs2js(output,<span style="color: #bbbbbb"> </span><span style="color: #666666">&amp;</span>app_handle);<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">                    </span>}<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">                </span>}<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">            </span>});<span style="color: #bbbbbb"></span>
+
+<span style="color: #bbbbbb">            </span><span style="color: #007020">Ok</span>(())<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span>})<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span><span style="color: #60a0b0; font-style: italic">// ...</span>
+}<span style="color: #bbbbbb"></span></code></pre></div></section></section>
+<section class="doc-section level-1"><h2 id="_result_2">6. Result</h2><p>The following demo shows three messages &#34;a&#34;, &#34;b&#34;, and &#34;c&#34; send from the webview to the async Rust process and back.</p>
+<p>Before a message is sent, it is reported in the &#34;js2rs events&#34; portion of the page.
+The message is then sent to the main thread in Rust.
+When the message is received by the main thread, it is reported in the terminal.
+The message is then sent to the async process and then back out of the async process to the main thread.
+When the message is received by the main thread, it is against reported in the terminal before sending to the webview.
+The message is sent to the webview.
+When the message is received by the webview, it is added to the &#34;rs2js events&#34; portion of the page.</p>
+<figure class="video-block"><video src="https://user-images.githubusercontent.com/28975/185815131-0c45ba14-4588-4722-806c-8dcf5b1bb67e.mp4" width="480" controls="">Your browser does not support the video tag.</video>
+<figcaption>Demo of bidirectional communication between the webview and an async Rust process</figcaption></figure>
+<p>Here is the complete Rust code in <code>src-tauri/src/main.rs</code></p>
+<div class="listing-block"><pre class="pygments highlight" style="background: #f0f0f0;"><code data-lang="rust"><span></span><span style="color: #007020">#![cfg_attr(</span>
+<span style="color: #007020">    all(not(debug_assertions), target_os = </span><span style="color: #4070a0">&#34;windows&#34;</span><span style="color: #007020">),</span>
+<span style="color: #007020">    windows_subsystem = </span><span style="color: #4070a0">&#34;windows&#34;</span><span style="color: #007020"></span>
+<span style="color: #007020">)]</span><span style="color: #bbbbbb"></span>
+
+<span style="color: #007020; font-weight: bold">use</span><span style="color: #bbbbbb"> </span>tauri::Manager;<span style="color: #bbbbbb"></span>
+<span style="color: #007020; font-weight: bold">use</span><span style="color: #bbbbbb"> </span>tokio::sync::mpsc;<span style="color: #bbbbbb"></span>
+<span style="color: #007020; font-weight: bold">use</span><span style="color: #bbbbbb"> </span>tokio::sync::Mutex;<span style="color: #bbbbbb"></span>
+<span style="color: #007020; font-weight: bold">use</span><span style="color: #bbbbbb"> </span>tracing::info;<span style="color: #bbbbbb"></span>
+<span style="color: #007020; font-weight: bold">use</span><span style="color: #bbbbbb"> </span>tracing_subscriber;<span style="color: #bbbbbb"></span>
+
+<span style="color: #007020; font-weight: bold">struct</span> <span style="color: #0e84b5; font-weight: bold">AsyncProcInputTx</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span>inner: <span style="color: #0e84b5; font-weight: bold">Mutex</span><span style="color: #666666">&lt;</span>mpsc::Sender<span style="color: #666666">&lt;</span><span style="color: #007020">String</span><span style="color: #666666">&gt;&gt;</span>,<span style="color: #bbbbbb"></span>
+}<span style="color: #bbbbbb"></span>
+
+<span style="color: #007020; font-weight: bold">fn</span> <span style="color: #06287e">main</span>()<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span>tracing_subscriber::fmt::init();<span style="color: #bbbbbb"></span>
+
+<span style="color: #bbbbbb">    </span><span style="color: #007020; font-weight: bold">let</span><span style="color: #bbbbbb"> </span>(async_proc_input_tx,<span style="color: #bbbbbb"> </span>async_proc_input_rx)<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>mpsc::channel(<span style="color: #40a070">1</span>);<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span><span style="color: #007020; font-weight: bold">let</span><span style="color: #bbbbbb"> </span>(async_proc_output_tx,<span style="color: #bbbbbb"> </span><span style="color: #007020; font-weight: bold">mut</span><span style="color: #bbbbbb"> </span>async_proc_output_rx)<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>mpsc::channel(<span style="color: #40a070">1</span>);<span style="color: #bbbbbb"></span>
+
+<span style="color: #bbbbbb">    </span>tauri::Builder::default()<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span>.manage(AsyncProcInputTx<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">            </span>inner: <span style="color: #0e84b5; font-weight: bold">Mutex</span>::new(async_proc_input_tx),<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span>})<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span>.invoke_handler(tauri::generate_handler<span style="color: #666666">!</span>[js2rs])<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span>.setup(<span style="color: #666666">|</span>app<span style="color: #666666">|</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">            </span>tauri::async_runtime::spawn(<span style="color: #007020; font-weight: bold">async</span><span style="color: #bbbbbb"> </span><span style="color: #007020; font-weight: bold">move</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">                </span>async_process_model(<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">                    </span>async_proc_input_rx,<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">                    </span>async_proc_output_tx,<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">                </span>).<span style="color: #007020; font-weight: bold">await</span><span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">            </span>});<span style="color: #bbbbbb"></span>
+
+<span style="color: #bbbbbb">            </span><span style="color: #007020; font-weight: bold">let</span><span style="color: #bbbbbb"> </span>app_handle<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>app.handle();<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">            </span>tauri::async_runtime::spawn(<span style="color: #007020; font-weight: bold">async</span><span style="color: #bbbbbb"> </span><span style="color: #007020; font-weight: bold">move</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">                </span><span style="color: #007020; font-weight: bold">loop</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">                    </span><span style="color: #007020; font-weight: bold">if</span><span style="color: #bbbbbb"> </span><span style="color: #007020; font-weight: bold">let</span><span style="color: #bbbbbb"> </span><span style="color: #007020">Some</span>(output)<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>async_proc_output_rx.recv().<span style="color: #007020; font-weight: bold">await</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">                        </span>rs2js(output,<span style="color: #bbbbbb"> </span><span style="color: #666666">&amp;</span>app_handle);<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">                    </span>}<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">                </span>}<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">            </span>});<span style="color: #bbbbbb"></span>
+
+<span style="color: #bbbbbb">            </span><span style="color: #007020">Ok</span>(())<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span>})<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span>.run(tauri::generate_context<span style="color: #666666">!</span>())<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span>.expect(<span style="color: #4070a0">&#34;error while running tauri application&#34;</span>);<span style="color: #bbbbbb"></span>
+}<span style="color: #bbbbbb"></span>
+
+<span style="color: #007020; font-weight: bold">fn</span> <span style="color: #06287e">rs2js</span><span style="color: #666666">&lt;</span>R: <span style="color: #0e84b5; font-weight: bold">tauri</span>::Runtime<span style="color: #666666">&gt;</span>(message: <span style="color: #007020">String</span>,<span style="color: #bbbbbb"> </span>manager: <span style="color: #007020">&amp;</span><span style="color: #0e84b5; font-weight: bold">impl</span><span style="color: #bbbbbb"> </span>Manager<span style="color: #666666">&lt;</span>R<span style="color: #666666">&gt;</span>)<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span>info<span style="color: #666666">!</span>(<span style="color: #666666">?</span>message,<span style="color: #bbbbbb"> </span><span style="color: #4070a0">&#34;rs2js&#34;</span>);<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span>manager<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span>.emit_all(<span style="color: #4070a0">&#34;rs2js&#34;</span>,<span style="color: #bbbbbb"> </span><span style="color: #06287e">format!</span>(<span style="color: #4070a0">&#34;rs: {}&#34;</span>,<span style="color: #bbbbbb"> </span>message))<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span>.unwrap();<span style="color: #bbbbbb"></span>
+}<span style="color: #bbbbbb"></span>
+
+<span style="color: #007020">#[tauri::command]</span><span style="color: #bbbbbb"></span>
+<span style="color: #007020; font-weight: bold">async</span><span style="color: #bbbbbb"> </span><span style="color: #007020; font-weight: bold">fn</span> <span style="color: #06287e">js2rs</span>(<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span>message: <span style="color: #007020">String</span>,<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span>state: <span style="color: #0e84b5; font-weight: bold">tauri</span>::State<span style="color: #666666">&lt;&#39;</span><span style="color: #007020">_</span>,<span style="color: #bbbbbb"> </span>AsyncProcInputTx<span style="color: #666666">&gt;</span>,<span style="color: #bbbbbb"></span>
+)<span style="color: #bbbbbb"> </span>-&gt; <span style="color: #007020">Result</span><span style="color: #666666">&lt;</span>(),<span style="color: #bbbbbb"> </span><span style="color: #007020">String</span><span style="color: #666666">&gt;</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span>info<span style="color: #666666">!</span>(<span style="color: #666666">?</span>message,<span style="color: #bbbbbb"> </span><span style="color: #4070a0">&#34;js2rs&#34;</span>);<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span><span style="color: #007020; font-weight: bold">let</span><span style="color: #bbbbbb"> </span>async_proc_input_tx<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>state.inner.lock().<span style="color: #007020; font-weight: bold">await</span>;<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span>async_proc_input_tx<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span>.send(message)<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span>.<span style="color: #007020; font-weight: bold">await</span><span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span>.map_err(<span style="color: #666666">|</span>e<span style="color: #666666">|</span><span style="color: #bbbbbb"> </span>e.to_string())<span style="color: #bbbbbb"></span>
+}<span style="color: #bbbbbb"></span>
+
+<span style="color: #007020; font-weight: bold">async</span><span style="color: #bbbbbb"> </span><span style="color: #007020; font-weight: bold">fn</span> <span style="color: #06287e">async_process_model</span>(<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span><span style="color: #007020; font-weight: bold">mut</span><span style="color: #bbbbbb"> </span>input_rx: <span style="color: #0e84b5; font-weight: bold">mpsc</span>::Receiver<span style="color: #666666">&lt;</span><span style="color: #007020">String</span><span style="color: #666666">&gt;</span>,<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span>output_tx: <span style="color: #0e84b5; font-weight: bold">mpsc</span>::Sender<span style="color: #666666">&lt;</span><span style="color: #007020">String</span><span style="color: #666666">&gt;</span>,<span style="color: #bbbbbb"></span>
+)<span style="color: #bbbbbb"> </span>-&gt; <span style="color: #007020">Result</span><span style="color: #666666">&lt;</span>(),<span style="color: #bbbbbb"> </span><span style="color: #007020">Box</span><span style="color: #666666">&lt;</span><span style="color: #007020; font-weight: bold">dyn</span><span style="color: #bbbbbb"> </span>std::error::Error<span style="color: #bbbbbb"> </span><span style="color: #666666">+</span><span style="color: #bbbbbb"> </span><span style="color: #007020">Send</span><span style="color: #bbbbbb"> </span><span style="color: #666666">+</span><span style="color: #bbbbbb"> </span><span style="color: #007020">Sync</span><span style="color: #666666">&gt;&gt;</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span><span style="color: #007020; font-weight: bold">while</span><span style="color: #bbbbbb"> </span><span style="color: #007020; font-weight: bold">let</span><span style="color: #bbbbbb"> </span><span style="color: #007020">Some</span>(input)<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>input_rx.recv().<span style="color: #007020; font-weight: bold">await</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span><span style="color: #007020; font-weight: bold">let</span><span style="color: #bbbbbb"> </span>output<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>input;<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">        </span>output_tx.send(output).<span style="color: #007020; font-weight: bold">await</span><span style="color: #666666">?</span>;<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span>}<span style="color: #bbbbbb"></span>
+
+<span style="color: #bbbbbb">    </span><span style="color: #007020">Ok</span>(())<span style="color: #bbbbbb"></span>
+}<span style="color: #bbbbbb"></span></code></pre></div></section><section class="footnotes" aria-label="Footnotes" role="doc-endnotes"><hr/><ol class="footnotes"><li class="footnote" id="_footnote_1" role="doc-endnote">From <a href="https://www.ralfj.de/projects/rust-101/part15.html">Rust-101, Part 15: Mutex, Interior Mutability (cont.), RwLock, Sync</a> <a class="footnote-backref" href="#_footnoteref_1" role="doc-backlink" title="Jump to the first occurrence in the text">↩</a></li></ol></section>
+
+      </div>
+    </div>
+  </div>
+  <div class="pure-u-1-24 pure-u-md-5-24"></div>
+</div>
+
+<div class="footer pure-g">
+  <div class="pure-u-1-24 pure-u-md-5-24"></div>
+  <div class="pure-u-11-12 pure-u-md-7-12">
+    <div class="footer-content">
+      <div class="pure-menu pure-menu-horizontal">
+        <ul>
+          
+          <li class="pure-menu-item" id="foot-name">© Rob Donnelly</li>
+          
+
+          
+
+          
+          <li class="pure-menu-item">
+            <a href="https://github.com/rfdonnelly" class="pure-menu-link">GitHub</a>
+          </li>
+          
+
+          
+
+          
+
+        </ul>
+        <a href="#" class="pure-menu-link pull-right" id="gototop-btn">↑↑</a>
+        
+      </div>
+      
+    </div>
+  </div>
+  <div class="pure-u-1-24 pure-u-md-5-24"></div>
+</div>
+
+<script type="text/javascript">
+  go();
+  window.addEventListener('resize', go);
+  function go(){
+    var d=document.querySelector(".desktop")
+    if(document.documentElement.clientWidth > 768) {
+      d.style.display="";
+    } else {
+      d.style.display="none";
+    }
+  }
+</script>
+<script type="text/javascript">
+  var a=document.querySelector("#toggle-btn"),b=document.querySelector("#toggle-content");a.addEventListener("click",function(){""==b.style.display?(b.style.display="none",a.innerHTML="☰"):(b.style.display="",a.innerHTML="X")});</script>
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-145317325-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+</body>
+</html>
+

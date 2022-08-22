@@ -71,6 +71,25 @@ https://github.com/yahoo/pure/blob/master/LICENSE.md
 
   
   <style type="text/css" media="screen">
+    
+      /* Light mode -- this is the default! */
+:root {
+  --color: #484848;
+  --color-footnote: #575757;
+  --color-footer-content: #bbb;
+  --background-color: rgb(252, 252, 252);
+  --background-color-code: rgb(240, 240, 240);
+  --background-color-toggle-content: rgb(249, 249, 249);
+  --link-color: #c05b4d;
+  --link-color-hover: #a5473a;
+  --list-link-color: #336699;
+  --border-navbar-and-footer: #e3e3e3;
+}
+
+    
+  </style>
+
+  <style type="text/css" media="screen">
     html {
   min-height: 100%;
   width: 100%;
@@ -79,21 +98,27 @@ https://github.com/yahoo/pure/blob/master/LICENSE.md
 
 body {
   background-color: rgb(252, 252, 252);
+  background-color: var(--background-color);
   color: #484848;
+  color: var(--color);
 }
 
 a {
   text-decoration: none;
 }
 
-code, kbd, pre, samp {
+kbd, pre, code, samp {
   background-color: rgb(240, 240, 240);
+  background-color: var(--background-color-code);
 }
 
 .nav-menu {
   margin-top: 5px;
   padding-bottom: 5px;
-  border-bottom: 1px solid #e3e3e3;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: #e3e3e3;
+  border-bottom-color: var(--border-navbar-and-footer);
 }
 
 .pure-menu-heading {
@@ -101,9 +126,14 @@ code, kbd, pre, samp {
   font-size: large;
 }
 
+.pure-menu-link:hover {
+  background-color: unset;
+}
+
 .header {
   text-align: left;
   color: #484848;
+  color: var(--color);
   margin-bottom: .5em;
 }
 
@@ -114,17 +144,20 @@ code, kbd, pre, samp {
 .header ul li a {
   font-weight: bold;
   color: #484848;
+  color: var(--color);
   font-family: "Source Sans Pro", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .header {
   font-weight: bold;
   color: #484848;
+  color: var(--color);
   font-family: "Source Sans Pro", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .site-title {
   color: #484848;
+  color: var(--color);
   text-transform: none;
   font-weight: normal;
   font-family: "Source Sans Pro", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -158,6 +191,7 @@ code, kbd, pre, samp {
 
 .posts li > a {
   color: #369;
+  color: var(--list-link-color);
   text-decoration: none;
 }
 
@@ -168,17 +202,20 @@ code, kbd, pre, samp {
 .footnote {
   font-family: verdana, arial, helvetica, sans-serif;
   color: #575757;
+  color: var(--color-footnote);
   font-size: 0.75em;
   margin-bottom: 0;
 }
 
 .footnote a {
   color: #575757;
+  color: var(--color-footnote);
 }
 
 .footnote a:hover {
   text-decoration: underline;
   color: #369;
+  color: var(--list-link-color);
 }
 
 .footer {
@@ -190,13 +227,18 @@ code, kbd, pre, samp {
 }
 
 .footer-content {
-  border-top: 1px solid #e3e3e3;
+  border-top-width: 1px;
+  border-top-style: solid;
+  border-top-color: #e3e3e3;
+  border-top: 1px solid var(--border-navbar-and-footer);
   font-size: 80%;
   color: #bbb;
+  color: var(--color-footer-content);
 }
 
 .footer-content a {
   color: #575757;
+  color: var(--color-footnote);
 }
 
 .footer-content ul {
@@ -220,6 +262,7 @@ code, kbd, pre, samp {
 
 #foot-name {
   color: #484848;
+  color: var(--color);
   text-transform: none;
 }
 
@@ -232,6 +275,7 @@ code, kbd, pre, samp {
 .post {
   font-family: proxima-nova, "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
   color: #484848;
+  color: var(--color);
   letter-spacing: normal;
   padding-left: .5em;
 }
@@ -261,11 +305,13 @@ code, kbd, pre, samp {
 
 .post a {
   color: #c05b4d;
+  color: var(--link-color);
   text-decoration: none;
 }
 
 .post a:hover {
   color: #a5473a;
+  color: var(--link-color-hover);
   text-decoration: underline;
 }
 
@@ -295,7 +341,7 @@ code, kbd, pre, samp {
 
 .post-title {
   margin-top: 0;
-  margin-bottom: 2em;
+  margin-bottom: 1em;
 }
 
 .post-title h1 {
@@ -321,6 +367,7 @@ code, kbd, pre, samp {
     padding: .5em 1em;
     text-decoration: none;
     color: #484848;
+    color: var(--color);
     font-weight: bold;
   }
 
@@ -328,6 +375,7 @@ code, kbd, pre, samp {
     clear: both;
     height: auto;
     background-color: rgb(249, 249, 249);
+    background-color: var(--background-color-toggle-content);
   }
 
   #toggle-home {
@@ -357,10 +405,9 @@ code, kbd, pre, samp {
   
   
 
-  <meta name="generator" content="Hugo 0.81.0" />
-
   
   <link rel="stylesheet" href="https://rfdonnelly.github.io/css/syntax.css">
+<link rel="stylesheet" href="https://rfdonnelly.github.io/css/overrides.css">
 
 </head>
 <body>
@@ -401,11 +448,13 @@ code, kbd, pre, samp {
 
       <div class="post-title">
         <p class="footnote">
-          <time datetime="2020-06-30 00:00:00 &#43;0000 UTC">
-            
-              2020-06-30
-            
-          </time>
+          
+            <time datetime="2020-06-30 00:00:00 &#43;0000 UTC">
+              
+                2020-06-30
+              
+            </time>
+          
         
         
         |
@@ -423,52 +472,27 @@ code, kbd, pre, samp {
 
       <div class="post-content">
         
-        <div class="paragraph">
-<p>My Houdini, the blue layer pictured in these photos, is no more.
+        <p>My Houdini, the blue layer pictured in these photos, is no more.
 After 6 years together our paternship came to a sudden end.
 I was in disbelief.
 It wasn’t due to some epic alpine adventure.
 It was caused by a puppy; a cute, energetic, teething puppy.</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="/images/houdini/tmc.jpg" alt="tmc" width="600"/>
-</div>
-<div class="title">Matthes Crest during a Tenaya-Matthes-Cathedral linkup. Photo: Tami Abdollah 2015-09-05</div>
-</div>
-<div class="paragraph">
+<figure class="image-block"><img src="/images/houdini/tmc.jpg" alt="tmc" width="600"/>
+<figcaption>Matthes Crest during a Tenaya-Matthes-Cathedral linkup. Photo: Tami Abdollah 2015-09-05</figcaption></figure>
 <p>At less than 4oz and $99 dollars I was initially very unsure about the purchase.
 However, time and time again the Houdini has brought me comfort in uncomfortable conditions.
 The Houdini has grown to be one of my most beloved layers.</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="/images/houdini/baldy.jpg" alt="baldy" width="800"/>
-</div>
-<div class="title">A winter ascent of Mt Baldy. Photo: Sherman Lam 2020-01-04</div>
-</div>
-<div class="paragraph">
+<figure class="image-block"><img src="/images/houdini/baldy.jpg" alt="baldy" width="800"/>
+<figcaption>A winter ascent of Mt Baldy. Photo: Sherman Lam 2020-01-04</figcaption></figure>
 <p>All was not lost.
 Patagonia has an excellent complementary repair program.</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="/images/houdini/tahquitz.jpg" alt="tahquitz" width="600"/>
-</div>
-<div class="title">Tahquitz summit after The Long Climb. Photo: Rob Donnelly 2018-05-27</div>
-</div>
-<div class="paragraph">
+<figure class="image-block"><img src="/images/houdini/tahquitz.jpg" alt="tahquitz" width="600"/>
+<figcaption>Tahquitz summit after The Long Climb. Photo: Rob Donnelly 2018-05-27</figcaption></figure>
 <p>This was the second time I’d walk into the Pasadena store with a torn garmet in hand and lay bare the mistake I had made.
 The associate had heard it all before.
 Man’s best friend strikes again.</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="/images/houdini/clyde-minaret.jpg" alt="clyde minaret" width="600"/>
-</div>
-<div class="title">An attempt on Clyde Minaret. Photo: Sherman Lam 2019-08-01</div>
-</div>
-<div class="paragraph">
+<figure class="image-block"><img src="/images/houdini/clyde-minaret.jpg" alt="clyde minaret" width="600"/>
+<figcaption>An attempt on Clyde Minaret. Photo: Sherman Lam 2019-08-01</figcaption></figure>
 <p>The associate detailed the repair process.
 If they had the material in stock they’d do the repair in-house.
 If they didn’t they’d send it up to their facility in Reno.
@@ -476,35 +500,17 @@ If they didn’t have the exact color they’d use a different color.
 They might need to replace the entire sleeve.
 When it was all said and done they’d ship it back to me.
 All free of charge.</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="/images/houdini/conness-w2n.jpg" alt="conness w2n" width="800"/>
-</div>
-<div class="title">Mt Conness West Ridge during a linkup of the West and North ridges. Photo: Rob Donnelly 2018-08-31</div>
-</div>
-<div class="paragraph">
+<figure class="image-block"><img src="/images/houdini/conness-w2n.jpg" alt="conness w2n" width="800"/>
+<figcaption>Mt Conness West Ridge during a linkup of the West and North ridges. Photo: Rob Donnelly 2018-08-31</figcaption></figure>
 <p>I was excited for my one-of-a-kind patch-work Houdini.
 The evidence of repair would be a badge of honor.</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="/images/houdini/bcs.jpg" alt="bcs" width="800"/>
-</div>
-<div class="title">Bear Creek Spire. Photo: Brent Norum 2018-06-23</div>
-</div>
-<div class="paragraph">
+<figure class="image-block"><img src="/images/houdini/bcs.jpg" alt="bcs" width="800"/>
+<figcaption>Bear Creek Spire. Photo: Brent Norum 2018-06-23</figcaption></figure>
 <p>A week later the Coronavirus hit the US and everything shutdown.
 Patagonia shutdown their returns, exchanges, and repairs.
 I wouldn’t see my Houdini for awhile but Patagonia was being Patagonia doing the right thing.</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="/images/houdini/angels-landing.jpg" alt="angels landing" width="800"/>
-</div>
-<div class="title">Hitchhiking to Angels Landing. Photo: Fellow Hiker 2019-03-25</div>
-</div>
-<div class="paragraph">
+<figure class="image-block"><img src="/images/houdini/angels-landing.jpg" alt="angels landing" width="800"/>
+<figcaption>Hitchhiking to Angels Landing. Photo: Fellow Hiker 2019-03-25</figcaption></figure>
 <p>Fast forward 4 months later.
 Still no Houdini.
 I called Patagonia and spoke to Miles.
@@ -512,14 +518,8 @@ Miles told me he would get to the bottom of it.
 I left the conversation with a mix of hope and low expectations.
 Things get lost.
 People forget to call back.</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="/images/houdini/tahoe-mtb.jpg" alt="tahoe mtb" width="600"/>
-</div>
-<div class="title">Mountain biking in Tahoe. Photo: Rob Donnelly 2013-10-05</div>
-</div>
-<div class="paragraph">
+<figure class="image-block"><img src="/images/houdini/tahoe-mtb.jpg" alt="tahoe mtb" width="600"/>
+<figcaption>Mountain biking in Tahoe. Photo: Rob Donnelly 2013-10-05</figcaption></figure>
 <p>Less than a week later, I got a call from Miles.
 Miles began to tell me the Pasadena store didn’t have a record of the repair.
 My heart sank.
@@ -527,33 +527,18 @@ He continued by saying they were going to send out a new one and started going o
 I was having trouble processing the news.
 On one hand I had lost my adventure companion of 6 years.
 On the other I was being offered to be made more than whole without having to fight for it.</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="/images/houdini/jt.jpg" alt="jt" width="600"/>
-</div>
-<div class="title">Joshua Tree with the family. Photo: Ashley Donnelly 2014-11-30</div>
-</div>
-<div class="paragraph">
+<figure class="image-block"><img src="/images/houdini/jt.jpg" alt="jt" width="600"/>
+<figcaption>Joshua Tree with the family. Photo: Ashley Donnelly 2014-11-30</figcaption></figure>
 <p>Patagonia is a unicorn and not in the financial sense; in a more important sense.
 It’s not just their customer service.
 Patagonia makes great products.
 Patagonia fights for the environment.
 Patagonia values people.</p>
-</div>
-<div class="paragraph">
 <p>Few companies make me feel this good to be a customer.</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="/images/houdini/tahquitz-finger-trip.jpg" alt="tahquitz finger trip" width="800"/>
-</div>
-<div class="title">Tahquitz Finger Trip. Photo: Aaron Jacobs-Smith 2019-06-30</div>
-</div>
-<div class="paragraph">
+<figure class="image-block"><img src="/images/houdini/tahquitz-finger-trip.jpg" alt="tahquitz finger trip" width="800"/>
+<figcaption>Tahquitz Finger Trip. Photo: Aaron Jacobs-Smith 2019-06-30</figcaption></figure>
 <p>When you buy Patagonia you aren’t buying just a piece of clothing.
 You are also investing in people and in the environment.</p>
-</div>
 
       </div>
     </div>

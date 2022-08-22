@@ -13,11 +13,8 @@
       <pubDate>Tue, 01 Dec 2020 22:31:27 +0000</pubDate>
       
       <guid>https://rfdonnelly.github.io/posts/vscode-remote-with-pageant/</guid>
-      <description>This article documents using Pageant to manage SSH keys for VS Code Remote.
- Assumptions   VS Code and the VS Code Remote Development extension is installed
-  PuTTY Pageant is being used to manage SSH keys
-  The remote host has a corresponding public key
-     Introduction VS Code Remote Development doesn’t support Pageant out of the box.⁠[1] More specifically, VS Code Remote Development uses the Windows 10 native OpenSSH client and the OpenSSH client doesn’t support Pageant.</description>
+      <description>Table of Contents1. Assumptions2. Introduction3. Install wsl-ssh-pageant4. Setup wsl-ssh-pageant5. Use VS Code Remote DevelopmentThis article documents using Pageant to manage SSH keys for VS Code Remote.
+1. AssumptionsVS Code and the VS Code Remote Development extension is installedPuTTY Pageant is being used to manage SSH keysThe remote host has a corresponding public key 2. IntroductionVS Code Remote Development doesn’t support Pageant out of the box.⁠[1] More specifically, VS Code Remote Development uses the Windows 10 native OpenSSH client and the OpenSSH client doesn’t support Pageant.</description>
     </item>
     
     <item>
@@ -26,9 +23,7 @@
       <pubDate>Mon, 03 Feb 2020 22:44:58 +0000</pubDate>
       
       <guid>https://rfdonnelly.github.io/posts/wsl2/</guid>
-      <description>This article documents the setup of WSL2 for local and remote development. Local development is supported by Docker. For remote development, WSL2 effectively acts as a bridge. Remote development is done via SSH with support for X11 forwarding. This allows X11 applications to be run on the remote host and display on the Windows desktop.
-   Note  CHANGELOG   2020-11-25 — Added SSH into WSL2.
-  2020-11-27 — Changed Docker from edge to stable.</description>
+      <description>Table of Contents1. Install WSL22. Install Docker3. Install Windows Terminal4. Setup SSH X11 Forwarding5. Setup Pageant6. SSH into WSL2This article documents the setup of WSL2 for local and remote development. Local development is supported by Docker. For remote development, WSL2 effectively acts as a bridge. Remote development is done via SSH with support for X11 forwarding. This allows X11 applications to be run on the remote host and display on the Windows desktop.</description>
     </item>
     
     <item>

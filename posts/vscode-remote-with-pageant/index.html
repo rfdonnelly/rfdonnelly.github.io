@@ -71,6 +71,25 @@ https://github.com/yahoo/pure/blob/master/LICENSE.md
 
   
   <style type="text/css" media="screen">
+    
+      /* Light mode -- this is the default! */
+:root {
+  --color: #484848;
+  --color-footnote: #575757;
+  --color-footer-content: #bbb;
+  --background-color: rgb(252, 252, 252);
+  --background-color-code: rgb(240, 240, 240);
+  --background-color-toggle-content: rgb(249, 249, 249);
+  --link-color: #c05b4d;
+  --link-color-hover: #a5473a;
+  --list-link-color: #336699;
+  --border-navbar-and-footer: #e3e3e3;
+}
+
+    
+  </style>
+
+  <style type="text/css" media="screen">
     html {
   min-height: 100%;
   width: 100%;
@@ -79,21 +98,27 @@ https://github.com/yahoo/pure/blob/master/LICENSE.md
 
 body {
   background-color: rgb(252, 252, 252);
+  background-color: var(--background-color);
   color: #484848;
+  color: var(--color);
 }
 
 a {
   text-decoration: none;
 }
 
-code, kbd, pre, samp {
+kbd, pre, code, samp {
   background-color: rgb(240, 240, 240);
+  background-color: var(--background-color-code);
 }
 
 .nav-menu {
   margin-top: 5px;
   padding-bottom: 5px;
-  border-bottom: 1px solid #e3e3e3;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: #e3e3e3;
+  border-bottom-color: var(--border-navbar-and-footer);
 }
 
 .pure-menu-heading {
@@ -101,9 +126,14 @@ code, kbd, pre, samp {
   font-size: large;
 }
 
+.pure-menu-link:hover {
+  background-color: unset;
+}
+
 .header {
   text-align: left;
   color: #484848;
+  color: var(--color);
   margin-bottom: .5em;
 }
 
@@ -114,17 +144,20 @@ code, kbd, pre, samp {
 .header ul li a {
   font-weight: bold;
   color: #484848;
+  color: var(--color);
   font-family: "Source Sans Pro", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .header {
   font-weight: bold;
   color: #484848;
+  color: var(--color);
   font-family: "Source Sans Pro", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .site-title {
   color: #484848;
+  color: var(--color);
   text-transform: none;
   font-weight: normal;
   font-family: "Source Sans Pro", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -158,6 +191,7 @@ code, kbd, pre, samp {
 
 .posts li > a {
   color: #369;
+  color: var(--list-link-color);
   text-decoration: none;
 }
 
@@ -168,17 +202,20 @@ code, kbd, pre, samp {
 .footnote {
   font-family: verdana, arial, helvetica, sans-serif;
   color: #575757;
+  color: var(--color-footnote);
   font-size: 0.75em;
   margin-bottom: 0;
 }
 
 .footnote a {
   color: #575757;
+  color: var(--color-footnote);
 }
 
 .footnote a:hover {
   text-decoration: underline;
   color: #369;
+  color: var(--list-link-color);
 }
 
 .footer {
@@ -190,13 +227,18 @@ code, kbd, pre, samp {
 }
 
 .footer-content {
-  border-top: 1px solid #e3e3e3;
+  border-top-width: 1px;
+  border-top-style: solid;
+  border-top-color: #e3e3e3;
+  border-top: 1px solid var(--border-navbar-and-footer);
   font-size: 80%;
   color: #bbb;
+  color: var(--color-footer-content);
 }
 
 .footer-content a {
   color: #575757;
+  color: var(--color-footnote);
 }
 
 .footer-content ul {
@@ -220,6 +262,7 @@ code, kbd, pre, samp {
 
 #foot-name {
   color: #484848;
+  color: var(--color);
   text-transform: none;
 }
 
@@ -232,6 +275,7 @@ code, kbd, pre, samp {
 .post {
   font-family: proxima-nova, "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
   color: #484848;
+  color: var(--color);
   letter-spacing: normal;
   padding-left: .5em;
 }
@@ -261,11 +305,13 @@ code, kbd, pre, samp {
 
 .post a {
   color: #c05b4d;
+  color: var(--link-color);
   text-decoration: none;
 }
 
 .post a:hover {
   color: #a5473a;
+  color: var(--link-color-hover);
   text-decoration: underline;
 }
 
@@ -295,7 +341,7 @@ code, kbd, pre, samp {
 
 .post-title {
   margin-top: 0;
-  margin-bottom: 2em;
+  margin-bottom: 1em;
 }
 
 .post-title h1 {
@@ -321,6 +367,7 @@ code, kbd, pre, samp {
     padding: .5em 1em;
     text-decoration: none;
     color: #484848;
+    color: var(--color);
     font-weight: bold;
   }
 
@@ -328,6 +375,7 @@ code, kbd, pre, samp {
     clear: both;
     height: auto;
     background-color: rgb(249, 249, 249);
+    background-color: var(--background-color-toggle-content);
   }
 
   #toggle-home {
@@ -357,10 +405,9 @@ code, kbd, pre, samp {
   
   
 
-  <meta name="generator" content="Hugo 0.81.0" />
-
   
   <link rel="stylesheet" href="https://rfdonnelly.github.io/css/syntax.css">
+<link rel="stylesheet" href="https://rfdonnelly.github.io/css/overrides.css">
 
 </head>
 <body>
@@ -401,11 +448,13 @@ code, kbd, pre, samp {
 
       <div class="post-title">
         <p class="footnote">
-          <time datetime="2020-12-01 22:31:27 &#43;0000 UTC">
-            
-              2020-12-01
-            
-          </time>
+          
+            <time datetime="2020-12-01 22:31:27 &#43;0000 UTC">
+              
+                2020-12-01
+              
+            </time>
+          
         
         
         |
@@ -423,108 +472,21 @@ code, kbd, pre, samp {
 
       <div class="post-content">
         
-        <div class="paragraph">
-<p>This article documents using Pageant to manage SSH keys for VS Code Remote.</p>
-</div>
-<div class="sect1">
-<h2 id="_assumptions">Assumptions</h2>
-<div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p><a href="https://code.visualstudio.com/">VS Code</a> and the <a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack">VS Code Remote Development extension</a> is installed</p>
-</li>
-<li>
-<p><a href="https://the.earth.li/~sgtatham/putty/0.74/htmldoc/Chapter9.html#pageant">PuTTY Pageant</a> is being used to manage SSH keys</p>
-</li>
-<li>
-<p>The remote host has a corresponding public key</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_introduction">Introduction</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>VS Code Remote Development doesn’t support Pageant out of the box.⁠<sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup>
+        <nav id="toc" class="toc" role="doc-toc"><h2 id="toc-title">Table of Contents</h2><ol class="toc-list level-1"><li><a href="#_assumptions">1. Assumptions</a></li><li><a href="#_introduction">2. Introduction</a></li><li><a href="#_install_wsl_ssh_pageant">3. Install <code>wsl-ssh-pageant</code></a></li><li><a href="#_setup_wsl_ssh_pageant">4. Setup <code>wsl-ssh-pageant</code></a></li><li><a href="#_use_vs_code_remote_development">5. Use VS Code Remote Development</a></li></ol></nav><p>This article documents using Pageant to manage SSH keys for VS Code Remote.</p>
+<section class="doc-section level-1"><h2 id="_assumptions">1. Assumptions</h2><div class="ulist"><ul><li><a href="https://code.visualstudio.com/">VS Code</a> and the <a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack">VS Code Remote Development extension</a> is installed</li><li><a href="https://the.earth.li/~sgtatham/putty/0.74/htmldoc/Chapter9.html#pageant">PuTTY Pageant</a> is being used to manage SSH keys</li><li>The remote host has a corresponding public key</li></ul></div></section>
+<section class="doc-section level-1"><h2 id="_introduction">2. Introduction</h2><p>VS Code Remote Development doesn’t support Pageant out of the box.⁠<a class="footnote-ref" id="_footnoteref_1" href="#_footnote_1" title="View footnote 1" role="doc-noteref">[1]</a>
 More specifically, VS Code Remote Development uses the Windows 10 native OpenSSH client and the OpenSSH client doesn’t support Pageant.
 A bridge is needed to make Pageant available to the OpenSSH client.</p>
-</div>
-<div class="paragraph">
 <p>This is where <code>wsl-ssh-pageant</code> comes in.
 <code>wsl-ssh-pageant</code> can make Pageant available to WSL or the Windows OpenSSH client.
-We are going to use it to make Pageant available to the Windows OpenSSH client.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_install_wsl_ssh_pageant">Install <code>wsl-ssh-pageant</code></h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Download <code>wsl-ssh-pageant-amd64-gui.exe</code> from the <a href="https://github.com/benpye/wsl-ssh-pageant/releases">latest release</a> of <code>wsl-ssh-pageant</code>⁠<sup class="footnote">[<a id="_footnoteref_2" class="footnote" href="#_footnotedef_2" title="View footnote.">2</a>]</sup></p>
-</div>
-<div class="admonitionblock note">
-<table class='pure-table pure-table-striped'>
-<tbody><tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-The <code>-gui</code> version doesn’t actually provide a GUI but rather it doesn’t open a terminal while the non-gui version does.
-</td>
-</tr>
-</tbody></table>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_setup_wsl_ssh_pageant">Setup <code>wsl-ssh-pageant</code></h2>
-<div class="sectionbody">
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Open the startup directory by pressing <span class="keyseq"><kbd>⊞Win</kbd>+<kbd>R</kbd></span> and typing <code>shell:startup↵</code></p>
-</li>
-<li>
-<p>Create a <code>.bat</code> file with the following content⁠<sup class="footnote">[<a id="_footnoteref_3" class="footnote" href="#_footnotedef_3" title="View footnote.">3</a>]</sup></p>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-bat" data-lang="bat">@ECHO OFF
+We are going to use it to make Pageant available to the Windows OpenSSH client.</p></section>
+<section class="doc-section level-1"><h2 id="_install_wsl_ssh_pageant">3. Install <code>wsl-ssh-pageant</code></h2><p>Download <code>wsl-ssh-pageant-amd64-gui.exe</code> from the <a href="https://github.com/benpye/wsl-ssh-pageant/releases">latest release</a> of <code>wsl-ssh-pageant</code>⁠<a class="footnote-ref" id="_footnoteref_2" href="#_footnote_2" title="View footnote 2" role="doc-noteref">[2]</a></p>
+<aside class="admonition-block note" role="note"><h6 class="block-title label-only"><span class="title-label">Note: </span></h6><p>The <code>-gui</code> version doesn’t actually provide a GUI but rather it doesn’t open a terminal while the non-gui version does.</p></aside></section>
+<section class="doc-section level-1"><h2 id="_setup_wsl_ssh_pageant">4. Setup <code>wsl-ssh-pageant</code></h2><div class="olist arabic"><ol class="arabic"><li>Open the startup directory by pressing <kbd class="keyseq"><kbd class="key">⊞Win</kbd>+<kbd class="key">R</kbd></kbd> and typing <code>shell:startup↵</code></li><li><p>Create a <code>.bat</code> file with the following content⁠<a class="footnote-ref" id="_footnoteref_3" href="#_footnote_3" title="View footnote 3" role="doc-noteref">[3]</a></p><div class="listing-block"><pre class="pygments highlight" style="background: #f0f0f0;"><code data-lang="bat"><span></span>@<span style="color: #007020; font-weight: bold">ECHO</span> OFF
 SETX SSH_AUTH_SOCK \\.\pipe\ssh-pageant
-START /B &#34;&#34; &#34;C:\SSH\wsl-ssh-pageant-amd64-gui.exe&#34; --systray --winssh ssh-pageant</code></pre>
-</div>
-</div>
-</li>
-<li>
-<p>Run the <code>.bat</code> file</p>
-</li>
-</ol>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_use_vs_code_remote_development">Use VS Code Remote Development</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Open VS Code and connect to a remote host.
-You should no longer be prompted for a password.</p>
-</div>
-</div>
-</div>
-<div id="footnotes">
-<hr/>
-<div class="footnote" id="_footnotedef_1">
-<a href="#_footnoteref_1">1</a>. As of VS Code v1.51.
-</div>
-<div class="footnote" id="_footnotedef_2">
-<a href="#_footnoteref_2">2</a>. <code>wsl-ssh-pageant</code> v20201121.2 as of this writing.
-</div>
-<div class="footnote" id="_footnotedef_3">
-<a href="#_footnoteref_3">3</a>. Sourced from <a href="https://github.com/microsoft/vscode-remote-release/issues/61#issuecomment-508651407">microsoft/vscode-remote-release#61</a>.
-</div>
-</div>
+<span style="color: #007020; font-weight: bold">START</span> /B <span style="color: #4070a0">&#34;&#34;</span> <span style="color: #4070a0">&#34;C:\SSH\wsl-ssh-pageant-amd64-gui.exe&#34;</span> --systray --winssh ssh-pageant</code></pre></div></li><li>Run the <code>.bat</code> file</li></ol></div></section>
+<section class="doc-section level-1"><h2 id="_use_vs_code_remote_development">5. Use VS Code Remote Development</h2><p>Open VS Code and connect to a remote host.
+You should no longer be prompted for a password.</p></section><section class="footnotes" aria-label="Footnotes" role="doc-endnotes"><hr/><ol class="footnotes"><li class="footnote" id="_footnote_1" role="doc-endnote">As of VS Code v1.51. <a class="footnote-backref" href="#_footnoteref_1" role="doc-backlink" title="Jump to the first occurrence in the text">↩</a></li><li class="footnote" id="_footnote_2" role="doc-endnote"><code>wsl-ssh-pageant</code> v20201121.2 as of this writing. <a class="footnote-backref" href="#_footnoteref_2" role="doc-backlink" title="Jump to the first occurrence in the text">↩</a></li><li class="footnote" id="_footnote_3" role="doc-endnote">Sourced from <a href="https://github.com/microsoft/vscode-remote-release/issues/61#issuecomment-508651407">microsoft/vscode-remote-release#61</a>. <a class="footnote-backref" href="#_footnoteref_3" role="doc-backlink" title="Jump to the first occurrence in the text">↩</a></li></ol></section>
 
       </div>
     </div>

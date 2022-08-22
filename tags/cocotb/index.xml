@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>cocotb on Rob Donnelly</title>
+    <link>https://rfdonnelly.github.io/tags/cocotb/</link>
+    <description>Recent content in cocotb on Rob Donnelly</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 16 Jun 2020 20:45:23 +0000</lastBuildDate><atom:link href="https://rfdonnelly.github.io/tags/cocotb/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Parallel CRC</title>
+      <link>https://rfdonnelly.github.io/posts/parallel-lfsr/</link>
+      <pubDate>Tue, 16 Jun 2020 20:45:23 +0000</pubDate>
+      
+      <guid>https://rfdonnelly.github.io/posts/parallel-lfsr/</guid>
+      <description>Over my years in digital hardware design and verification I’ve worked with error detection and correction several times. Every time, I’ve copied implementations from specifications always curious how they were derived but never had the time or inclination to dive deeper. Implementations took on two forms, the sequential implementation using a LFSR or a combinational implementation. The sequential implementation was easy to understand because it is a direct translation of the generator polynomial.</description>
+    </item>
+    
+  </channel>
+</rss>

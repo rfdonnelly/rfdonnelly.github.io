@@ -71,6 +71,25 @@ https://github.com/yahoo/pure/blob/master/LICENSE.md
 
   
   <style type="text/css" media="screen">
+    
+      /* Light mode -- this is the default! */
+:root {
+  --color: #484848;
+  --color-footnote: #575757;
+  --color-footer-content: #bbb;
+  --background-color: rgb(252, 252, 252);
+  --background-color-code: rgb(240, 240, 240);
+  --background-color-toggle-content: rgb(249, 249, 249);
+  --link-color: #c05b4d;
+  --link-color-hover: #a5473a;
+  --list-link-color: #336699;
+  --border-navbar-and-footer: #e3e3e3;
+}
+
+    
+  </style>
+
+  <style type="text/css" media="screen">
     html {
   min-height: 100%;
   width: 100%;
@@ -79,21 +98,27 @@ https://github.com/yahoo/pure/blob/master/LICENSE.md
 
 body {
   background-color: rgb(252, 252, 252);
+  background-color: var(--background-color);
   color: #484848;
+  color: var(--color);
 }
 
 a {
   text-decoration: none;
 }
 
-code, kbd, pre, samp {
+kbd, pre, code, samp {
   background-color: rgb(240, 240, 240);
+  background-color: var(--background-color-code);
 }
 
 .nav-menu {
   margin-top: 5px;
   padding-bottom: 5px;
-  border-bottom: 1px solid #e3e3e3;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: #e3e3e3;
+  border-bottom-color: var(--border-navbar-and-footer);
 }
 
 .pure-menu-heading {
@@ -101,9 +126,14 @@ code, kbd, pre, samp {
   font-size: large;
 }
 
+.pure-menu-link:hover {
+  background-color: unset;
+}
+
 .header {
   text-align: left;
   color: #484848;
+  color: var(--color);
   margin-bottom: .5em;
 }
 
@@ -114,17 +144,20 @@ code, kbd, pre, samp {
 .header ul li a {
   font-weight: bold;
   color: #484848;
+  color: var(--color);
   font-family: "Source Sans Pro", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .header {
   font-weight: bold;
   color: #484848;
+  color: var(--color);
   font-family: "Source Sans Pro", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .site-title {
   color: #484848;
+  color: var(--color);
   text-transform: none;
   font-weight: normal;
   font-family: "Source Sans Pro", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -158,6 +191,7 @@ code, kbd, pre, samp {
 
 .posts li > a {
   color: #369;
+  color: var(--list-link-color);
   text-decoration: none;
 }
 
@@ -168,17 +202,20 @@ code, kbd, pre, samp {
 .footnote {
   font-family: verdana, arial, helvetica, sans-serif;
   color: #575757;
+  color: var(--color-footnote);
   font-size: 0.75em;
   margin-bottom: 0;
 }
 
 .footnote a {
   color: #575757;
+  color: var(--color-footnote);
 }
 
 .footnote a:hover {
   text-decoration: underline;
   color: #369;
+  color: var(--list-link-color);
 }
 
 .footer {
@@ -190,13 +227,18 @@ code, kbd, pre, samp {
 }
 
 .footer-content {
-  border-top: 1px solid #e3e3e3;
+  border-top-width: 1px;
+  border-top-style: solid;
+  border-top-color: #e3e3e3;
+  border-top: 1px solid var(--border-navbar-and-footer);
   font-size: 80%;
   color: #bbb;
+  color: var(--color-footer-content);
 }
 
 .footer-content a {
   color: #575757;
+  color: var(--color-footnote);
 }
 
 .footer-content ul {
@@ -220,6 +262,7 @@ code, kbd, pre, samp {
 
 #foot-name {
   color: #484848;
+  color: var(--color);
   text-transform: none;
 }
 
@@ -232,6 +275,7 @@ code, kbd, pre, samp {
 .post {
   font-family: proxima-nova, "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
   color: #484848;
+  color: var(--color);
   letter-spacing: normal;
   padding-left: .5em;
 }
@@ -261,11 +305,13 @@ code, kbd, pre, samp {
 
 .post a {
   color: #c05b4d;
+  color: var(--link-color);
   text-decoration: none;
 }
 
 .post a:hover {
   color: #a5473a;
+  color: var(--link-color-hover);
   text-decoration: underline;
 }
 
@@ -295,7 +341,7 @@ code, kbd, pre, samp {
 
 .post-title {
   margin-top: 0;
-  margin-bottom: 2em;
+  margin-bottom: 1em;
 }
 
 .post-title h1 {
@@ -321,6 +367,7 @@ code, kbd, pre, samp {
     padding: .5em 1em;
     text-decoration: none;
     color: #484848;
+    color: var(--color);
     font-weight: bold;
   }
 
@@ -328,6 +375,7 @@ code, kbd, pre, samp {
     clear: both;
     height: auto;
     background-color: rgb(249, 249, 249);
+    background-color: var(--background-color-toggle-content);
   }
 
   #toggle-home {
@@ -357,10 +405,9 @@ code, kbd, pre, samp {
   
   
 
-  <meta name="generator" content="Hugo 0.81.0" />
-
   
   <link rel="stylesheet" href="https://rfdonnelly.github.io/css/syntax.css">
+<link rel="stylesheet" href="https://rfdonnelly.github.io/css/overrides.css">
 
 </head>
 <body>
@@ -401,11 +448,13 @@ code, kbd, pre, samp {
 
       <div class="post-title">
         <p class="footnote">
-          <time datetime="2020-02-03 22:44:58 &#43;0000 UTC">
-            
-              2020-02-03
-            
-          </time>
+          
+            <time datetime="2020-02-03 22:44:58 &#43;0000 UTC">
+              
+                2020-02-03
+              
+            </time>
+          
         
         
         |
@@ -423,354 +472,98 @@ code, kbd, pre, samp {
 
       <div class="post-content">
         
-        <div class="paragraph">
-<p>This article documents the setup of WSL2 for local and remote development.
+        <nav id="toc" class="toc" role="doc-toc"><h2 id="toc-title">Table of Contents</h2><ol class="toc-list level-1"><li><a href="#install-wsl2">1. Install WSL2</a></li><li><a href="#install-docker">2. Install Docker</a></li><li><a href="#install-windows-terminal">3. Install Windows Terminal</a></li><li><a href="#setup-ssh-x11-forwarding">4. Setup SSH X11 Forwarding</a></li><li><a href="#setup-pageant">5. Setup Pageant</a></li><li><a href="#ssh-into-wsl2">6. SSH into WSL2</a></li></ol></nav><p>This article documents the setup of WSL2 for local and remote development.
 Local development is supported by Docker.
 For remote development, WSL2 effectively acts as a bridge.
 Remote development is done via SSH with support for X11 forwarding.
 This allows X11 applications to be run on the remote host and display on the Windows desktop.</p>
-</div>
-<div class="admonitionblock note">
-<table class='pure-table pure-table-striped'>
-<tbody><tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-<div class="title">CHANGELOG</div>
-<div class="ulist">
-<ul>
-<li>
-<p>2020-11-25 — Added <a href="#ssh-into-wsl2">SSH into WSL2</a>.</p>
-</li>
-<li>
-<p>2020-11-27 — Changed Docker from edge to stable.
-Edge is no longer required.</p>
-</li>
-<li>
-<p>2020-11-27 — Simplified Windows Terminal settings.</p>
-</li>
-<li>
-<p>2020-11-29 — Added workaround for older Docker images.</p>
-</li>
-</ul>
-</div>
-</td>
-</tr>
-</tbody></table>
-</div>
-<div class="sect1">
-<h2 id="install-wsl2">Install WSL2</h2>
-<div class="sectionbody">
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Install <a href="https://docs.microsoft.com/en-us/windows/wsl/wsl2-install">WSL2</a></p>
-</li>
-<li>
-<p>Install Ubuntu from the Microsoft Store</p>
-</li>
-<li>
-<p>Convert to WSL2</p>
-<div class="literalblock">
-<div class="content">
-<pre>wsl --set-version Ubuntu 2</pre>
-</div>
-</div>
-</li>
-<li>
-<p>Verify WSL version</p>
-<div class="literalblock">
-<div class="content">
-<pre>wsl --list --verbose</pre>
-</div>
-</div>
-</li>
-</ol>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="install-docker">Install Docker</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The following will make Docker available from WSL2.</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Download the <a href="https://docs.docker.com/docker-for-windows/release-notes/">latest stable release</a></p>
-</li>
-<li>
-<p>Follow the <a href="https://docs.docker.com/docker-for-windows/wsl/">Docker WSL2 instructions</a></p>
-</li>
-</ol>
-</div>
-<div class="admonitionblock note">
-<table class='pure-table pure-table-striped'>
-<tbody><tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>To run older Docker base images <a href="https://github.com/microsoft/WSL/issues/4694">a workaround may be needed</a>.</p>
-</div>
-<div class="listingblock">
-<div class="title">Create <code>%userprofile%\.wslconfig</code> with the following content</div>
-<div class="content">
-<pre class="highlight"><code>[wsl2]
-kernelCommandLine = vsyscall=emulate</code></pre>
-</div>
-</div>
-</td>
-</tr>
-</tbody></table>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="install-windows-terminal">Install Windows Terminal</h2>
-<div class="sectionbody">
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Install Windows Terminal from the Microsoft Store⁠<sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup></p>
-</li>
-<li>
-<p>Open Windows Terminal</p>
-</li>
-<li>
-<p>Edit Settings</p>
-<div class="listingblock">
-<div class="title">profile.json</div>
-<div class="content">
-<pre class="highlight"><code class="language-json" data-lang="json">// To view the default settings, hold &#34;alt&#34; while clicking on the &#34;Settings&#34; button.
-// For documentation on these settings, see: https://aka.ms/terminal-documentation
+<aside class="admonition-block note" role="note"><h6 class="block-title"><span class="title-label">Note: </span>CHANGELOG</h6><div class="ulist"><ul><li>2020-11-25 – Added <a href="#ssh-into-wsl2">SSH into WSL2</a>.</li><li>2020-11-27 – Changed Docker from edge to stable.
+Edge is no longer required.</li><li>2020-11-27 – Simplified Windows Terminal settings.</li><li>2020-11-29 – Added workaround for older Docker images.</li></ul></div></aside>
+<section class="doc-section level-1"><h2 id="install-wsl2">1. Install WSL2</h2><div class="olist arabic"><ol class="arabic"><li>Install <a href="https://docs.microsoft.com/en-us/windows/wsl/wsl2-install">WSL2</a></li><li>Install Ubuntu from the Microsoft Store</li><li><p>Convert to WSL2</p><div class="literal-block"><pre>wsl --set-version Ubuntu 2</pre></div></li><li><p>Verify WSL version</p><div class="literal-block"><pre>wsl --list --verbose</pre></div></li></ol></div></section>
+<section class="doc-section level-1"><h2 id="install-docker">2. Install Docker</h2><p>The following will make Docker available from WSL2.</p>
+<div class="olist arabic"><ol class="arabic"><li>Download the <a href="https://docs.docker.com/docker-for-windows/release-notes/">latest stable release</a></li><li>Follow the <a href="https://docs.docker.com/docker-for-windows/wsl/">Docker WSL2 instructions</a></li></ol></div>
+<aside class="admonition-block note" role="note"><h6 class="block-title label-only"><span class="title-label">Note: </span></h6><p>To run older Docker base images <a href="https://github.com/microsoft/WSL/issues/4694">a workaround may be needed</a>.</p>
+<figure class="listing-block"><figcaption>Create <code>%userprofile%\.wslconfig</code> with the following content</figcaption>
+<pre class="pygments highlight" style="background: #f0f0f0;"><code><span></span>[wsl2]
+kernelCommandLine = vsyscall=emulate</code></pre></figure></aside></section>
+<section class="doc-section level-1"><h2 id="install-windows-terminal">3. Install Windows Terminal</h2><div class="olist arabic"><ol class="arabic"><li>Install Windows Terminal from the Microsoft Store⁠<a class="footnote-ref" id="_footnoteref_1" href="#_footnote_1" title="View footnote 1" role="doc-noteref">[1]</a></li><li>Open Windows Terminal</li><li><p>Edit Settings</p><figure class="listing-block"><figcaption>profile.json</figcaption>
+<pre class="pygments highlight" style="background: #f0f0f0;"><code data-lang="json"><span></span><span style="border: 1px solid #FF0000">//</span> <span style="border: 1px solid #FF0000">To</span> <span style="border: 1px solid #FF0000">view</span> <span style="color: #007020; font-weight: bold">t</span><span style="border: 1px solid #FF0000">he</span> <span style="border: 1px solid #FF0000">de</span><span style="color: #007020; font-weight: bold">fault</span> <span style="border: 1px solid #FF0000">se</span><span style="color: #007020; font-weight: bold">tt</span><span style="border: 1px solid #FF0000">i</span><span style="color: #007020; font-weight: bold">n</span><span style="border: 1px solid #FF0000">gs</span>, <span style="border: 1px solid #FF0000">hold</span> <span style="color: #4070a0">&#34;alt&#34;</span> <span style="border: 1px solid #FF0000">while</span> <span style="border: 1px solid #FF0000">clicki</span><span style="color: #007020; font-weight: bold">n</span><span style="border: 1px solid #FF0000">g</span> <span style="border: 1px solid #FF0000">o</span><span style="color: #007020; font-weight: bold">n</span> <span style="color: #007020; font-weight: bold">t</span><span style="border: 1px solid #FF0000">he</span> <span style="color: #4070a0">&#34;Settings&#34;</span> <span style="border: 1px solid #FF0000">bu</span><span style="color: #007020; font-weight: bold">tt</span><span style="border: 1px solid #FF0000">o</span><span style="color: #007020; font-weight: bold">n</span><span style="border: 1px solid #FF0000">.</span>
+<span style="border: 1px solid #FF0000">//</span> <span style="border: 1px solid #FF0000">For</span> <span style="border: 1px solid #FF0000">docume</span><span style="color: #007020; font-weight: bold">ntat</span><span style="border: 1px solid #FF0000">io</span><span style="color: #007020; font-weight: bold">n</span> <span style="border: 1px solid #FF0000">o</span><span style="color: #007020; font-weight: bold">n</span> <span style="color: #007020; font-weight: bold">t</span><span style="border: 1px solid #FF0000">hese</span> <span style="border: 1px solid #FF0000">se</span><span style="color: #007020; font-weight: bold">tt</span><span style="border: 1px solid #FF0000">i</span><span style="color: #007020; font-weight: bold">n</span><span style="border: 1px solid #FF0000">gs</span>, <span style="border: 1px solid #FF0000">see</span>: <span style="border: 1px solid #FF0000">h</span><span style="color: #007020; font-weight: bold">tt</span><span style="border: 1px solid #FF0000">ps</span>:<span style="border: 1px solid #FF0000">//aka.ms/</span><span style="color: #007020; font-weight: bold">ter</span><span style="border: 1px solid #FF0000">mi</span><span style="color: #007020; font-weight: bold">nal</span><span style="color: #40a070">-</span><span style="border: 1px solid #FF0000">docume</span><span style="color: #007020; font-weight: bold">ntat</span><span style="border: 1px solid #FF0000">io</span><span style="color: #007020; font-weight: bold">n</span>
 {
-    &#34;$schema&#34;: &#34;https://aka.ms/terminal-profiles-schema&#34;,
+    <span style="color: #062873; font-weight: bold">&#34;$schema&#34;</span>: <span style="color: #4070a0">&#34;https://aka.ms/terminal-profiles-schema&#34;</span>,
 
-    &#34;defaultProfile&#34;: &#34;{2c4de342-38b7-51cf-b940-2309a097f518}&#34;,
+    <span style="color: #062873; font-weight: bold">&#34;defaultProfile&#34;</span>: <span style="color: #4070a0">&#34;{2c4de342-38b7-51cf-b940-2309a097f518}&#34;</span>,
 
-    // Simplify copying
-    &#34;copyOnSelect&#34;: true,
+    <span style="border: 1px solid #FF0000">//</span> <span style="border: 1px solid #FF0000">Simpli</span><span style="color: #007020; font-weight: bold">f</span><span style="border: 1px solid #FF0000">y</span> <span style="border: 1px solid #FF0000">copyi</span><span style="color: #007020; font-weight: bold">n</span><span style="border: 1px solid #FF0000">g</span>
+    <span style="color: #062873; font-weight: bold">&#34;copyOnSelect&#34;</span>: <span style="color: #007020; font-weight: bold">true</span>,
 
-    // Disable multi-line paste warning
-    &#34;multiLinePasteWarning&#34;: false,
+    <span style="border: 1px solid #FF0000">//</span> <span style="border: 1px solid #FF0000">Disable</span> <span style="border: 1px solid #FF0000">mul</span><span style="color: #007020; font-weight: bold">t</span><span style="border: 1px solid #FF0000">i</span><span style="color: #40a070">-</span><span style="border: 1px solid #FF0000">li</span><span style="color: #007020; font-weight: bold">ne</span> <span style="border: 1px solid #FF0000">pas</span><span style="color: #007020; font-weight: bold">te</span> <span style="border: 1px solid #FF0000">war</span><span style="color: #007020; font-weight: bold">n</span><span style="border: 1px solid #FF0000">i</span><span style="color: #007020; font-weight: bold">n</span><span style="border: 1px solid #FF0000">g</span>
+    <span style="color: #062873; font-weight: bold">&#34;multiLinePasteWarning&#34;</span>: <span style="color: #007020; font-weight: bold">false</span>,
 
-    // Removed the following characters from the default list to allow double clicking
-    // of paths and URLs to select and copy them: &#39;/&#39;, &#39;\&#39;, &#39;.&#39;, &#39;:&#39;
-    &#34;wordDelimiters&#34;: &#34; ()\&#34;&#39;,;&lt;&gt;~!@#$%^&amp;*|+=[]{}~?\u2502&#34;,
+    <span style="border: 1px solid #FF0000">//</span> <span style="border: 1px solid #FF0000">Removed</span> <span style="color: #007020; font-weight: bold">t</span><span style="border: 1px solid #FF0000">he</span> <span style="color: #007020; font-weight: bold">f</span><span style="border: 1px solid #FF0000">ollowi</span><span style="color: #007020; font-weight: bold">n</span><span style="border: 1px solid #FF0000">g</span> <span style="border: 1px solid #FF0000">charac</span><span style="color: #007020; font-weight: bold">ters</span> <span style="color: #007020; font-weight: bold">fr</span><span style="border: 1px solid #FF0000">om</span> <span style="color: #007020; font-weight: bold">t</span><span style="border: 1px solid #FF0000">he</span> <span style="border: 1px solid #FF0000">de</span><span style="color: #007020; font-weight: bold">fault</span> <span style="border: 1px solid #FF0000">lis</span><span style="color: #007020; font-weight: bold">t</span> <span style="color: #007020; font-weight: bold">t</span><span style="border: 1px solid #FF0000">o</span> <span style="border: 1px solid #FF0000">allow</span> <span style="border: 1px solid #FF0000">double</span> <span style="border: 1px solid #FF0000">clicki</span><span style="color: #007020; font-weight: bold">n</span><span style="border: 1px solid #FF0000">g</span>
+    <span style="border: 1px solid #FF0000">//</span> <span style="border: 1px solid #FF0000">o</span><span style="color: #007020; font-weight: bold">f</span> <span style="border: 1px solid #FF0000">pa</span><span style="color: #007020; font-weight: bold">t</span><span style="border: 1px solid #FF0000">hs</span> <span style="border: 1px solid #FF0000">a</span><span style="color: #007020; font-weight: bold">n</span><span style="border: 1px solid #FF0000">d</span> <span style="border: 1px solid #FF0000">URLs</span> <span style="color: #007020; font-weight: bold">t</span><span style="border: 1px solid #FF0000">o</span> <span style="border: 1px solid #FF0000">selec</span><span style="color: #007020; font-weight: bold">t</span> <span style="border: 1px solid #FF0000">a</span><span style="color: #007020; font-weight: bold">n</span><span style="border: 1px solid #FF0000">d</span> <span style="border: 1px solid #FF0000">copy</span> <span style="color: #007020; font-weight: bold">t</span><span style="border: 1px solid #FF0000">hem</span>: <span style="border: 1px solid #FF0000">&#39;/&#39;</span>, <span style="border: 1px solid #FF0000">&#39;\&#39;</span>, <span style="border: 1px solid #FF0000">&#39;.&#39;</span>, <span style="border: 1px solid #FF0000">&#39;</span>:<span style="border: 1px solid #FF0000">&#39;</span>
+    <span style="color: #062873; font-weight: bold">&#34;wordDelimiters&#34;</span>: <span style="color: #4070a0">&#34; ()\&#34;&#39;,;&lt;&gt;~!@#$%^&amp;*|+=[]{}~?\u2502&#34;</span>,
 
-    &#34;profiles&#34;: {
-        &#34;defaults&#34;: {
-            // Make the cursor easier to find
-            &#34;cursorShape&#34;: &#34;emptyBox&#34;,
+    <span style="color: #062873; font-weight: bold">&#34;profiles&#34;</span>: {
+        <span style="color: #062873; font-weight: bold">&#34;defaults&#34;</span>: {
+            <span style="border: 1px solid #FF0000">//</span> <span style="border: 1px solid #FF0000">Make</span> <span style="color: #007020; font-weight: bold">t</span><span style="border: 1px solid #FF0000">he</span> <span style="border: 1px solid #FF0000">cursor</span> <span style="border: 1px solid #FF0000">easier</span> <span style="color: #007020; font-weight: bold">t</span><span style="border: 1px solid #FF0000">o</span> <span style="color: #007020; font-weight: bold">f</span><span style="border: 1px solid #FF0000">i</span><span style="color: #007020; font-weight: bold">n</span><span style="border: 1px solid #FF0000">d</span>
+            <span style="color: #062873; font-weight: bold">&#34;cursorShape&#34;</span>: <span style="color: #4070a0">&#34;emptyBox&#34;</span>,
 
-            // Hide everything by default
-            &#34;hidden&#34;: true,
+            <span style="border: 1px solid #FF0000">//</span> <span style="border: 1px solid #FF0000">Hide</span> <span style="border: 1px solid #FF0000">every</span><span style="color: #007020; font-weight: bold">t</span><span style="border: 1px solid #FF0000">hi</span><span style="color: #007020; font-weight: bold">n</span><span style="border: 1px solid #FF0000">g</span> <span style="border: 1px solid #FF0000">by</span> <span style="border: 1px solid #FF0000">de</span><span style="color: #007020; font-weight: bold">fault</span>
+            <span style="color: #062873; font-weight: bold">&#34;hidden&#34;</span>: <span style="color: #007020; font-weight: bold">true</span>,
         },
-        &#34;list&#34;: [
+        <span style="color: #062873; font-weight: bold">&#34;list&#34;</span>: [
             {
-                &#34;guid&#34;: &#34;{2c4de342-38b7-51cf-b940-2309a097f518}&#34;,
-                &#34;hidden&#34;: false,
-                &#34;name&#34;: &#34;WSL2&#34;,
+                <span style="color: #062873; font-weight: bold">&#34;guid&#34;</span>: <span style="color: #4070a0">&#34;{2c4de342-38b7-51cf-b940-2309a097f518}&#34;</span>,
+                <span style="color: #062873; font-weight: bold">&#34;hidden&#34;</span>: <span style="color: #007020; font-weight: bold">false</span>,
+                <span style="color: #062873; font-weight: bold">&#34;name&#34;</span>: <span style="color: #4070a0">&#34;WSL2&#34;</span>,
 
-                // Start WSL like any other profile (i.e. don&#39;t use &#34;source&#34;)
-                // Start in Linux home directory instead of Windows home directory
-                &#34;commandline&#34;: &#34;wsl.exe ~&#34;,
+                <span style="border: 1px solid #FF0000">//</span> <span style="border: 1px solid #FF0000">S</span><span style="color: #007020; font-weight: bold">tart</span> <span style="border: 1px solid #FF0000">WSL</span> <span style="border: 1px solid #FF0000">like</span> <span style="border: 1px solid #FF0000">a</span><span style="color: #007020; font-weight: bold">n</span><span style="border: 1px solid #FF0000">y</span> <span style="border: 1px solid #FF0000">o</span><span style="color: #007020; font-weight: bold">t</span><span style="border: 1px solid #FF0000">her</span> <span style="border: 1px solid #FF0000">pro</span><span style="color: #007020; font-weight: bold">f</span><span style="border: 1px solid #FF0000">ile</span> <span style="border: 1px solid #FF0000">(i.e.</span> <span style="border: 1px solid #FF0000">do</span><span style="color: #007020; font-weight: bold">n</span><span style="border: 1px solid #FF0000">&#39;</span><span style="color: #007020; font-weight: bold">t</span> <span style="border: 1px solid #FF0000">use</span> <span style="color: #4070a0">&#34;source&#34;</span><span style="border: 1px solid #FF0000">)</span>
+                <span style="border: 1px solid #FF0000">//</span> <span style="border: 1px solid #FF0000">S</span><span style="color: #007020; font-weight: bold">tart</span> <span style="border: 1px solid #FF0000">i</span><span style="color: #007020; font-weight: bold">n</span> <span style="border: 1px solid #FF0000">Li</span><span style="color: #007020; font-weight: bold">nu</span><span style="border: 1px solid #FF0000">x</span> <span style="border: 1px solid #FF0000">home</span> <span style="border: 1px solid #FF0000">direc</span><span style="color: #007020; font-weight: bold">t</span><span style="border: 1px solid #FF0000">ory</span> <span style="border: 1px solid #FF0000">i</span><span style="color: #007020; font-weight: bold">nstea</span><span style="border: 1px solid #FF0000">d</span> <span style="border: 1px solid #FF0000">o</span><span style="color: #007020; font-weight: bold">f</span> <span style="border: 1px solid #FF0000">Wi</span><span style="color: #007020; font-weight: bold">n</span><span style="border: 1px solid #FF0000">dows</span> <span style="border: 1px solid #FF0000">home</span> <span style="border: 1px solid #FF0000">direc</span><span style="color: #007020; font-weight: bold">t</span><span style="border: 1px solid #FF0000">ory</span>
+                <span style="color: #062873; font-weight: bold">&#34;commandline&#34;</span>: <span style="color: #4070a0">&#34;wsl.exe ~&#34;</span>,
 
-                // WORKAROUND: The right padding is more than it should be.
-                // Making it 0 seems to be equivalent to 8 on the left.
-                // Also hide the scrollbar so that it doesn&#39;t contribute to the padding.
-                &#34;padding&#34;: &#34;8, 8, 0, 0&#34;,
-                &#34;scrollbarState&#34;: &#34;hidden&#34;,
+                <span style="border: 1px solid #FF0000">//</span> <span style="border: 1px solid #FF0000">WORKAROUND</span>: <span style="border: 1px solid #FF0000">The</span> <span style="border: 1px solid #FF0000">righ</span><span style="color: #007020; font-weight: bold">t</span> <span style="border: 1px solid #FF0000">paddi</span><span style="color: #007020; font-weight: bold">n</span><span style="border: 1px solid #FF0000">g</span> <span style="border: 1px solid #FF0000">is</span> <span style="border: 1px solid #FF0000">more</span> <span style="color: #007020; font-weight: bold">t</span><span style="border: 1px solid #FF0000">ha</span><span style="color: #007020; font-weight: bold">n</span> <span style="border: 1px solid #FF0000">i</span><span style="color: #007020; font-weight: bold">t</span> <span style="border: 1px solid #FF0000">should</span> <span style="border: 1px solid #FF0000">be.</span>
+                <span style="border: 1px solid #FF0000">//</span> <span style="border: 1px solid #FF0000">Maki</span><span style="color: #007020; font-weight: bold">n</span><span style="border: 1px solid #FF0000">g</span> <span style="border: 1px solid #FF0000">i</span><span style="color: #007020; font-weight: bold">t</span> <span style="color: #40a070">0</span> <span style="border: 1px solid #FF0000">seems</span> <span style="color: #007020; font-weight: bold">t</span><span style="border: 1px solid #FF0000">o</span> <span style="border: 1px solid #FF0000">be</span> <span style="border: 1px solid #FF0000">equivale</span><span style="color: #007020; font-weight: bold">nt</span> <span style="color: #007020; font-weight: bold">t</span><span style="border: 1px solid #FF0000">o</span> <span style="color: #40a070">8</span> <span style="border: 1px solid #FF0000">o</span><span style="color: #007020; font-weight: bold">n</span> <span style="color: #007020; font-weight: bold">t</span><span style="border: 1px solid #FF0000">he</span> <span style="border: 1px solid #FF0000">le</span><span style="color: #007020; font-weight: bold">ft</span><span style="border: 1px solid #FF0000">.</span>
+                <span style="border: 1px solid #FF0000">//</span> <span style="border: 1px solid #FF0000">Also</span> <span style="border: 1px solid #FF0000">hide</span> <span style="color: #007020; font-weight: bold">t</span><span style="border: 1px solid #FF0000">he</span> <span style="border: 1px solid #FF0000">scrollbar</span> <span style="border: 1px solid #FF0000">so</span> <span style="color: #007020; font-weight: bold">t</span><span style="border: 1px solid #FF0000">ha</span><span style="color: #007020; font-weight: bold">t</span> <span style="border: 1px solid #FF0000">i</span><span style="color: #007020; font-weight: bold">t</span> <span style="border: 1px solid #FF0000">does</span><span style="color: #007020; font-weight: bold">n</span><span style="border: 1px solid #FF0000">&#39;</span><span style="color: #007020; font-weight: bold">t</span> <span style="border: 1px solid #FF0000">co</span><span style="color: #007020; font-weight: bold">ntr</span><span style="border: 1px solid #FF0000">ibu</span><span style="color: #007020; font-weight: bold">te</span> <span style="color: #007020; font-weight: bold">t</span><span style="border: 1px solid #FF0000">o</span> <span style="color: #007020; font-weight: bold">t</span><span style="border: 1px solid #FF0000">he</span> <span style="border: 1px solid #FF0000">paddi</span><span style="color: #007020; font-weight: bold">n</span><span style="border: 1px solid #FF0000">g.</span>
+                <span style="color: #062873; font-weight: bold">&#34;padding&#34;</span>: <span style="color: #4070a0">&#34;8, 8, 0, 0&#34;</span>,
+                <span style="color: #062873; font-weight: bold">&#34;scrollbarState&#34;</span>: <span style="color: #4070a0">&#34;hidden&#34;</span>,
             },
         ]
     },
 
-    // Add any keybinding overrides to this array.
-    // To unbind a default keybinding, set the command to &#34;unbound&#34;
-    &#34;keybindings&#34;: [
-        // Make paste work like Linux
-        { &#34;command&#34;: &#34;paste&#34;, &#34;keys&#34;: [ &#34;shift+insert&#34; ] }
+    <span style="border: 1px solid #FF0000">//</span> <span style="border: 1px solid #FF0000">Add</span> <span style="border: 1px solid #FF0000">a</span><span style="color: #007020; font-weight: bold">n</span><span style="border: 1px solid #FF0000">y</span> <span style="border: 1px solid #FF0000">keybi</span><span style="color: #007020; font-weight: bold">n</span><span style="border: 1px solid #FF0000">di</span><span style="color: #007020; font-weight: bold">n</span><span style="border: 1px solid #FF0000">g</span> <span style="border: 1px solid #FF0000">overrides</span> <span style="color: #007020; font-weight: bold">t</span><span style="border: 1px solid #FF0000">o</span> <span style="color: #007020; font-weight: bold">t</span><span style="border: 1px solid #FF0000">his</span> <span style="border: 1px solid #FF0000">array.</span>
+    <span style="border: 1px solid #FF0000">//</span> <span style="border: 1px solid #FF0000">To</span> <span style="border: 1px solid #FF0000">u</span><span style="color: #007020; font-weight: bold">n</span><span style="border: 1px solid #FF0000">bi</span><span style="color: #007020; font-weight: bold">n</span><span style="border: 1px solid #FF0000">d</span> <span style="border: 1px solid #FF0000">a</span> <span style="border: 1px solid #FF0000">de</span><span style="color: #007020; font-weight: bold">fault</span> <span style="border: 1px solid #FF0000">keybi</span><span style="color: #007020; font-weight: bold">n</span><span style="border: 1px solid #FF0000">di</span><span style="color: #007020; font-weight: bold">n</span><span style="border: 1px solid #FF0000">g</span>, <span style="border: 1px solid #FF0000">se</span><span style="color: #007020; font-weight: bold">t</span> <span style="color: #007020; font-weight: bold">t</span><span style="border: 1px solid #FF0000">he</span> <span style="border: 1px solid #FF0000">comma</span><span style="color: #007020; font-weight: bold">n</span><span style="border: 1px solid #FF0000">d</span> <span style="color: #007020; font-weight: bold">t</span><span style="border: 1px solid #FF0000">o</span> <span style="color: #062873; font-weight: bold">&#34;unbound&#34;</span>
+    <span style="color: #062873; font-weight: bold">&#34;keybindings&#34;</span>: [
+        <span style="border: 1px solid #FF0000">//</span> <span style="border: 1px solid #FF0000">Make</span> <span style="border: 1px solid #FF0000">pas</span><span style="color: #007020; font-weight: bold">te</span> <span style="border: 1px solid #FF0000">work</span> <span style="border: 1px solid #FF0000">like</span> <span style="border: 1px solid #FF0000">Li</span><span style="color: #007020; font-weight: bold">nu</span><span style="border: 1px solid #FF0000">x</span>
+        { <span style="color: #062873; font-weight: bold">&#34;command&#34;</span>: <span style="color: #4070a0">&#34;paste&#34;</span>, <span style="color: #062873; font-weight: bold">&#34;keys&#34;</span>: [ <span style="color: #4070a0">&#34;shift+insert&#34;</span> ] }
     ]
-}</code></pre>
-</div>
-</div>
-</li>
-</ol>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="setup-ssh-x11-forwarding">Setup SSH X11 Forwarding</h2>
-<div class="sectionbody">
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Install <a href="https://sourceforge.net/projects/vcxsrv">VcXsrc</a></p>
-</li>
-<li>
-<p>Run XLaunch</p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>Set display number to <code>0</code></p>
-</li>
-<li>
-<p>Disable access control</p>
-</li>
-<li>
-<p>Save configuration</p>
-</li>
-<li>
-<p>Open saved configuration to run VcXsrc</p>
-</li>
-</ol>
-</div>
-</li>
-<li>
-<p>Open a WSL terminal</p>
-</li>
-<li>
-<p>Configure <code>$DISPLAY</code> by adding the following to your <code>~/.bashrc</code></p>
-<div class="literalblock">
-<div class="content">
-<pre>export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk &#39;{print $2}&#39;):0.0</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>This sets the DISPLAY to the IP address of the Windows host.</p>
-</div>
-</li>
-<li>
-<p>Configure SSH</p>
-<div class="listingblock">
-<div class="title">~/.ssh/config</div>
-<div class="content">
-<pre class="highlight"><code>Host *
+}</code></pre></figure></li></ol></div></section>
+<section class="doc-section level-1"><h2 id="setup-ssh-x11-forwarding">4. Setup SSH X11 Forwarding</h2><div class="olist arabic"><ol class="arabic"><li>Install <a href="https://sourceforge.net/projects/vcxsrv">VcXsrc</a></li><li>Run XLaunch<ol class="loweralpha" type="a"><li>Set display number to <code>0</code></li><li>Disable access control</li><li>Save configuration</li><li>Open saved configuration to run VcXsrc</li></ol></li><li>Open a WSL terminal</li><li><p>Configure <code>$DISPLAY</code> by adding the following to your <code>~/.bashrc</code></p><div class="literal-block"><pre>export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk &#39;{print $2}&#39;):0.0</pre></div>
+<p>This sets the DISPLAY to the IP address of the Windows host.</p></li><li><p>Configure SSH</p><figure class="listing-block"><figcaption>~/.ssh/config</figcaption>
+<pre class="pygments highlight" style="background: #f0f0f0;"><code><span></span>Host *
     User &lt;remote-username&gt;
     ForwardX11 yes
     ForwardX11Trusted yes
-    ForwardAgent yes</code></pre>
-</div>
-</div>
-</li>
-<li>
-<p>Test</p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>SSH</p>
-<div class="literalblock">
-<div class="content">
-<pre>ssh remote-host</pre>
-</div>
-</div>
-</li>
-<li>
-<p>Run an X11 application</p>
-<div class="literalblock">
-<div class="content">
-<pre>xlogo</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>It should display on your Windows desktop.</p>
-</div>
-</li>
-</ol>
-</div>
-</li>
-</ol>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="setup-pageant">Setup Pageant</h2>
-<div class="sectionbody">
-<div class="admonitionblock note">
-<table class='pure-table pure-table-striped'>
-<tbody><tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-This assumes you manage SSH keys using PuTTY pageant or compatible application.
-</td>
-</tr>
-</tbody></table>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Download <a href="https://github.com/BlackReloaded/wsl2-ssh-pageant">wsl2-ssh-pageant</a></p>
-<div class="literalblock">
-<div class="content">
-<pre>cd ~/.ssh/
+    ForwardAgent yes</code></pre></figure></li><li>Test<ol class="loweralpha" type="a"><li><p>SSH</p><div class="literal-block"><pre>ssh remote-host</pre></div></li><li><p>Run an X11 application</p><div class="literal-block"><pre>xlogo</pre></div>
+<p>It should display on your Windows desktop.</p></li></ol></li></ol></div></section>
+<section class="doc-section level-1"><h2 id="setup-pageant">5. Setup Pageant</h2><aside class="admonition-block note" role="note"><h6 class="block-title label-only"><span class="title-label">Note: </span></h6><p>This assumes you manage SSH keys using PuTTY pageant or compatible application.</p></aside>
+<div class="olist arabic"><ol class="arabic"><li><p>Download <a href="https://github.com/BlackReloaded/wsl2-ssh-pageant">wsl2-ssh-pageant</a></p><div class="literal-block"><pre>cd ~/.ssh/
 curl -LO https://github.com/BlackReloaded/wsl2-ssh-pageant/releases/download/v1.0.0/wsl2-ssh-pageant.exe
-chmod +x wsl2-ssh-pageant.exe</pre>
-</div>
-</div>
-</li>
-<li>
-<p>Install <code>socat</code></p>
-<div class="literalblock">
-<div class="content">
-<pre>sudo apt-get install socat</pre>
-</div>
-</div>
-</li>
-<li>
-<p>Add <code>wsl2-ssh-pageant</code> to your <code>~/.bashrc</code></p>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-sh" data-lang="sh">export SSH_AUTH_SOCK=$HOME/.ssh/agent.sock
-ss -a | grep -q $SSH_AUTH_SOCK
-if [ $? -ne 0 ]; then
-        rm -f $SSH_AUTH_SOCK
-        setsid nohup socat UNIX-LISTEN:$SSH_AUTH_SOCK,fork EXEC:$HOME/.ssh/wsl2-ssh-pageant.exe &gt;/dev/null 2&gt;&amp;1 &amp;
-fi</code></pre>
-</div>
-</div>
-</li>
-</ol>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="ssh-into-wsl2">SSH into WSL2</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Scott Hanselman has a great article on accessing WSL2 via Windows OpenSSH server titled <a href="https://www.hanselman.com/blog/the-easy-way-how-to-ssh-into-bash-and-wsl2-on-windows-10-from-an-external-machine">THE EASY WAY how to SSH into Bash and WSL2 on Windows 10 from an external machine</a>.
+chmod +x wsl2-ssh-pageant.exe</pre></div></li><li><p>Install <code>socat</code></p><div class="literal-block"><pre>sudo apt-get install socat</pre></div></li><li><p>Add <code>wsl2-ssh-pageant</code> to your <code>~/.bashrc</code></p><div class="listing-block"><pre class="pygments highlight" style="background: #f0f0f0;"><code data-lang="sh"><span></span><span style="color: #007020">export</span> <span style="color: #bb60d5">SSH_AUTH_SOCK</span><span style="color: #666666">=</span><span style="color: #bb60d5">$HOME</span>/.ssh/agent.sock
+ss -a | grep -q <span style="color: #bb60d5">$SSH_AUTH_SOCK</span>
+<span style="color: #007020; font-weight: bold">if</span> <span style="color: #666666">[</span> <span style="color: #bb60d5">$?</span> -ne <span style="color: #40a070">0</span> <span style="color: #666666">]</span>; <span style="color: #007020; font-weight: bold">then</span>
+        rm -f <span style="color: #bb60d5">$SSH_AUTH_SOCK</span>
+        setsid nohup socat UNIX-LISTEN:<span style="color: #bb60d5">$SSH_AUTH_SOCK</span>,fork EXEC:<span style="color: #bb60d5">$HOME</span>/.ssh/wsl2-ssh-pageant.exe &gt;/dev/null <span style="color: #40a070">2</span>&gt;&amp;<span style="color: #40a070">1</span> &amp;
+<span style="color: #007020; font-weight: bold">fi</span></code></pre></div></li></ol></div></section>
+<section class="doc-section level-1"><h2 id="ssh-into-wsl2">6. SSH into WSL2</h2><p>Scott Hanselman has a great article on accessing WSL2 via Windows OpenSSH server titled <a href="https://www.hanselman.com/blog/the-easy-way-how-to-ssh-into-bash-and-wsl2-on-windows-10-from-an-external-machine">THE EASY WAY how to SSH into Bash and WSL2 on Windows 10 from an external machine</a>.
 However, it only supports Bash.
 It doesn’t support alternative shells like Zsh.</p>
-</div>
-<div class="paragraph">
 <p>The trick is to change the Windows OpenSSH server default shell to <code>C:\Windows\System32\wsl.exe</code> instead of <code>C:\Windows\System32\bash.exe</code>.
 This will use whatever shell WSL2 has been configured to use.</p>
-</div>
-<div class="listingblock">
-<div class="title">So instead of</div>
-<div class="content">
-<pre class="highlight"><code>New-ItemProperty -Path &#34;HKLM:\SOFTWARE\OpenSSH&#34; -Name DefaultShell -Value &#34;C:\WINDOWS\System32\bash.exe&#34; -PropertyType String -Force</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title">Use</div>
-<div class="content">
-<pre class="highlight"><code>New-ItemProperty -Path &#34;HKLM:\SOFTWARE\OpenSSH&#34; -Name DefaultShell -Value &#34;C:\WINDOWS\System32\wsl.exe&#34; -PropertyType String -Force</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div id="footnotes">
-<hr/>
-<div class="footnote" id="_footnotedef_1">
-<a href="#_footnoteref_1">1</a>. Windows Terminal v1.4 as of this writing.
-</div>
-</div>
+<figure class="listing-block"><figcaption>So instead of</figcaption>
+<pre class="pygments highlight" style="background: #f0f0f0;"><code><span></span>New-ItemProperty -Path &#34;HKLM:\SOFTWARE\OpenSSH&#34; -Name DefaultShell -Value &#34;C:\WINDOWS\System32\bash.exe&#34; -PropertyType String -Force</code></pre></figure>
+<figure class="listing-block"><figcaption>Use</figcaption>
+<pre class="pygments highlight" style="background: #f0f0f0;"><code><span></span>New-ItemProperty -Path &#34;HKLM:\SOFTWARE\OpenSSH&#34; -Name DefaultShell -Value &#34;C:\WINDOWS\System32\wsl.exe&#34; -PropertyType String -Force</code></pre></figure></section><section class="footnotes" aria-label="Footnotes" role="doc-endnotes"><hr/><ol class="footnotes"><li class="footnote" id="_footnote_1" role="doc-endnote">Windows Terminal v1.4 as of this writing. <a class="footnote-backref" href="#_footnoteref_1" role="doc-backlink" title="Jump to the first occurrence in the text">↩</a></li></ol></section>
 
       </div>
     </div>
