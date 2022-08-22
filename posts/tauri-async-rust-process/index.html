@@ -491,7 +491,7 @@ The main thread sits between the two.</p>
 ? What UI recipe would you like to add? <strong>create-vite</strong>
 ? Add &#34;@tauri-apps/api&#34; npm package? <strong>Yes</strong>
 ? Which vite template would you like to use? <strong>vue</strong></pre></div>
-<p>Then run build and run the application</p>
+<p>Then build and run the application</p>
 <div class="listing-block"><pre class="pygments highlight" style="background: #f0f0f0;"><code data-lang="sh"><span></span><span style="color: #007020">cd</span> tauri-async
 npm install
 npm run tauri dev</code></pre></div>
@@ -528,8 +528,8 @@ cargo add tracing tracing-subscriber</code></pre></div></section>
 <section class="doc-section level-1"><h2 id="bidirectional-communication-between-rust-and-javascript">4. Bidirectional Communication between Rust and JavaScript</h2><div class="image-block kroki"><img src="https://kroki.io/graphviz/svg/eNqlkMFqwzAMhu95CpPTBt0juFDGGIwVRlvYYSlDsdXGTLE92U4po-8-J-0yUthpugiZ___8S9rsGXwjHsVXIXIx2A9tWK6ei2EOqT4LFKUQkd8jJDYXcV8ENZIsN_1zZRfek1EQjbNlMWoOnXi76F6x7gweKnvzBB2sFRsfb8uZCA14lOEzAWOe4pFQ7gwR6pnou3LkWJLZN7GmhNuR3caRvQRjxaZhBJ35q5z3X2TwI3kRjlZV9oWdwhD-gG8nC9_Nh2jK2RA5B4tyBxRygjPy3rUtWB0mi2RP_-m1ZxJp4F6Zfu_70KGNP9BTcfoGSVuXsg==" alt="Diagram"/></div>
 <p>Tauri provides two mechanism for communicating between Rust and JavaScript: Events and Commands.
 The <a href="https://tauri.app/v1/guides/features/command">Tauri docs for Commands</a> and <a href="https://tauri.app/v1/guides/features/events">Events</a> do a good job of covering these.</p>
-<section class="doc-section level-2"><h3 id="comands-vs-events">4.1. Comands vs Events</h3><p>Events be sent in either direction while Commands can only go from JavaScript to Rust.</p>
-<p>For sending messages from JavaScript to Rust, I prefer Commands.
+<section class="doc-section level-2"><h3 id="comands-vs-events">4.1. Comands vs Events</h3><p>Events can be sent in either direction while Commands can only be sent from JavaScript to Rust.</p>
+<p>I prefer Commands for sending messages from JavaScript to Rust.
 Commands automate a lot of the boiler plate like message deserialization and state management.
 So while we could use Events for everything, Commands are more ergonomic.</p></section>
 <section class="doc-section level-2"><h3 id="possible-simplification">4.2. Possible Simplification</h3><p>You can get by with only async Tauri Commands (i.e. without Tauri Events) if:</p>
@@ -590,16 +590,20 @@ The interesting parts are the <code>sendOutput()</code> function and the call to
   &lt;/<span style="color: #062873; font-weight: bold">div</span>&gt;
 &lt;/<span style="color: #062873; font-weight: bold">template</span>&gt;</code></pre><ol class="callout-list arabic"><li>Clicking the button calls <code>sendOutput()</code></li><li>Add the &#39;js2rs&#39; message to the outputs array to show the user what was sent</li><li>Send the &#39;js2rs&#39; message to Rust via the Tauri <code>invoke</code> API</li><li>Setup a listener for the &#39;rs2js&#39; event via the Tauri <code>listen</code> API</li><li>Add the &#39;rs2js&#39; message to the <code>inputs</code> array to show the user what was received</li></ol></div>
 
-<section class="doc-section level-3"><h4 id="an-aside-suspense">4.3.1. An Aside: <code>&lt;Suspense&gt;</code></h4><p>The <code>HelloWorld</code> component is now awaiting an async function in the <code>&lt;script setup&gt;</code>.
-When a Vue component includes a top-level <code>await</code> statement in <code>&lt;script setup&gt;</code>, the Vue component must now be placed in a <a href="https://vuejs.org/guide/built-ins/suspense.html"><code>&lt;Suspense&gt;</code></a> component.
-Modify <code>src/App.vue</code> as follows</p>
+<section class="doc-section level-3"><h4 id="an-aside-the-lack-of-suspense-is-killing-me">4.3.1. An Aside: The (lack of) <code>&lt;Suspense&gt;</code> is Killing Me</h4><p>If we run the application now, the <code>HelloWorld</code> world component is no longer rendered.
+If we open the JavaScript console, we find an error.</p>
+<figure class="image-block"><img src="vue-suspense.png" alt="A component with async setup() must be nested in a &lt;Suspense&gt;"/>
+<figcaption>Figure 3. &#34;A component with async setup() must be nested in a &lt;Suspense&gt;&#34;</figcaption></figure>
+<p>The <code>HelloWorld</code> component is now awaiting an async function in <code>&lt;script setup&gt;</code>.
+When a Vue component includes a top-level <code>await</code> statement in <code>&lt;script setup&gt;</code>, the Vue component must be placed in a <a href="https://vuejs.org/guide/built-ins/suspense.html"><code>&lt;Suspense&gt;</code></a> component.</p>
+<p>To fix, modify <code>src/App.vue</code> as follows</p>
 <div class="listing-block"><pre class="pygments highlight" style="background: #f0f0f0;"><code data-lang="diff"><span></span><span style="color: #A00000">-  &lt;HelloWorld/&gt;</span>
 <span style="color: #00A000">+  &lt;Suspense&gt;</span>
 <span style="color: #00A000">+    &lt;HelloWorld/&gt;</span>
 <span style="color: #00A000">+  &lt;/Suspense&gt;</span></code></pre></div></section>
-<section class="doc-section level-3"><h4 id="result">4.3.2. Result</h4><p>Now when we run the app it looks like</p>
+<section class="doc-section level-3"><h4 id="result">4.3.2. Result</h4><p>If we run the application again, it looks like</p>
 <figure class="image-block"><img src="vue-mods.png" alt="The Tauri application after the modifications to HelloWorld.vue"/>
-<figcaption>Figure 3. The Tauri application after the modifications to the <code>HelloWorld</code> component</figcaption></figure></section></section>
+<figcaption>Figure 4. The Tauri application after the modifications to the <code>HelloWorld</code> component</figcaption></figure></section></section>
 <section class="doc-section level-2"><h3 id="the-rust-side">4.4. The Rust Side</h3><p>Here is the Rust side of the bidirectional communication between the main thread and the webview.
 Most of the bidirectional communication between the main thread and the async process has been commented out.</p>
 <div class="listing-block"><pre class="pygments highlight" style="background: #f0f0f0;"><code data-lang="rust"><span></span><span style="color: #007020; font-weight: bold">use</span><span style="color: #bbbbbb"> </span>tauri::Manager;<span style="color: #bbbbbb"></span>
@@ -621,8 +625,8 @@ Most of the bidirectional communication between the main thread and the async pr
 
 <span style="color: #bbbbbb">            </span><span style="color: #007020; font-weight: bold">let</span><span style="color: #bbbbbb"> </span>app_handle<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>app.handle();<span style="color: #bbbbbb"></span>
 <span style="color: #bbbbbb">            </span>tauri::async_runtime::spawn(<span style="color: #007020; font-weight: bold">async</span><span style="color: #bbbbbb"> </span><span style="color: #007020; font-weight: bold">move</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
-<span style="color: #bbbbbb">                </span><span style="color: #60a0b0; font-style: italic">// An infinite loop that takes output from the async process</span>
-<span style="color: #bbbbbb">                </span><span style="color: #60a0b0; font-style: italic">// and sends it to the webview via a Tauri Event</span>
+<span style="color: #bbbbbb">                </span><span style="color: #60a0b0; font-style: italic">// A loop that takes output from the async process and sends it</span>
+<span style="color: #bbbbbb">                </span><span style="color: #60a0b0; font-style: italic">// to the webview via a Tauri Event</span>
 <span style="color: #bbbbbb">                </span><span style="color: #007020; font-weight: bold">loop</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
 <span style="color: #bbbbbb">                    </span><span style="color: #007020; font-weight: bold">if</span><span style="color: #bbbbbb"> </span><span style="color: #007020; font-weight: bold">let</span><span style="color: #bbbbbb"> </span><span style="color: #007020">Some</span>(output)<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>async_proc_output_rx.recv().<span style="color: #007020; font-weight: bold">await</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
 <span style="color: #bbbbbb">                        </span>rs2js(output,<span style="color: #bbbbbb"> </span><span style="color: #666666">&amp;</span>app_handle);<span style="color: #bbbbbb"></span>
@@ -644,8 +648,8 @@ Most of the bidirectional communication between the main thread and the async pr
 <span style="color: #bbbbbb">        </span>.unwrap();<span style="color: #bbbbbb"></span>
 }<span style="color: #bbbbbb"></span>
 
-<span style="color: #60a0b0; font-style: italic">// The Tauri command that gets called when Tauri JavaScript API `invoke`</span>
-<span style="color: #60a0b0; font-style: italic">// command is called</span>
+<span style="color: #60a0b0; font-style: italic">// The Tauri command that gets called when Tauri `invoke` JavaScript API is</span>
+<span style="color: #60a0b0; font-style: italic">// called</span>
 <span style="color: #007020">#[tauri::command]</span><span style="color: #bbbbbb"></span>
 <span style="color: #007020; font-weight: bold">async</span><span style="color: #bbbbbb"> </span><span style="color: #007020; font-weight: bold">fn</span> <span style="color: #06287e">js2rs</span>(<span style="color: #bbbbbb"></span>
 <span style="color: #bbbbbb">    </span>message: <span style="color: #007020">String</span>,<span style="color: #bbbbbb"></span>
@@ -704,7 +708,7 @@ We can do this by adding the <code>#[tokio::main]</code> annotation, adding <cod
 <span style="color: #bbbbbb">    </span>tauri::Builder::default()<span style="color: #bbbbbb"></span>
 <span style="color: #bbbbbb">        </span><span style="color: #60a0b0; font-style: italic">// ...</span>
 }<span style="color: #bbbbbb"></span></code></pre></div></section></section>
-<section class="doc-section level-2"><h3 id="creating-the-channels">5.2. Creating the Channels</h3><p>The <code>tokio::mpsc</code> channels need to be created for both directions: inputs in to the async process and outputs out of the async process.</p>
+<section class="doc-section level-2"><h3 id="creating-the-channels">5.2. Creating the Channels</h3><p>The <code>tokio::mpsc</code> channels need to be created for both directions: inputs to the async process and outputs from the async process.</p>
 <div class="listing-block"><pre class="pygments highlight" style="background: #f0f0f0;"><code data-lang="rust"><span></span><span style="color: #007020; font-weight: bold">fn</span> <span style="color: #06287e">main</span>()<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
 <span style="color: #bbbbbb">    </span><span style="color: #60a0b0; font-style: italic">// ...</span>
 
@@ -735,8 +739,8 @@ We can do this by adding the <code>#[tokio::main]</code> annotation, adding <cod
 <span style="color: #bbbbbb">        </span><span style="color: #60a0b0; font-style: italic">// ...</span>
 }<span style="color: #bbbbbb"></span></code></pre></div></section>
 <section class="doc-section level-2"><h3 id="main-thread-to-async-process">5.4. Main Thread to Async Process</h3><div class="image-block kroki"><img src="https://kroki.io/graphviz/svg/eNqlUM1qwzAMvucpjE8bZC9Q8KCnwdigdIUeljEUR21MVceV7YQy-u5zmpC1uU4XWeL7kyuzZ3C1eBE_mUjFYA-VYbV-y66zj-UA0BR9QP4OENmM4L4ISiQlN_26sEvnyGgIprEymzBdKz5H3BbL1mBX2IdXaOFDs3HhUebC1-BQ-VMExq-JeAwT8R2MFZuaEapEXqcwc1qawplQ7QwRVrnou26oYUVmX4eS4o0yuEl56c9WF3bFjUbv_yN-e_DT8zW9bqwPnLIHtQPy97clTJ9jjsnHTz06r3MxuEjGalES6MMiveTdIaPVH2lu0rXD4pJdfgEFB51E" alt="Diagram"/></div>
-<p>Sending messages between the main thread to the async process requires more sophistication.
-This additional sophistication is dictated by the need for our command to have mutable access to the async process input channel.</p>
+<p>Sending messages from the main thread to the async process requires more sophistication.
+This additional sophistication is dictated by the need for our command to have mutable access to input channel for the async process.</p>
 <p>To review, the main thread receives a message from JavaScript via a Tauri Command.
 The Command then needs to forward the message to the async process via input channel for the async process.
 The Command needs access to the channel.
@@ -745,7 +749,7 @@ So how do we get give the Command access to the input channel?</p>
 We can use Tauri’s state management system to pass the input channel to the Command.
 The Tauri Command guide covers <a href="https://tauri.app/v1/guides/features/command#accessing-managed-state">state management</a> but it is <a href="https://github.com/tauri-apps/tauri/issues/4993">missing a key piece</a>.
 Mutability.</p>
-<p>We need mutable access to the input channel but Tauri managed state is not directly mutable and what good is state if you can mutate it?
+<p>We need mutable access to the input channel but Tauri managed state is immutable and what good is state if you can mutate it?
 How do we get mutable access to the input channel via immutable state?</p>
 <p>The answer is <a href="https://doc.rust-lang.org/reference/interior-mutability.html">interior mutability</a> and &#34;the most basic type for interior mutability that supports concurrency is <code>Mutex&lt;T&gt;</code>&#34;<a class="footnote-ref" id="_footnoteref_1" href="#_footnote_1" title="View footnote 1" role="doc-noteref">[1]</a>.</p>
 <p>We can’t use <a href="https://doc.rust-lang.org/std/sync/struct.Mutex.html"><code>std::sync::Mutex&lt;T&gt;</code></a> because we need to <code>.await</code> a <code>send()</code> on the input channel and the guard for <code>std::sync::Mutex&lt;T&gt;</code> cannot be held across an <code>.await</code>.
@@ -800,14 +804,8 @@ Instead of having to write <code>Mutex&lt;mpsc::Sender&lt;String&gt;&gt;</code> 
 <span style="color: #bbbbbb">        </span>})<span style="color: #bbbbbb"></span>
 <span style="color: #bbbbbb">        </span><span style="color: #60a0b0; font-style: italic">// ...</span>
 }<span style="color: #bbbbbb"></span></code></pre></div></section></section>
-<section class="doc-section level-1"><h2 id="result-2">6. Result</h2><p>The following demo shows three messages &#34;a&#34;, &#34;b&#34;, and &#34;c&#34; send from the webview to the async Rust process and back.</p>
-<p>Before a message is sent, it is reported in the &#34;js2rs events&#34; portion of the page.
-The message is then sent to the main thread in Rust.
-When the message is received by the main thread, it is reported in the terminal.
-The message is then sent to the async process and then back out of the async process to the main thread.
-When the message is received by the main thread, it is against reported in the terminal before sending to the webview.
-The message is sent to the webview.
-When the message is received by the webview, it is added to the &#34;rs2js events&#34; portion of the page.</p>
+<section class="doc-section level-1"><h2 id="result-2">6. Result</h2><p>The following demo shows three messages &#34;a&#34;, &#34;b&#34;, and &#34;c&#34; sent from the webview to the async Rust process and back.</p>
+<div class="olist arabic"><ol class="arabic"><li>When the &#34;Send to Rust&#34; button is clicked, the frontend<ol class="loweralpha" type="a"><li>reports the message in the &#34;js2rs events&#34; portion of the page,</li><li>and sends the message to the main thread.</li></ol></li><li>The main thread<ol class="loweralpha" type="a"><li>receives the message,</li><li>reports the message in the terminal,</li><li>and sends the message to the async process.</li></ol></li><li>The async process,<ol class="loweralpha" type="a"><li>receives the message</li><li>and sends the message back to the main thread.</li></ol></li><li>The main thread,<ol class="loweralpha" type="a"><li>receives the message,</li><li>reports the message in the terminal,</li><li>and sends the message to the frontend.</li></ol></li><li>The frontend,<ol class="loweralpha" type="a"><li>receives the message,</li><li>and reports the message in the &#34;rs2js events&#34; portion of th page.</li></ol></li></ol></div>
 <figure class="video-block"><video src="https://user-images.githubusercontent.com/28975/185815131-0c45ba14-4588-4722-806c-8dcf5b1bb67e.mp4" width="480" controls="">Your browser does not support the video tag.</video>
 <figcaption>Demo of bidirectional communication between the webview and an async Rust process</figcaption></figure>
 <p>Here is the complete Rust code in <code>src-tauri/src/main.rs</code></p>
