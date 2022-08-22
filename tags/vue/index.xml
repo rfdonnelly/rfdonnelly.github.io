@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Vue on Rob Donnelly</title>
+    <link>https://rfdonnelly.github.io/tags/vue/</link>
+    <description>Recent content in Vue on Rob Donnelly</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 21 Aug 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://rfdonnelly.github.io/tags/vue/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Tauri &#43; Async Rust Process</title>
+      <link>https://rfdonnelly.github.io/posts/tauri-async-rust-process/</link>
+      <pubDate>Sun, 21 Aug 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfdonnelly.github.io/posts/tauri-async-rust-process/</guid>
+      <description>Table of Contents1. Goal2. Create a Tauri App3. The Async Process4. Bidirectional Communication between Rust and JavaScript4.1. Comands vs Events4.2. Possible Simplification4.3. The JavaScript Side4.4. The Rust Side5. Bidirectional Communication between the Main Thread and the Async Process5.1. An Aside: Who Owns the Async Runtime?5.2. Creating the Channels5.3. Running the Async Process5.4. Main Thread to Async Process5.5. Async Process to Main Thread6. ResultThe complete source code for this post is available at https://github.</description>
+    </item>
+    
+  </channel>
+</rss>
