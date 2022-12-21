@@ -3,8 +3,8 @@
 <head>
   
   <meta charset="utf-8">
-  <title>Using WSL2</title>
-  <meta name="description" content="Using WSL2">
+  <title>Sane VS Code Whitespace Settings</title>
+  <meta name="description" content="Sane VS Code Whitespace Settings">
   <meta name="author" content="Rob Donnelly">
   
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -449,121 +449,74 @@ kbd, pre, code, samp {
       <div class="post-title">
         <p class="footnote">
           
-            <time datetime="2020-02-03 22:44:58 &#43;0000 UTC">
+            <time datetime="2022-12-21 21:41:13 &#43;0000 UTC">
               
-                2020-02-03
+                2022-12-21
               
             </time>
           
         
         
-        |
-        
-        
-        tags: [ <a href="https://rfdonnelly.github.io/tags/software">Software</a> <a href="https://rfdonnelly.github.io/tags/docker">Docker</a> <a href="https://rfdonnelly.github.io/tags/wsl2">WSL2</a> <a href="https://rfdonnelly.github.io/tags/windows-terminal">Windows Terminal</a> <a href="https://rfdonnelly.github.io/tags/ssh">SSH</a> ]
         
 
         
 
         
         </p>
-        <h1>Using WSL2</h1>
+        <h1>Sane VS Code Whitespace Settings</h1>
       </div>
 
       <div class="post-content">
         
-        <nav id="toc" class="toc" role="doc-toc"><h2 id="toc-title">Table of Contents</h2><ol class="toc-list level-1"><li><a href="#install-wsl2">1. Install WSL2</a></li><li><a href="#install-docker">2. Install Docker</a></li><li><a href="#install-windows-terminal">3. Install Windows Terminal</a></li><li><a href="#setup-ssh-x11-forwarding">4. Setup SSH X11 Forwarding</a></li><li><a href="#setup-pageant">5. Setup Pageant</a></li><li><a href="#ssh-into-wsl2">6. SSH into WSL2</a></li></ol></nav><p>This article documents the setup of WSL2 for local and remote development.
-Local development is supported by Docker.
-For remote development, WSL2 effectively acts as a bridge.
-Remote development is done via SSH with support for X11 forwarding.
-This allows X11 applications to be run on the remote host and display on the Windows desktop.</p>
-<aside class="admonition-block note" role="note"><h6 class="block-title"><span class="title-label">Note: </span>CHANGELOG</h6><div class="ulist"><ul><li>2020-11-25 – Added <a href="#ssh-into-wsl2">SSH into WSL2</a>.</li><li>2020-11-27 – Changed Docker from edge to stable.
-Edge is no longer required.</li><li>2020-11-27 – Simplified Windows Terminal settings.</li><li>2020-11-29 – Added workaround for older Docker images.</li></ul></div></aside>
-<section class="doc-section level-1"><h2 id="install-wsl2">1. Install WSL2</h2><div class="olist arabic"><ol class="arabic"><li>Install <a href="https://docs.microsoft.com/en-us/windows/wsl/wsl2-install">WSL2</a></li><li>Install Ubuntu from the Microsoft Store</li><li><p>Convert to WSL2</p><div class="literal-block"><pre>wsl --set-version Ubuntu 2</pre></div></li><li><p>Verify WSL version</p><div class="literal-block"><pre>wsl --list --verbose</pre></div></li></ol></div></section>
-<section class="doc-section level-1"><h2 id="install-docker">2. Install Docker</h2><p>The following will make Docker available from WSL2.</p>
-<div class="olist arabic"><ol class="arabic"><li>Download the <a href="https://docs.docker.com/docker-for-windows/release-notes/">latest stable release</a></li><li>Follow the <a href="https://docs.docker.com/docker-for-windows/wsl/">Docker WSL2 instructions</a></li></ol></div>
-<aside class="admonition-block note" role="note"><h6 class="block-title label-only"><span class="title-label">Note: </span></h6><p>To run older Docker base images <a href="https://github.com/microsoft/WSL/issues/4694">a workaround may be needed</a>.</p>
-<figure class="listing-block"><figcaption>Create <code>%userprofile%\.wslconfig</code> with the following content</figcaption>
-<pre class="pygments highlight" style="background: #f0f0f0;"><code><span></span>[wsl2]
-kernelCommandLine = vsyscall=emulate</code></pre></figure></aside></section>
-<section class="doc-section level-1"><h2 id="install-windows-terminal">3. Install Windows Terminal</h2><div class="olist arabic"><ol class="arabic"><li>Install Windows Terminal from the Microsoft Store⁠<a class="footnote-ref" id="_footnoteref_1" href="#_footnote_1" title="View footnote 1" role="doc-noteref">[1]</a></li><li>Open Windows Terminal</li><li><p>Edit Settings</p><figure class="listing-block"><figcaption><code>profile.json</code></figcaption>
-<pre class="pygments highlight" style="background: #f0f0f0;"><code data-lang="javascript"><span></span><span style="color: #60a0b0; font-style: italic">// To view the default settings, hold &#34;alt&#34; while clicking on the &#34;Settings&#34; button.</span>
-<span style="color: #60a0b0; font-style: italic">// For documentation on these settings, see: https://aka.ms/terminal-documentation</span>
-{
-    <span style="color: #4070a0">&#34;$schema&#34;</span><span style="color: #666666">:</span> <span style="color: #4070a0">&#34;https://aka.ms/terminal-profiles-schema&#34;</span>,
+        <nav id="toc" class="toc" role="doc-toc"><h2 id="toc-title">Table of Contents</h2><ol class="toc-list level-1"><li><a href="#the-problem">1. The Problem</a></li><li><a href="#the-solution">2. The Solution</a></li></ol></nav><p>The default VS Code settings for the handling of the final newline character violates the POSIX standard.</p>
+<p>VS Code does not end files with a newline character.
+The POSIX standard requires that files end with a newline character.</p>
+<p>More specifically, the POSIX standard defines a <a href="https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap03.html#tag_03_206"><em>line</em></a> as</p>
+<div class="quote-block"><blockquote><p>A sequence of zero or more non-&lt;newline&gt; characters plus a terminating &lt;newline&gt; character.</p></blockquote></div>
+<p>The POSIX standard also defines an <a href="https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap03.html#tag_03_195"><em>incomplete line</em></a> as</p>
+<div class="quote-block"><blockquote><p>A sequence of one or more non-&lt;newline&gt; characters at the end of the file.</p></blockquote></div>
+<section class="doc-section level-1"><h2 id="the-problem">1. The Problem</h2><p>I’ve heard people say that this non-POSIX compliant behavior could cause problems with software that expects all lines to end with a newline character.
+I haven’t experienced this myself.</p>
+<p>However, this does cause unnecessary diffs to be created when different editors are used to edit the same file.
+For example, when saving file A, VS Code does not terminate the file with a newline.
+If you then simply open and save this file without making any other changes using a POSIX-compliant editor like Vim, a final newline will be appended.</p>
+<p>Now we Git shows that there is a change.
+This is silly.</p></section>
+<section class="doc-section level-1"><h2 id="the-solution">2. The Solution</h2><p>Add these settings to the <code>.vscode/settings.json</code> file in all of your repositories.</p>
+<p>The <code>files.insertFinalNewline</code> setting is the most critical.
+The others are nice to haves.</p>
+<figure class="listing-block"><figcaption><code>.vscode/settings.json</code></figcaption>
+<pre class="pygments highlight" style="background: #f0f0f0;"><code data-lang="javascript"><span></span>{
+  <span style="color: #60a0b0; font-style: italic">// Adhere to the POSIX standard on file save</span>
+  <span style="color: #60a0b0; font-style: italic">//</span>
+  <span style="color: #60a0b0; font-style: italic">// The POSIX standard defines a line as &#34;A sequence of zero or more non-</span>
+  <span style="color: #60a0b0; font-style: italic">// &lt;newline&gt; characters plus a terminating &lt;newline&gt; character.&#34;</span>
+  <span style="color: #60a0b0; font-style: italic">//</span>
+  <span style="color: #60a0b0; font-style: italic">// By default VS Code does not append a final newline character and by the</span>
+  <span style="color: #60a0b0; font-style: italic">// POSIX standard this final &#34;line&#34; is not actually a line.  This default</span>
+  <span style="color: #60a0b0; font-style: italic">// non-POSIX compliant behavior causes diff battles with other editors that</span>
+  <span style="color: #60a0b0; font-style: italic">// adhere to the POSIX standard.  With out this setting, VS Code will remove</span>
+  <span style="color: #60a0b0; font-style: italic">// the final newline character while a POSIX-compliant editor like Vim will</span>
+  <span style="color: #60a0b0; font-style: italic">// add back the final newline character.  This adds unnecessary noise to</span>
+  <span style="color: #60a0b0; font-style: italic">// diffs.</span>
+  <span style="color: #4070a0">&#34;files.insertFinalNewline&#34;</span><span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,
 
-    <span style="color: #4070a0">&#34;defaultProfile&#34;</span><span style="color: #666666">:</span> <span style="color: #4070a0">&#34;{2c4de342-38b7-51cf-b940-2309a097f518}&#34;</span>,
+  <span style="color: #60a0b0; font-style: italic">// Adhere to the POSIX standard on file render</span>
+  <span style="color: #60a0b0; font-style: italic">//</span>
+  <span style="color: #60a0b0; font-style: italic">// When &#34;files.insertFinalNewline&#34; is enabled and &#34;editor.renderFinalNewline&#34;</span>
+  <span style="color: #60a0b0; font-style: italic">// is not enabled, VS Code renders a line after the final newline character.</span>
+  <span style="color: #60a0b0; font-style: italic">// Per the POSIX standard, this additional rendered line is not actually a</span>
+  <span style="color: #60a0b0; font-style: italic">// line because it doesn&#39;t terminate with a newline character.  Fix this by</span>
+  <span style="color: #60a0b0; font-style: italic">// disabling this setting.</span>
+  <span style="color: #4070a0">&#34;editor.renderFinalNewline&#34;</span><span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">false</span>,
 
-    <span style="color: #60a0b0; font-style: italic">// Simplify copying</span>
-    <span style="color: #4070a0">&#34;copyOnSelect&#34;</span><span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,
+  <span style="color: #60a0b0; font-style: italic">// Trim all newlines after final newline.</span>
+  <span style="color: #4070a0">&#34;files.trimFinalNewlines&#34;</span><span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,
 
-    <span style="color: #60a0b0; font-style: italic">// Disable multi-line paste warning</span>
-    <span style="color: #4070a0">&#34;multiLinePasteWarning&#34;</span><span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">false</span>,
-
-    <span style="color: #60a0b0; font-style: italic">// Removed the following characters from the default list to allow double clicking</span>
-    <span style="color: #60a0b0; font-style: italic">// of paths and URLs to select and copy them: &#39;/&#39;, &#39;\&#39;, &#39;.&#39;, &#39;:&#39;</span>
-    <span style="color: #4070a0">&#34;wordDelimiters&#34;</span><span style="color: #666666">:</span> <span style="color: #4070a0">&#34; ()\&#34;&#39;,;&lt;&gt;~!@#$%^&amp;*|+=[]{}~?\u2502&#34;</span>,
-
-    <span style="color: #4070a0">&#34;profiles&#34;</span><span style="color: #666666">:</span> {
-        <span style="color: #4070a0">&#34;defaults&#34;</span><span style="color: #666666">:</span> {
-            <span style="color: #60a0b0; font-style: italic">// Make the cursor easier to find</span>
-            <span style="color: #4070a0">&#34;cursorShape&#34;</span><span style="color: #666666">:</span> <span style="color: #4070a0">&#34;emptyBox&#34;</span>,
-
-            <span style="color: #60a0b0; font-style: italic">// Hide everything by default</span>
-            <span style="color: #4070a0">&#34;hidden&#34;</span><span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,
-        },
-        <span style="color: #4070a0">&#34;list&#34;</span><span style="color: #666666">:</span> [
-            {
-                <span style="color: #4070a0">&#34;guid&#34;</span><span style="color: #666666">:</span> <span style="color: #4070a0">&#34;{2c4de342-38b7-51cf-b940-2309a097f518}&#34;</span>,
-                <span style="color: #4070a0">&#34;hidden&#34;</span><span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">false</span>,
-                <span style="color: #4070a0">&#34;name&#34;</span><span style="color: #666666">:</span> <span style="color: #4070a0">&#34;WSL2&#34;</span>,
-
-                <span style="color: #60a0b0; font-style: italic">// Start WSL like any other profile (i.e. don&#39;t use &#34;source&#34;)</span>
-                <span style="color: #60a0b0; font-style: italic">// Start in Linux home directory instead of Windows home directory</span>
-                <span style="color: #4070a0">&#34;commandline&#34;</span><span style="color: #666666">:</span> <span style="color: #4070a0">&#34;wsl.exe ~&#34;</span>,
-
-                <span style="color: #60a0b0; font-style: italic">// WORKAROUND: The right padding is more than it should be.</span>
-                <span style="color: #60a0b0; font-style: italic">// Making it 0 seems to be equivalent to 8 on the left.</span>
-                <span style="color: #60a0b0; font-style: italic">// Also hide the scrollbar so that it doesn&#39;t contribute to the padding.</span>
-                <span style="color: #4070a0">&#34;padding&#34;</span><span style="color: #666666">:</span> <span style="color: #4070a0">&#34;8, 8, 0, 0&#34;</span>,
-                <span style="color: #4070a0">&#34;scrollbarState&#34;</span><span style="color: #666666">:</span> <span style="color: #4070a0">&#34;hidden&#34;</span>,
-            },
-        ]
-    },
-
-    <span style="color: #60a0b0; font-style: italic">// Add any keybinding overrides to this array.</span>
-    <span style="color: #60a0b0; font-style: italic">// To unbind a default keybinding, set the command to &#34;unbound&#34;</span>
-    <span style="color: #4070a0">&#34;keybindings&#34;</span><span style="color: #666666">:</span> [
-        <span style="color: #60a0b0; font-style: italic">// Make paste work like Linux</span>
-        { <span style="color: #4070a0">&#34;command&#34;</span><span style="color: #666666">:</span> <span style="color: #4070a0">&#34;paste&#34;</span>, <span style="color: #4070a0">&#34;keys&#34;</span><span style="color: #666666">:</span> [ <span style="color: #4070a0">&#34;shift+insert&#34;</span> ] }
-    ]
-}</code></pre></figure></li></ol></div></section>
-<section class="doc-section level-1"><h2 id="setup-ssh-x11-forwarding">4. Setup SSH X11 Forwarding</h2><div class="olist arabic"><ol class="arabic"><li>Install <a href="https://sourceforge.net/projects/vcxsrv">VcXsrc</a></li><li>Run XLaunch<ol class="loweralpha" type="a"><li>Set display number to <code>0</code></li><li>Disable access control</li><li>Save configuration</li><li>Open saved configuration to run VcXsrc</li></ol></li><li>Open a WSL terminal</li><li><p>Configure <code>$DISPLAY</code> by adding the following to your <code>~/.bashrc</code></p><div class="literal-block"><pre>export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk &#39;{print $2}&#39;):0.0</pre></div>
-<p>This sets the DISPLAY to the IP address of the Windows host.</p></li><li><p>Configure SSH</p><figure class="listing-block"><figcaption>~/.ssh/config</figcaption>
-<pre class="pygments highlight" style="background: #f0f0f0;"><code><span></span>Host *
-    User &lt;remote-username&gt;
-    ForwardX11 yes
-    ForwardX11Trusted yes
-    ForwardAgent yes</code></pre></figure></li><li>Test<ol class="loweralpha" type="a"><li><p>SSH</p><div class="literal-block"><pre>ssh remote-host</pre></div></li><li><p>Run an X11 application</p><div class="literal-block"><pre>xlogo</pre></div>
-<p>It should display on your Windows desktop.</p></li></ol></li></ol></div></section>
-<section class="doc-section level-1"><h2 id="setup-pageant">5. Setup Pageant</h2><aside class="admonition-block note" role="note"><h6 class="block-title label-only"><span class="title-label">Note: </span></h6><p>This assumes you manage SSH keys using PuTTY pageant or compatible application.</p></aside>
-<div class="olist arabic"><ol class="arabic"><li><p>Download <a href="https://github.com/BlackReloaded/wsl2-ssh-pageant">wsl2-ssh-pageant</a></p><div class="literal-block"><pre>cd ~/.ssh/
-curl -LO https://github.com/BlackReloaded/wsl2-ssh-pageant/releases/download/v1.0.0/wsl2-ssh-pageant.exe
-chmod +x wsl2-ssh-pageant.exe</pre></div></li><li><p>Install <code>socat</code></p><div class="literal-block"><pre>sudo apt-get install socat</pre></div></li><li><p>Add <code>wsl2-ssh-pageant</code> to your <code>~/.bashrc</code></p><div class="listing-block"><pre class="pygments highlight" style="background: #f0f0f0;"><code data-lang="sh"><span></span><span style="color: #007020">export</span> <span style="color: #bb60d5">SSH_AUTH_SOCK</span><span style="color: #666666">=</span><span style="color: #bb60d5">$HOME</span>/.ssh/agent.sock
-ss -a | grep -q <span style="color: #bb60d5">$SSH_AUTH_SOCK</span>
-<span style="color: #007020; font-weight: bold">if</span> <span style="color: #666666">[</span> <span style="color: #bb60d5">$?</span> -ne <span style="color: #40a070">0</span> <span style="color: #666666">]</span>; <span style="color: #007020; font-weight: bold">then</span>
-        rm -f <span style="color: #bb60d5">$SSH_AUTH_SOCK</span>
-        setsid nohup socat UNIX-LISTEN:<span style="color: #bb60d5">$SSH_AUTH_SOCK</span>,fork EXEC:<span style="color: #bb60d5">$HOME</span>/.ssh/wsl2-ssh-pageant.exe &gt;/dev/null <span style="color: #40a070">2</span>&gt;&amp;<span style="color: #40a070">1</span> &amp;
-<span style="color: #007020; font-weight: bold">fi</span></code></pre></div></li></ol></div></section>
-<section class="doc-section level-1"><h2 id="ssh-into-wsl2">6. SSH into WSL2</h2><p>Scott Hanselman has a great article on accessing WSL2 via Windows OpenSSH server titled <a href="https://www.hanselman.com/blog/the-easy-way-how-to-ssh-into-bash-and-wsl2-on-windows-10-from-an-external-machine">THE EASY WAY how to SSH into Bash and WSL2 on Windows 10 from an external machine</a>.
-However, it only supports Bash.
-It doesn’t support alternative shells like Zsh.</p>
-<p>The trick is to change the Windows OpenSSH server default shell to <code>C:\Windows\System32\wsl.exe</code> instead of <code>C:\Windows\System32\bash.exe</code>.
-This will use whatever shell WSL2 has been configured to use.</p>
-<figure class="listing-block"><figcaption>So instead of</figcaption>
-<pre class="pygments highlight" style="background: #f0f0f0;"><code><span></span>New-ItemProperty -Path &#34;HKLM:\SOFTWARE\OpenSSH&#34; -Name DefaultShell -Value &#34;C:\WINDOWS\System32\bash.exe&#34; -PropertyType String -Force</code></pre></figure>
-<figure class="listing-block"><figcaption>Use</figcaption>
-<pre class="pygments highlight" style="background: #f0f0f0;"><code><span></span>New-ItemProperty -Path &#34;HKLM:\SOFTWARE\OpenSSH&#34; -Name DefaultShell -Value &#34;C:\WINDOWS\System32\wsl.exe&#34; -PropertyType String -Force</code></pre></figure></section><section class="footnotes" aria-label="Footnotes" role="doc-endnotes"><hr/><ol class="footnotes"><li class="footnote" id="_footnote_1" role="doc-endnote">Windows Terminal v1.4 as of this writing. <a class="footnote-backref" href="#_footnoteref_1" role="doc-backlink" title="Jump to the first occurrence in the text">↩</a></li></ol></section>
+  <span style="color: #60a0b0; font-style: italic">// Trim all non-newline whitespace characters between final non-whitespace</span>
+  <span style="color: #60a0b0; font-style: italic">// character and newline character</span>
+  <span style="color: #4070a0">&#34;files.trimTrailingWhitespace&#34;</span><span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,
+}</code></pre></figure></section>
 
       </div>
     </div>

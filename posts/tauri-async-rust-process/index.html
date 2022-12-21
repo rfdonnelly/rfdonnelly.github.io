@@ -477,7 +477,7 @@ kbd, pre, code, samp {
 More specifically, perform bidirectional communication between the Tauri webview and an async Rust process where either side can initiate.</p>
 <p>The Tauri main thread manages both the webview and the async process.
 The main thread sits between the two.</p>
-<figure class="image-block kroki"><img src="https://kroki.io/graphviz/svg/eNp1jsEKwjAMhu97irKTgj7ChJ0EUZA58OBEsq66Yu1q0m2I7N3t3Ch6WA6BhO_Ln0LeEEzJ1uwdMFcI-l5IjJJt8J2pzgeAq5qswIuFGuUI96UgFyoK036d6dgYJTlYWekw8EzbsNPIHUXeSNFmeraBBg4cpbHzcMGoBCMietaA4uzFh_XiDqRmaYkCCicn7plpDYzXYnppnuk9VlwQTZq_ry5Xfa7r_RleabLosm10BUX_IZ5sm2HdBd0HaOlmwA==" alt="Diagram"/>
+<figure class="image-block kroki"><img src="https://kroki.io/graphviz/svg/eNp1jsEKwjAMhu97irKTgj7ChJ0EUZA58OBEsq66Yu1q0m2I7N3t3Ch6WA6BhO_Ln0LeEEzJ1uwdMFcI-l5IjJJt8J2pzgeAq5qswIuFGuUI96UgFyoK036d6dgYJTlYWekw8EzbsNPIHUXeSNFmeraBBg4cpbHzcMGoBCMietaA4uzFh_XiDqRmaYkCCicn7plpDYzXYnppnuk9VlwQTZq_ry5Xfa7r_RleabLosm10BUX_IZ5sm2HdBd0HaOlmwA==" alt="A diagram of our desired Tauri application"/>
 <figcaption>Figure 1. A diagram of our desired Tauri application</figcaption></figure>
 <p>We can break this up into two smaller problems: bidirectional communication between,</p>
 <div class="ulist"><ul><li>the webview (JavaScript) and the main thread (Rust)</li><li>the main thread (Rust) and the async process (Rust)</li></ul></div></section>

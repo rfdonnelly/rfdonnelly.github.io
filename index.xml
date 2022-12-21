@@ -6,7 +6,20 @@
     <description>Recent content on Rob Donnelly</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 21 Aug 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://rfdonnelly.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 21 Dec 2022 21:41:13 +0000</lastBuildDate><atom:link href="https://rfdonnelly.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Sane VS Code Whitespace Settings</title>
+      <link>https://rfdonnelly.github.io/posts/sane-vscode-whitespace-settings/</link>
+      <pubDate>Wed, 21 Dec 2022 21:41:13 +0000</pubDate>
+      
+      <guid>https://rfdonnelly.github.io/posts/sane-vscode-whitespace-settings/</guid>
+      <description>Table of Contents1. The Problem2. The SolutionThe default VS Code settings for the handling of the final newline character violates the POSIX standard.
+VS Code does not end files with a newline character. The POSIX standard requires that files end with a newline character.
+More specifically, the POSIX standard defines a line as
+A sequence of zero or more non-&amp;lt;newline&amp;gt; characters plus a terminating &amp;lt;newline&amp;gt; character.
+The POSIX standard also defines an incomplete line as</description>
+    </item>
+    
     <item>
       <title>Tauri &#43; Async Rust Process</title>
       <link>https://rfdonnelly.github.io/posts/tauri-async-rust-process/</link>
