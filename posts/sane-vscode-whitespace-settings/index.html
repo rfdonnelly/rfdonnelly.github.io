@@ -480,7 +480,7 @@ I haven’t experienced this myself.</p>
 <p>However, this does cause unnecessary diffs to be created when different editors are used to edit the same file.
 For example, when saving file A, VS Code does not terminate the file with a newline.
 If you then simply open and save this file without making any other changes using a POSIX-compliant editor like Vim, a final newline will be appended.</p>
-<p>Now we Git shows that there is a change.
+<p>Now Git shows that there is a change.
 This is silly.</p></section>
 <section class="doc-section level-1"><h2 id="the-solution">2. The Solution</h2><p>Add these settings to the <code>.vscode/settings.json</code> file in all of your repositories.</p>
 <p>The <code>files.insertFinalNewline</code> setting is the most critical.
