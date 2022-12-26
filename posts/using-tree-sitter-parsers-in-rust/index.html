@@ -535,7 +535,7 @@ Add the <code>cc</code> crate to the <code>build-dependencies</code> section of 
 <p>We&rsquo;ll be using the parser via the Rust Tree-sitter bindings provided by the <a href="https://crates.io/crates/tree-sitter">tree-sitter crate</a>.
 Add the <code>tree-sitter</code> crate to the <code>dependencies</code> section of <code>Cargo.toml</code>:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-toml" data-lang="toml"><span class="line"><span class="cl"><span class="p">[</span><span class="nx">dependencies</span><span class="p">]</span>
-</span></span><span class="line"><span class="cl"><span class="nx">tree-sitter</span> <span class="p">=</span> <span class="s2">&#34;0.3&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">tree-sitter</span> <span class="p">=</span> <span class="s2">&#34;0.20.9&#34;</span>
 </span></span></code></pre></div><p>Edit the contents of <code>src/main.rs</code> to be the following:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="k">use</span><span class="w"> </span><span class="n">tree_sitter</span>::<span class="p">{</span><span class="n">Parser</span><span class="p">,</span><span class="w"> </span><span class="n">Language</span><span class="p">};</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
