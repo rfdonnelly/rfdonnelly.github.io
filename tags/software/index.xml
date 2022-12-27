@@ -41,9 +41,9 @@
       <pubDate>Wed, 07 Aug 2019 11:20:33 -0700</pubDate>
       
       <guid>https://rfdonnelly.github.io/posts/using-tree-sitter-parsers-in-rust/</guid>
-      <description>Update: 2019-08-10: Fixed rerun directive in build.rs
+      <description>Update: 2022-12-26: Fixed unwrap() on Err by updating to latest tree-sitter Update: 2019-08-10: Fixed rerun directive in build.rs
 Tree-sitter is a parser generator tool and parsing library. It generates portable parsers that can be used in several languages including Rust. Tree-sitter grammars are available for several languages.
-This is a game changer because it lowers the barrier to entry for writing language tooling. You no longer need to write your own parser. With Tree-sitter, you can now simply use an existing parser.</description>
+This is a game changer because it lowers the barrier to entry for writing language tooling. You no longer need to write your own parser.</description>
     </item>
     
   </channel>
