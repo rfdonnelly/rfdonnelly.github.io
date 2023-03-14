@@ -662,7 +662,8 @@ Most of the bidirectional communication between the main thread and the async pr
 <section class="doc-section level-1"><h2 id="bidirectional-communication-between-the-main-thread-and-the-async-process">5. Bidirectional Communication between the Main Thread and the Async Process</h2><div class="image-block kroki"><img src="https://kroki.io/graphviz/svg/eNqlkMFqwzAMhu95CpPTBtkjeNDTYGwwusIOyxiKozZmqu1JdkIZffc5TQht2W26GMnf__NLrd0xhE49qJ9C5WJwX61lvX4qTr2kZgIMJYnInxES2xkei6BB0uVmHNduFQJZA9F6VxYLM_TqfebesOktDrW7eYQeXg3bEG_LSkkHAbV8J2D8WIT7uAifwTq16RihzeJ1DnMty108EOqtJcK2UuNrPHnWZHddbCidOUNYnFdycKZ2L-wNivzH_Hzhu_tTeuOdRM7Zo94CyeVumRlzXDPVfNR9EHORePb863dyG_ppcCyOv7jhlXE=" alt="Diagram"/></div>
 <p>Passing messages between Rust and JavaScript may be straightforward but doing so between the Tauri main thread and an async process is a little more involved.</p>
 <p>The inputs and outputs of the async process are implemented as <a href="https://docs.rs/tokio/latest/tokio/sync/mpsc/index.html"><code>tokio::mpsc</code></a> (Multi-Producer, Single-Consumer) channels.
-We only have a single producer but there isn’t a more specific channel primitive for single-producer, single-consumer.</p>
+We only have a single producer but there isn’t a more specific persistent channel primitive for single-producer, single-consumer.
+There is <code>tokio::oneshot</code> which is single-producer, single-consumer but as the name implies, it can only send a single value ever.</p>
 <section class="doc-section level-2"><h3 id="an-aside-who-owns-the-async-runtime">5.1. An Aside: Who Owns the Async Runtime?</h3><p>By default, Tauri owns and initializes the Tokio runtime.
 Because of this, you don’t need an async <code>main</code> and a <code>#[tokio::main]</code> annotation.</p>
 <p>For additional flexibility, Tauri allows us to own and initialize the Tokio runtime ourselves.
